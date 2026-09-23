@@ -16,7 +16,8 @@ function read(name: string, check?: (v: string) => boolean, hint?: string): stri
 const isUrl = (v: string) => {
   try {
     const u = new URL(v);
-    return u.protocol === "https:" || u.hostname === "localhost";
+    // En desarrollo, http solo hacia la propia máquina (Supabase local sirve en http://127.0.0.1:55321).
+    return u.protocol === "https:" || ["localhost", "127.0.0.1", "[::1]"].includes(u.hostname);
   } catch {
     return false;
   }
@@ -24,7 +25,7 @@ const isUrl = (v: string) => {
 
 /** Dominio público de la app, sin barra final. Base de todos los redirect_uri. */
 export function appUrl(): string {
-  return read("APP_URL", isUrl, "usa https://dominio (o http://localhost:3000 en local)").replace(/\/+$/, "");
+  return read("APP_URL", isUrl, "usa https://dominio (o http://localhost en local)").replace(/\/+$/, "");
 }
 
 export function stateSecret(): string {
