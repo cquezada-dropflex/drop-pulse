@@ -2,11 +2,13 @@ import "server-only";
 import { metaEnv } from "../env";
 import { appSecretProof, graphUrl } from "./client";
 
-// Facebook Login for Business (spec §6.1–6.3). Corrige a dropflex (lib/ads/meta/oauth.ts):
-// usa `config_id` en lugar de una lista de scopes suelta, pide `rerequest` al reconectar, lee
-// vencimiento y permisos reales con debug_token y no intenta “refrescar” el token largo (falla 15).
+// Login de Meta (spec §6.1–6.3). Dos modos, según META_LOGIN_CONFIG_ID:
+// - con él, Facebook Login for Business (`config_id`, app de tipo Business);
+// - sin él, el login clásico con la lista de permisos en `scope`, como dropflex (lib/ads/meta/oauth.ts).
+// En ambos: `rerequest` al reconectar, vencimiento y permisos reales con debug_token y sin “refrescar”
+// el token largo (falla 15).
 
-/** Permisos que deben quedar concedidos (la configuración de FLfB en el panel de Meta los pide). */
+/** Permisos que deben quedar concedidos: los pide `scope` (clásico) o la configuración de FLfB. */
 export const META_REQUIRED_SCOPES = ["ads_read", "ads_management", "business_management", "pages_show_list"] as const;
 
 const TIMEOUT_MS = 15_000;
@@ -23,9 +25,13 @@ export function authorizeUrl(state: string, rerequest: boolean): string {
   url.searchParams.set("client_id", appId);
   url.searchParams.set("redirect_uri", redirectUri);
   url.searchParams.set("state", state);
-  url.searchParams.set("config_id", configId);
   url.searchParams.set("response_type", "code");
-  url.searchParams.set("override_default_response_type", "true");
+  if (configId) {
+    url.searchParams.set("config_id", configId);
+    url.searchParams.set("override_default_response_type", "true");
+  } else {
+    url.searchParams.set("scope", META_REQUIRED_SCOPES.join(","));
+  }
   if (rerequest) url.searchParams.set("auth_type", "rerequest");
   return url.toString();
 }

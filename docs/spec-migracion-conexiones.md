@@ -384,6 +384,7 @@ Hoy la UI dice "Puedes desconectar en cualquier momento desde Ajustes o desde tu
 ### 6.1 App y permisos
 
 - **Facebook Login for Business** con una *configuración* creada en el panel de la app (`META_LOGIN_CONFIG_ID`), de tipo token de acceso de usuario. Así se cierra la falla 17.
+  - **Actualización (2026-09-23):** `META_LOGIN_CONFIG_ID` es opcional. Sin él se usa el login clásico con los mismos permisos en `scope`, para apps que no son de tipo Business (como la del base). `rerequest`, `debug_token` y `appsecret_proof` se aplican igual en los dos modos.
 - **Permisos**, derivados de `PERMS_META`:
   - `ads_read`: rendimiento de campañas y del píxel.
   - `ads_management`: campañas, anuncios y presupuestos que tú apruebes.

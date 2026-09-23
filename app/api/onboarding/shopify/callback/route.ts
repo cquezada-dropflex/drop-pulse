@@ -35,7 +35,10 @@ export async function GET(req: NextRequest) {
   if (params.get("error") || !code) return failWith("denied", params.get("error") ?? "sin code");
   if (!isShopDomain(shop) || !verifyShopifyRequest(params)) return failWith("expired", "hmac, timestamp o tienda");
   if (!check.ok) return failWith("expired", `state: ${check.reason}`);
-  if (check.state.shop !== shop) return failWith("expired", "state de otra tienda");
+  // El comerciante puede escribir un dominio antiguo o un alias (datazo-1141.myshopify.com) y Shopify
+  // responder con el canónico (qs060z-e7.myshopify.com). El `shop` del callback viene firmado por
+  // Shopify (HMAC ya validado) y el state ya ata usuario y nonce: se usa el canónico.
+  if (check.state.shop !== shop) console.info("[shopify/callback] dominio canónico distinto del escrito", { escrito: check.state.shop, shop });
 
   try {
     const token = await exchangeCode(shop, code);

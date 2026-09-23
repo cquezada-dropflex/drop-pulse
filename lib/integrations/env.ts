@@ -55,7 +55,8 @@ export function metaEnv() {
   return {
     appId: read("META_APP_ID"),
     appSecret: read("META_APP_SECRET"),
-    configId: read("META_LOGIN_CONFIG_ID"),
+    // Opcional: con él, Facebook Login for Business; sin él, el login clásico con `scope` (app no Business).
+    configId: process.env.META_LOGIN_CONFIG_ID?.trim() || null,
     graphVersion: read("META_GRAPH_VERSION", (v) => /^v\d{2,3}\.0$/.test(v), "formato v24.0"),
     redirectUri: `${appUrl()}/api/onboarding/meta/callback`,
   };

@@ -11,7 +11,7 @@ El onboarding de `design-system/onboarding.md` funciona contra **Shopify y Meta 
 | Recomendados | Ventas de 30 días (pedidos sin datos de clientes) × potencial de mejora |
 | Mercado | País y zona horaria desde Shopify (`SHOP_MARKET_QUERY`, al conectar); el comerciante confirma país, moneda e idioma en “Tienda conectada” (`merchant_settings`) |
 | Generación de la IA | El avance del onboarding sigue **simulado** (1.º producto a los 8 s, luego cada 18 s). La IA real corre por producto: ver `docs/pipeline-ia.md` |
-| Autorizar Meta | Facebook Login for Business (`config_id`), token largo y `debug_token` |
+| Autorizar Meta | Login clásico con `scope` o, si hay `META_LOGIN_CONFIG_ID`, Facebook Login for Business (`config_id`); token largo y `debug_token` |
 | Cuentas, páginas y píxeles | Marketing API con `appsecret_proof`, validados en el servidor al guardar |
 | Tokens | Supabase Vault (`set/get/delete_integration_token`, solo `service_role`) |
 
@@ -72,7 +72,7 @@ Todas responden JSON, salvo los callbacks y la instalación, que redirigen. Los 
    3. `shopify app deploy --config dev`.
    4. Solicita el acceso a *Protected customer data* por `read_orders`.
 3. Meta:
-   1. app de tipo Business con una configuración de Facebook Login for Business (sus permisos van en `META_LOGIN_CONFIG_ID`);
+   1. con el login clásico basta el producto Facebook Login (`META_LOGIN_CONFIG_ID` vacío); con una app de tipo Business, crea una configuración de Facebook Login for Business y pon su id en `META_LOGIN_CONFIG_ID`;
    2. URI de redirección `<APP_URL>/api/onboarding/meta/callback`;
    3. URL de desautorización `<APP_URL>/api/webhooks/meta/deauthorize`;
    4. URL de borrado de datos `<APP_URL>/api/webhooks/meta/data-deletion`.
