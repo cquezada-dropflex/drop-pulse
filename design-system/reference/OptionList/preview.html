@@ -1,0 +1,12 @@
+<!-- @dsCard group="Onboarding" height=260 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>OptionList</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{padding:16, maxWidth:390}}, h(D.OptionList,{label:'Cuenta publicitaria', name:'acc', value:'a1', options:[{value:'a1',title:'Mi Tienda CL',meta:'CLP · activa',tag:'Sugerida'},{value:'a3',title:'Mi Tienda PE',meta:'PEN · activa'},{value:'a2',title:'Pruebas 2025',meta:'Deshabilitada por Meta',tone:'danger',disabled:true}]})));
+</script>
+</body>
+</html>

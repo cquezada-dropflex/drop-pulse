@@ -1,6 +1,6 @@
 import type * as React from 'react';
 
-export type IconName = 'sparkle' | 'eye' | 'check' | 'x' | 'loader' | 'check-circle' | 'alert' | 'chevron-right' | 'chevron-left' | 'plus' | 'inbox' | 'box' | 'megaphone' | 'chat' | 'lock' | 'image' | 'tag' | 'text' | 'store' | 'send' | 'arrow-up' | 'arrow-down' | 'pause' | 'power' | 'more' | 'undo' | 'edit' | 'search' | 'clock' | 'minus' | 'truck' | 'trend' | 'grip' | 'star' | 'settings';
+export type IconName = 'sparkle' | 'eye' | 'check' | 'x' | 'loader' | 'check-circle' | 'alert' | 'chevron-right' | 'chevron-left' | 'plus' | 'inbox' | 'box' | 'megaphone' | 'chat' | 'lock' | 'image' | 'tag' | 'text' | 'store' | 'send' | 'arrow-up' | 'arrow-down' | 'pause' | 'power' | 'more' | 'undo' | 'edit' | 'search' | 'clock' | 'minus' | 'truck' | 'trend' | 'grip' | 'star' | 'settings' | 'shield';
 export interface IconProps { name: IconName; size?: 'sm'; label?: string; strokeWidth?: number; className?: string }
 export declare function Icon(props: IconProps): React.ReactElement;
 
@@ -74,6 +74,37 @@ export interface AssistantMessage { from: 'user' | 'ai'; text: string | string[]
 export interface AssistantSheetProps { variant?: 'sheet' | 'panel'; context?: string; contextImage?: number; messages?: AssistantMessage[]; suggestions?: string[]; placeholder?: string; style?: React.CSSProperties }
 export declare function AssistantSheet(props: AssistantSheetProps): React.ReactElement;
 
+export interface OnboardingHeaderProps { step: number; total?: number; optionalSteps?: number[]; back?: string; skip?: string; stepLabel?: string; title?: string; desc?: string }
+export declare function OnboardingHeader(props: OnboardingHeaderProps): React.ReactElement;
+
+export type Provider = 'shopify' | 'meta';
+export interface ProviderMarkProps { provider: Provider; size?: 'lg' }
+/** Marca genérica. Reemplazar por el logo oficial del proveedor. */
+export declare function ProviderMark(props: ProviderMarkProps): React.ReactElement;
+
+export type ConnectionState = 'idle' | 'connecting' | 'importing' | 'connected' | 'action' | 'error' | 'later';
+export interface ConnectionCardProps { provider: Provider; state?: ConnectionState; account?: string; detail?: string; progress?: number; facts?: [string, string][]; actions?: React.ReactNode }
+export declare function ConnectionCard(props: ConnectionCardProps): React.ReactElement;
+
+export interface Permission { kind: 'read' | 'write' | 'never'; text: string }
+export interface PermissionListProps { title?: string; items: Permission[]; note?: string }
+export declare function PermissionList(props: PermissionListProps): React.ReactElement;
+
+export interface Option { value: string; title: string; meta?: string; tone?: 'warning' | 'danger'; disabled?: boolean; tag?: string }
+export interface OptionListProps { label: string; hint?: string; name?: string; value?: string; options: Option[] }
+export declare function OptionList(props: OptionListProps): React.ReactElement;
+
+export interface PickRowProps { name: string; imageIndex?: number; meta?: string; issues?: string[]; score?: 'Alta' | 'Media' | 'Baja' | string; checked?: boolean }
+export declare function PickRow(props: PickRowProps): React.ReactElement;
+
+export interface GenerationItem { name: string; imageIndex?: number; status: 'generado' | 'publicando' | 'cola' | 'error' | 'aprobado'; detail?: string }
+export interface GenerationProgressProps { items: GenerationItem[]; eta?: string; title?: string; compact?: boolean; action?: React.ReactNode }
+export declare function GenerationProgress(props: GenerationProgressProps): React.ReactElement;
+
+export interface SetupItem { title: string; desc?: string; done?: boolean; action?: string }
+export interface SetupChecklistProps { title?: string; items: SetupItem[] }
+export declare function SetupChecklist(props: SetupChecklistProps): React.ReactElement;
+
 declare global {
   interface Window {
     DropFlex: {
@@ -82,6 +113,8 @@ declare global {
       ImageTile: typeof ImageTile; SegmentedControl: typeof SegmentedControl; Field: typeof Field; PriceBreakdown: typeof PriceBreakdown;
       OfferPreview: typeof OfferPreview; Metric: typeof Metric; CampaignCard: typeof CampaignCard; Navigation: typeof Navigation;
       TopBar: typeof TopBar; Toast: typeof Toast; AssistantSheet: typeof AssistantSheet; Icon: typeof Icon;
+      OnboardingHeader: typeof OnboardingHeader; ProviderMark: typeof ProviderMark; ConnectionCard: typeof ConnectionCard; PermissionList: typeof PermissionList;
+      OptionList: typeof OptionList; PickRow: typeof PickRow; GenerationProgress: typeof GenerationProgress; SetupChecklist: typeof SetupChecklist;
     };
   }
 }

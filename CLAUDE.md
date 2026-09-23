@@ -16,6 +16,7 @@ Todo color, medida, radio, tipografía, duración y texto de UI sale de `design-
 
 - `README.md`: principios, voz, fundamentos visuales, ciclo de vida, accesibilidad.
 - `arquitectura.md`: navegación, rutas y por qué.
+- `onboarding.md`: flujo de alta (Shopify obligatorio, Meta Ads opcional), decisiones y estados.
 - `tokens.json`: todos los tokens (colores claro/oscuro, tipografía, espaciado, radios, sombras, duraciones, easing, medidas, z-index, breakpoints).
 - `export/globals.css`: tokens para Tailwind v4, copiados en `app/globals.css`.
 - `reference/index.d.ts`: props de cada componente. `reference/<Componente>/README.md`: comportamiento, estados y textos.
@@ -48,6 +49,11 @@ Las medidas de `bundle.css` que no están en `tokens.json` se declaran en el blo
 - WCAG 2.1 AA en claro y en oscuro.
 - Área segura: `env(safe-area-inset-bottom)` (`pb-safe`) en la barra inferior y en las barras de acción fijas.
 
+## Rutas
+
+- **Las rutas van siempre en inglés** (segmentos de URL, carpetas de `app/`, rutas de API y parámetros de búsqueda): `/today`, `/products/[id]/images`, `/api/onboarding/products`, `?filter=stuck`. Los textos visibles siguen en español.
+- Pendiente: las rutas existentes están en español (`/hoy`, `/productos`, `/campanas`, `/ajustes`, `/auth/crear-cuenta`, `/onboarding/productos|numeros|listo`, `/simulacion/*`, `/api/onboarding/cuenta|productos|numeros|generacion|…`, `?filtro=`, `?periodo=`). Hay que migrarlas; mientras tanto, toda ruta nueva va en inglés.
+
 ## Textos de UI
 
 Español neutro con tuteo, nunca voseo ni “usted”: “Revisa”, “Elige”, “Tienes 6 decisiones” (nunca “Revisá”, “Elegí”). Verbo primero en botones, sentence case, sin signos de exclamación ni emojis. Los errores dicen qué pasó y qué hacer; los estados detenidos dicen qué falta y desde cuándo. Ver “Contenido y voz” en `design-system/README.md`.
@@ -60,6 +66,13 @@ Español neutro con tuteo, nunca voseo ni “usted”: “Revisa”, “Elige”
 
 - Tipos en `lib/types.ts`; datos de ejemplo en `lib/mock/`. La UI lee **solo** a través de `lib/data/*.ts` (`getTodayQueue()`, `getProducts(filter)`, `getProduct(id)`…). Para pasar a Supabase se cambia el cuerpo de esas funciones: ver `docs/esquema-supabase.md`.
 - Pantallas en `app/(app)/`; piezas interactivas de pantalla en `components/screens/`; shell (layout, asistente, barra fija, estados) en `components/shell/`.
+
+## Onboarding
+
+- Rutas: `/auth/crear-cuenta` (O1), `/onboarding/*` (pasos 1–4 y Listo), `SetupChecklist` en Hoy y Conexiones en Ajustes. Pasos en `components/onboarding/steps/`.
+- Backend **simulado** en `lib/onboarding/` (estado en cookie, OAuth con páginas `/simulacion/*`, importación y generación por tiempo) detrás de `app/api/onboarding/*`. Contrato y cómo pasar a producción: `docs/onboarding-backend.md`.
+- Los estados de conexión usan `ConnectionCard` / `StateChip`, nunca `StatusBadge` (que es solo para el ciclo de vida del contenido).
+- `ProviderMark` es genérico: no dibujes logos de Shopify, Meta ni Google.
 
 ## Verificación
 
@@ -77,6 +90,7 @@ npm run check:a11y           # axe en cada ruta, 390 y 1280px, claro y oscuro
 npm run check:teclado        # orden de foco, foco visible y atajos A / D / E
 npm run capturas             # docs/capturas/pantallas + montajes contra design-system/screenshots
 npm run capturas:componentes # /dev/componentes contra las capturas de referencia
+npm run check:onboarding     # recorre el onboarding completo, con capturas y axe
 ```
 
 - `/dev/tokens` y `/dev/componentes` (solo en desarrollo) para revisar tokens y componentes en claro y oscuro.

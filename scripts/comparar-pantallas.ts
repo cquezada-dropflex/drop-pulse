@@ -12,7 +12,12 @@ const REF = join(process.cwd(), "design-system/screenshots/pantallas");
 const OURS = join(process.cwd(), "docs/capturas/pantallas");
 const OUT = join(process.cwd(), "docs/capturas/comparacion/pantallas");
 
-const GROUPS: { ref: string; ours: string[]; vp: "390" | "1280" }[] = [
+const GROUPS: { ref: string; ours: string[]; vp: "390" | "1280"; dir?: string }[] = [
+  { ref: "PantallasOnboarding1", ours: ["o1-crear-cuenta", "o2-shopify", "o3-importando", "o3-shopify-error"], vp: "390", dir: "onboarding" },
+  { ref: "PantallasOnboarding2", ours: ["o4-productos", "o5-numeros", "o6-meta"], vp: "390", dir: "onboarding" },
+  { ref: "PantallasOnboarding3", ours: ["o7-meta-cuentas", "o8-listo", "o9-hoy"], vp: "390", dir: "onboarding" },
+  { ref: "PantallasOnboardingEscritorio1", ours: ["o4-productos"], vp: "1280", dir: "onboarding" },
+  { ref: "PantallasOnboardingEscritorio2", ours: ["o7-meta-cuentas"], vp: "1280", dir: "onboarding" },
   { ref: "PantallasMovil1", ours: ["hoy", "productos", "producto"], vp: "390" },
   { ref: "PantallasMovil2", ours: ["textos", "imagenes", "precio"], vp: "390" },
   { ref: "PantallasMovil3", ours: ["campanas", "asistente"], vp: "390" },
@@ -29,7 +34,8 @@ async function main() {
   for (const g of GROUPS) {
     for (const theme of ["claro", "oscuro"]) {
       const ref = join(REF, `${g.ref}-${theme}.png`);
-      const ours = g.ours.map((n) => join(OURS, `${n}-${g.vp}-${theme}.png`)).filter(existsSync);
+      const ours = g.ours.map((n) => join(g.dir ? join(process.cwd(), "docs/capturas", g.dir) : OURS, `${n}-${g.vp}-${theme}.png`)).filter(existsSync);
+      if (!ours.length) continue;
       const w = g.vp === "390" ? 390 : 1280;
       await page.setContent(`<body style="margin:0;background:#888;font:14px system-ui;color:#fff">
         <p style="margin:8px">Referencia · ${g.ref} (${theme})</p><img style="max-width:100%;display:block" src="${uri(ref)}">

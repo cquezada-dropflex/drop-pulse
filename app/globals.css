@@ -233,12 +233,20 @@
   /* .df-btn:active: presionado. */
   --scale-press: 0.98;
 
+  /* 22/28 · 600: .df-ob-title (título de cada paso del onboarding en móvil). */
+  --text-onboarding: 22px; --text-onboarding--line-height: 28px; --text-onboarding--font-weight: 600; --text-onboarding--letter-spacing: -0.01em;
+
   /* .df-rail-brand: nombre en el riel. */
   --tracking-brand: -0.01em;
 
   /* .df-spin (0,9s) y .df-tile.is-generating::after (df-shimmer 1,4s). */
   --animate-df-spin: spin 0.9s linear infinite;
   --animate-df-shimmer: df-shimmer 1.4s linear infinite;
+  /* .df-pulse: el destello mientras la IA genera. */
+  --animate-df-pulse: df-pulse 1.6s cubic-bezier(0.2, 0, 0, 1) infinite;
+  @keyframes df-pulse {
+    50% { opacity: 0.35; }
+  }
   @keyframes df-shimmer {
     from { transform: translateX(-100%); }
     to { transform: translateX(100%); }

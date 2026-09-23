@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { SetupSlot } from "@/components/onboarding/setup-slot";
 import { AttentionItem, Button, Icon, IconButton } from "@/components/df";
 import { EmptyState, Group, PageHeader, SectionTitle } from "@/components/shell/page-header";
 import { getTodayQueue, getTodaySummary } from "@/lib/data/today";
@@ -57,6 +59,11 @@ export default async function HoyPage() {
         desktopActions={null}
       />
       <div className="pb-6 lg:max-w-content lg:px-8 lg:py-6 md:max-lg:px-4">
+        <Suspense fallback={null}>
+          <div className="px-4 pb-3 empty:hidden lg:px-0 md:max-lg:px-0">
+            <SetupSlot where="hoy" />
+          </div>
+        </Suspense>
         <div className="flex gap-2 px-4 lg:px-0 md:max-lg:px-0">
           <Summary value={summary.pending} label="Por decidir" dot="bg-warning" />
           <Summary value={summary.errors} label="Con error" dot="bg-destructive" />

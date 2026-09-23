@@ -1,0 +1,14 @@
+<!-- @dsCard group="Onboarding" height=300 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>GenerationProgress</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:16, padding:16, alignItems:'start'}},
+  h('div',{className:'df-card df-card-pad'}, h(D.GenerationProgress,{eta:'unos 2 min', items:[{name:'Corrector de postura',imageIndex:1,status:'generado',detail:'8 textos · 6 imágenes'},{name:'Lámpara lunar 3D',imageIndex:2,status:'publicando',detail:'Escribiendo textos'},{name:'Botella térmica 1L',imageIndex:0,status:'cola',detail:'Empieza en ~1 min'},{name:'Masajeador de cuello',imageIndex:4,status:'error',detail:'No pudimos leer las imágenes'}]})),
+  h('div',{className:'df-card df-card-pad'}, h(D.GenerationProgress,{compact:true, eta:'unos 3 min', items:[{name:'a',status:'generado'},{name:'b',status:'publicando'},{name:'c',status:'cola'}]}))));
+</script>
+</body>
+</html>

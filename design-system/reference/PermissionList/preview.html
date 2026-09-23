@@ -1,0 +1,12 @@
+<!-- @dsCard group="Onboarding" height=230 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>PermissionList</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{padding:16, maxWidth:390}}, h(D.PermissionList,{title:'Qué hará DropFlex con tu tienda', items:[{kind:'read',text:'Productos, variantes, imágenes y precios'},{kind:'read',text:'Pedidos, para saber qué se vende y cuánto se entrega'},{kind:'write',text:'Productos: solo lo que tú apruebes'},{kind:'never',text:'Datos de pago ni clientes fuera de tus pedidos'}], note:'Puedes desconectar en cualquier momento.'})));
+</script>
+</body>
+</html>

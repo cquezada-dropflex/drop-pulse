@@ -11,7 +11,8 @@
     "check:teclado": "tsx scripts/teclado.ts",
     "capturas": "tsx scripts/capturas.ts && tsx scripts/comparar-pantallas.ts",
     "capturas:componentes": "tsx scripts/componentes.ts && tsx scripts/comparar.ts componentes",
-    "capturas:referencia": "tsx scripts/referencia/capturar.ts"
+    "capturas:referencia": "tsx scripts/referencia/capturar.ts",
+    "check:onboarding": "tsx scripts/onboarding.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -27,6 +28,7 @@
     "radix-ui": "^1.6.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "server-only": "^0.0.1",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.3.0",
     "vaul": "^1.1.2"

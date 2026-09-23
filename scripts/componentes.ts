@@ -20,6 +20,8 @@ const NAMES: Record<string, string> = {
   "segmented-control": "SegmentedControl", field: "Field", "price-breakdown": "PriceBreakdown",
   "offer-preview": "OfferPreview", metric: "Metric", "campaign-card": "CampaignCard",
   navigation: "Navigation", "top-bar": "TopBar", toast: "Toast", "assistant-sheet": "AssistantSheet",
+  "onboarding-header": "OnboardingHeader", "connection-card": "ConnectionCard", "permission-list": "PermissionList",
+  "option-list": "OptionList", "pick-row": "PickRow", "generation-progress": "GenerationProgress", "setup-checklist": "SetupChecklist",
 };
 
 async function main() {

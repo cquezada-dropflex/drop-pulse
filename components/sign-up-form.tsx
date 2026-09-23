@@ -6,7 +6,8 @@ import { AuthCard, FormError, linkClass } from "@/components/auth/auth-card";
 import { authErrorMessage } from "@/lib/auth-errors";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { PREFILL_KEY } from "@/components/onboarding/steps/crear-cuenta";
 
 export function SignUpForm() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,17 @@ export function SignUpForm() {
   const [mismatch, setMismatch] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  // Correo escrito en “Crea tu cuenta” (O1), sin pasarlo por la URL.
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(PREFILL_KEY);
+      if (saved) {
+        setEmail(saved);
+        sessionStorage.removeItem(PREFILL_KEY);
+      }
+    } catch {}
+  }, []);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +47,7 @@ export function SignUpForm() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/hoy`,
+          emailRedirectTo: `${window.location.origin}/onboarding`,
         },
       });
       if (error) throw error;

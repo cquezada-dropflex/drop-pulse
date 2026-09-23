@@ -5,6 +5,9 @@ La estructura sale de los siete casos de uso, no de las pantallas de una app tí
 ## Mapa
 
 ```
+Onboarding ───── Crear cuenta → Shopify → Productos → Tus números → Meta Ads (opcional) → Listo
+                 (ver sección Onboarding; termina en el primer producto a revisar)
+
 Hoy  ─────────── cola de decisiones (todas las pantallas desembocan aquí)
 │
 Productos ────── lista filtrable: Avanzan · Detenidos · Publicados
@@ -19,7 +22,7 @@ Campañas ─────── tarjetas con veredicto: Sube · Déjala · Vigí
     └─ Campaña ── cifras, historial, presupuesto
 
 Asistente ────── hoja sobre cualquier pantalla, con el contexto actual
-Ajustes ──────── supuestos (tasa de entrega, CPA máximo), tienda, cuentas
+Ajustes ──────── supuestos (tasa de entrega, CPA máximo), Conexiones (Shopify, Meta Ads), plan
 ```
 
 ## Decisiones y por qué

@@ -25,6 +25,10 @@ export function AppShell({ children, badges }: { children: React.ReactNode; badg
     const root = document.documentElement.style;
     root.setProperty("--df-tabbar-h", showTabbar ? "calc(var(--size-tabbar) + env(safe-area-inset-bottom))" : "0px");
     root.setProperty("--df-sticky-safe", showTabbar ? "0px" : "env(safe-area-inset-bottom)");
+    return () => {
+      root.removeProperty("--df-tabbar-h");
+      root.removeProperty("--df-sticky-safe");
+    };
   }, [showTabbar]);
 
   return (

@@ -1,0 +1,19 @@
+<!-- @dsCard group="Onboarding" height=480 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>ConnectionCard</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:12, padding:16, alignItems:'start'}},
+  h(D.ConnectionCard,{provider:'shopify', state:'idle'}),
+  h(D.ConnectionCard,{provider:'shopify', state:'connecting', account:'mitienda.myshopify.com', detail:'Esperando tu autorización en Shopify'}),
+  h(D.ConnectionCard,{provider:'shopify', state:'importing', account:'mitienda.myshopify.com', progress:0.67, detail:'86 de 128 productos importados'}),
+  h(D.ConnectionCard,{provider:'shopify', state:'connected', account:'mitienda.myshopify.com', facts:[['Productos','128'],['Moneda','CLP']]}),
+  h(D.ConnectionCard,{provider:'meta', state:'action', account:'Business Manager: Mi Tienda', detail:'Elige cuenta publicitaria, página y píxel para terminar.', actions:[h(D.Button,{key:1,size:'sm',variant:'primary'},'Elegir')]}),
+  h(D.ConnectionCard,{provider:'meta', state:'error', account:'Mi Tienda CL', detail:'Meta venció el permiso. Vuelve a conectar para seguir viendo tus campañas.', actions:[h(D.Button,{key:1,size:'sm',variant:'secondary'},'Volver a conectar')]}),
+  h(D.ConnectionCard,{provider:'meta', state:'later', account:'Conéctala cuando quieras anunciar', actions:[h(D.Button,{key:1,size:'sm',variant:'secondary'},'Conectar')]})));
+</script>
+</body>
+</html>

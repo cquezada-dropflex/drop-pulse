@@ -25,6 +25,8 @@ import {
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { productImage } from "@/lib/mock/images";
 import { FieldDemo, InteractiveDemo, SegmentedDemo } from "./demos";
+import { OnboardingDemos } from "./onboarding";
+import { Section } from "./section";
 
 export const metadata: Metadata = { title: "Componentes" };
 
@@ -40,15 +42,6 @@ const COSTS = [
   { label: "Envío", value: 3500 },
   { label: "Publicidad por venta", value: 6000 },
 ];
-
-function Section({ title, children, id }: { title: string; children: React.ReactNode; id: string }) {
-  return (
-    <section aria-labelledby={id} data-componente={id} className="flex flex-col gap-3 border-b py-6 last:border-b-0">
-      <h2 id={id} className="text-heading">{title}</h2>
-      {children}
-    </section>
-  );
-}
 
 const group = "overflow-hidden rounded-lg border bg-card";
 
@@ -276,6 +269,8 @@ export default function ComponentesPage() {
           </div>
         </div>
       </Section>
+
+      <OnboardingDemos />
 
       <Section id="interaccion" title="Interacción (revisión, imágenes, precio en vivo, toast)">
         <InteractiveDemo />

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import { Icon } from "@/components/df";
+import { Suspense } from "react";
+import { Connections } from "@/components/onboarding/connections";
+import { SetupSlot } from "@/components/onboarding/setup-slot";
+import { Skeleton } from "@/components/shell/skeletons";
 import { LogoutButton } from "@/components/logout-button";
 import { AssumptionsForm } from "@/components/screens/assumptions-form";
 import { PageHeader } from "@/components/shell/page-header";
@@ -31,25 +34,13 @@ export default async function AjustesPage() {
         >
           <AssumptionsForm initial={assumptions} />
         </Section>
-        <Section id="cuentas" title="Tienda y cuentas">
-          <ul className="flex flex-col">
-            {[
-              ["store", "Tienda", assumptions.store],
-              ["megaphone", "Anuncios", assumptions.metaAccount],
-            ].map(([icon, label, value]) => (
-              <li key={label} className="flex items-center gap-3 py-2 not-first:border-t">
-                <Icon name={icon as "store" | "megaphone"} className="text-muted-foreground" />
-                <div className="min-w-0 flex-1">
-                  <p className="text-row">{label}</p>
-                  <p className="truncate text-caption text-muted-foreground">{value}</p>
-                </div>
-                <span className="flex items-center gap-1 text-caption text-success">
-                  <Icon name="check-circle" size="sm" strokeWidth={2} />
-                  Conectada
-                </span>
-              </li>
-            ))}
-          </ul>
+        <Section id="conexiones" title="Conexiones" description="Tu tienda Shopify y tu cuenta de Meta Ads.">
+          <Suspense fallback={<Skeleton className="h-40" />}>
+            <div className="flex flex-col gap-3">
+              <SetupSlot where="ajustes" />
+              <Connections fallbackStore={assumptions.store} fallbackMeta={assumptions.metaAccount} />
+            </div>
+          </Suspense>
         </Section>
         <Section id="apariencia" title="Apariencia" description="Claro, oscuro o el mismo del teléfono.">
           <div className="flex items-center justify-between gap-3">

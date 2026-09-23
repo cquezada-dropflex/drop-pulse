@@ -21,3 +21,12 @@ export { Navigation, type NavigationProps, type NavId, type NavItem } from "./na
 export { TopBar, type TopBarProps } from "./top-bar";
 export { Toast, Toaster, notify, notifyUndo, type ToastProps } from "./toast";
 export { AssistantSheet, type AssistantMessage, type AssistantSheetProps } from "./assistant-sheet";
+// Onboarding (design-system/onboarding.md)
+export { OnboardingHeader, type OnboardingHeaderProps } from "./onboarding-header";
+export { ConnectionCard, ProviderMark, type ConnectionCardProps, type ConnectionState, type Provider } from "./connection-card";
+export { PermissionList, type Permission, type PermissionListProps } from "./permission-list";
+export { OptionList, type Option, type OptionListProps } from "./option-list";
+export { PickRow, type PickRowProps } from "./pick-row";
+export { GenerationProgress, type GenerationItem, type GenerationProgressProps } from "./generation-progress";
+export { SetupChecklist, type SetupChecklistProps, type SetupItem } from "./setup-checklist";
+export { StateChip } from "./state-chip";

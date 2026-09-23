@@ -1,0 +1,15 @@
+<!-- @dsCard group="Onboarding" height=300 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>PickRow</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{padding:16, maxWidth:420}}, h('div',{className:'df-group', style:{margin:0}},
+  h(D.PickRow,{name:'Corrector de postura', imageIndex:1, meta:'$24.990 · 41 ventas en 30 días', issues:['Sin descripción','2 imágenes'], score:'Alta', checked:true}),
+  h(D.PickRow,{name:'Botella térmica 1L', imageIndex:0, meta:'$14.990 · 9 ventas', issues:['Imágenes con texto chino'], score:'Media', checked:false}),
+  h(D.PickRow,{name:'Organizador de cables', imageIndex:3, meta:'$9.990 · 2 ventas', issues:[], score:'Baja', checked:false}))));
+</script>
+</body>
+</html>

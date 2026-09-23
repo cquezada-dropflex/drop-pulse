@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"DropFlex","components":[{"name":"Button"},{"name":"IconButton"},{"name":"StatusBadge"},{"name":"StageMeter"},{"name":"ProductRow"},{"name":"AttentionItem"},{"name":"StageList"},{"name":"ReviewCard"},{"name":"ImageTile"},{"name":"SegmentedControl"},{"name":"Field"},{"name":"PriceBreakdown"},{"name":"OfferPreview"},{"name":"Metric"},{"name":"CampaignCard"},{"name":"Navigation"},{"name":"TopBar"},{"name":"Toast"},{"name":"AssistantSheet"},{"name":"Icon"}]} */
+/* @ds-bundle: {"format":4,"namespace":"DropFlex","components":[{"name":"Button"},{"name":"IconButton"},{"name":"StatusBadge"},{"name":"StageMeter"},{"name":"ProductRow"},{"name":"AttentionItem"},{"name":"StageList"},{"name":"ReviewCard"},{"name":"ImageTile"},{"name":"SegmentedControl"},{"name":"Field"},{"name":"PriceBreakdown"},{"name":"OfferPreview"},{"name":"Metric"},{"name":"CampaignCard"},{"name":"Navigation"},{"name":"TopBar"},{"name":"Toast"},{"name":"AssistantSheet"},{"name":"OnboardingHeader"},{"name":"ConnectionCard"},{"name":"PermissionList"},{"name":"OptionList"},{"name":"PickRow"},{"name":"GenerationProgress"},{"name":"SetupChecklist"},{"name":"Icon"}]} */
 (function () {
   var React = window.React;
   var h = React.createElement;
@@ -41,6 +41,7 @@
     trend: 'M3.5 16.5l5.5-5.5 4 4 7.5-7.5 M15 7.5h5.5V13',
     grip: 'M9 6h.01 M15 6h.01 M9 12h.01 M15 12h.01 M9 18h.01 M15 18h.01',
     star: 'M12 4l2.4 5 5.3.6-3.9 3.7 1 5.2L12 16l-4.8 2.5 1-5.2-3.9-3.7 5.3-.6z',
+    shield: 'M12 3.25l7.25 2.75v5.5c0 4.5-3.1 8-7.25 9.25C7.85 19.5 4.75 16 4.75 11.5V6z M8.75 12l2.25 2.25 4.25-4.5',
     settings: 'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.1-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2.1 1.2l-2.3-.9-2 3.4 2 1.5a7 7 0 0 0 0 2.4l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2.1 1.2L10 21h4l.5-2.6a7 7 0 0 0 2.1-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z'
   };
   function Icon(props) {
@@ -360,6 +361,140 @@
   }
 
   /* =========================================================
+     Onboarding: conexión con Shopify y Meta Ads
+     ========================================================= */
+
+  /* OnboardingHeader: paso, avance, volver y título */
+  function OnboardingHeader(props) {
+    var total = props.total || 4, step = props.step || 1;
+    var stages = [];
+    for (var i = 1; i <= total; i++) stages.push(i < step ? 'done' : i === step ? 'current' : (props.optionalSteps && props.optionalSteps.indexOf(i) >= 0 ? 'optional' : 'locked'));
+    return h('header', { className: 'df-ob-head' },
+      h('div', { className: 'df-ob-bar' },
+        props.back ? h(IconButton, { icon: 'chevron-left', label: props.back }) : h('span', { style: { width: 44 } }),
+        h('div', { className: 'df-ob-step' }, props.stepLabel || ('Paso ' + step + ' de ' + total)),
+        props.skip ? h(Button, { variant: 'ghost', size: 'sm' }, props.skip) : h('span', { style: { width: 44 } })),
+      h('div', { className: 'df-ob-meter' }, h(StageMeter, { stages: stages })),
+      props.title ? h('h1', { className: 'df-ob-title' }, props.title) : null,
+      props.desc ? h('p', { className: 'df-ob-desc' }, props.desc) : null);
+  }
+
+  /* ProviderMark: marca genérica del proveedor. Reemplazar por el logo oficial según sus guías de marca. */
+  var PROVIDERS = {
+    shopify: { name: 'Shopify', icon: 'store', what: 'Tu tienda' },
+    meta: { name: 'Meta Ads', icon: 'megaphone', what: 'Tus anuncios' }
+  };
+  function ProviderMark(props) {
+    var p = PROVIDERS[props.provider] || PROVIDERS.shopify;
+    return h('span', { className: cx('df-pmark', props.size === 'lg' && 'is-lg'), 'aria-hidden': 'true', 'data-provider': props.provider }, h(Icon, { name: p.icon }));
+  }
+
+  /* ConnectionCard: estado de una integración */
+  var CONN = {
+    idle:       { badge: null },
+    connecting: { badge: { t: 'Conectando', i: 'loader', c: 'df-status-progress', spin: true } },
+    importing:  { badge: { t: 'Importando', i: 'loader', c: 'df-status-progress', spin: true } },
+    connected:  { badge: { t: 'Conectada', i: 'check-circle', c: 'df-status-success' } },
+    action:     { badge: { t: 'Falta un paso', i: 'clock', c: 'df-status-warning' } },
+    error:      { badge: { t: 'Sin conexión', i: 'alert', c: 'df-status-danger' } },
+    later:      { badge: { t: 'Pendiente', i: 'minus', c: 'df-status-quiet' } }
+  };
+  function ConnectionCard(props) {
+    var p = PROVIDERS[props.provider] || PROVIDERS.shopify, st = props.state || 'idle', c = CONN[st];
+    return h('section', { className: cx('df-card df-conn', 'is-' + st), 'aria-label': p.name },
+      h('div', { className: 'df-conn-head' },
+        h(ProviderMark, { provider: props.provider }),
+        h('div', { style: { minWidth: 0, flex: 1 } },
+          h('div', { className: 'df-conn-name' }, p.name),
+          h('div', { className: 'df-conn-acc' }, props.account || p.what)),
+        c.badge ? h('span', { className: 'df-status ' + c.badge.c, role: c.badge.spin ? 'status' : undefined }, h(Icon, { name: c.badge.i, className: c.badge.spin ? 'df-spin' : undefined, strokeWidth: 2 }), c.badge.t) : null),
+      props.progress != null ? h('div', { className: 'df-conn-prog' },
+        h('div', { className: 'df-conn-track' }, h('span', { style: { width: Math.round(props.progress * 100) + '%' } })),
+        h('div', { className: 'df-conn-detail' }, props.detail)) : props.detail ? h('div', { className: cx('df-conn-detail', st === 'error' && 't-danger', st === 'action' && 't-warning') }, props.detail) : null,
+      props.facts ? h('dl', { className: 'df-conn-facts' }, props.facts.map(function (f, i) { return h('div', { key: i }, h('dt', null, f[0]), h('dd', null, f[1])); })) : null,
+      props.actions ? h('div', { className: 'df-conn-actions' }, props.actions) : null);
+  }
+
+  /* PermissionList: qué lee y qué escribe DropFlex */
+  function PermissionList(props) {
+    return h('div', { className: 'df-perms' },
+      props.title ? h('div', { className: 'df-perms-t' }, h(Icon, { name: 'shield', size: 'sm' }), props.title) : null,
+      h('ul', null, (props.items || []).map(function (it, i) {
+        return h('li', { key: i },
+          h('span', { className: cx('df-perm-k', it.kind === 'write' && 'is-write') }, it.kind === 'write' ? 'Escribe' : it.kind === 'never' ? 'Nunca' : 'Lee'),
+          h('span', null, it.text));
+      })),
+      props.note ? h('p', { className: 'df-perms-n' }, props.note) : null);
+  }
+
+  /* OptionList: elegir una cuenta, página o píxel */
+  function OptionList(props) {
+    var name = props.name || 'opt';
+    return h('fieldset', { className: 'df-opts' },
+      h('legend', { className: 'df-opts-l' }, props.label, props.hint ? h('span', null, props.hint) : null),
+      h('div', { className: 'df-opts-box' }, (props.options || []).map(function (o, i) {
+        var sel = props.value === o.value;
+        return h('label', { key: i, className: cx('df-opt', sel && 'is-sel', o.disabled && 'is-dis') },
+          h('input', { type: 'radio', name: name, defaultChecked: sel, disabled: o.disabled }),
+          h('span', { className: 'df-radio', 'aria-hidden': 'true' }),
+          h('span', { className: 'df-opt-body' },
+            h('span', { className: 'df-opt-t' }, o.title),
+            o.meta ? h('span', { className: cx('df-opt-m', o.tone && 't-' + o.tone) }, o.tone === 'warning' ? h(Icon, { name: 'clock', size: 'sm', strokeWidth: 2 }) : o.tone === 'danger' ? h(Icon, { name: 'alert', size: 'sm', strokeWidth: 2 }) : null, o.meta) : null),
+          o.tag ? h('span', { className: 'df-opt-tag' }, o.tag) : null);
+      })));
+  }
+
+  /* PickRow: elegir productos importados, con diagnóstico */
+  function PickRow(props) {
+    return h('label', { className: cx('df-pick', props.checked && 'is-sel') },
+      h('input', { type: 'checkbox', defaultChecked: props.checked }),
+      h('span', { className: 'df-check', 'aria-hidden': 'true' }, h(Icon, { name: 'check', size: 'sm', strokeWidth: 2.5 })),
+      h('img', { className: 'df-thumb', src: productImage(props.imageIndex || 0), alt: '' }),
+      h('span', { className: 'df-pick-body' },
+        h('span', { className: 'df-prow-name' }, props.name),
+        h('span', { className: 'df-pick-meta' }, props.meta),
+        props.issues && props.issues.length ? h('span', { className: 'df-pick-issues' }, props.issues.map(function (t, i) { return h('span', { key: i, className: 'df-issue' }, t); })) : null),
+      props.score != null ? h('span', { className: 'df-pick-score', title: 'Potencial de mejora' }, h('b', null, props.score), h('small', null, 'mejora')) : null);
+  }
+
+  /* GenerationProgress: la IA trabajando sobre los productos elegidos */
+  function GenerationProgress(props) {
+    var items = props.items || [];
+    var done = items.filter(function (i) { return i.status === 'generado' || i.status === 'aprobado'; }).length;
+    return h('div', { className: cx('df-gen', props.compact && 'is-compact') },
+      h('div', { className: 'df-gen-head' },
+        h(Icon, { name: 'sparkle', className: done < items.length ? 'df-pulse' : undefined }),
+        h('div', { style: { flex: 1, minWidth: 0 } },
+          h('div', { className: 'df-gen-t' }, props.title || (done < items.length ? 'Generando contenido' : 'Todo listo para revisar')),
+          h('div', { className: 'df-gen-s' }, done + ' de ' + items.length + ' productos listos' + (props.eta ? ' · ' + props.eta : ''))),
+        props.action || null),
+      h('div', { className: 'df-conn-track', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': items.length, 'aria-valuenow': done }, h('span', { style: { width: (items.length ? done / items.length * 100 : 0) + '%' } })),
+      props.compact ? null : h('ul', { className: 'df-gen-list' }, items.map(function (it, i) {
+        return h('li', { key: i },
+          h('img', { className: 'df-thumb', src: productImage(it.imageIndex || 0), alt: '', style: { width: 36, height: 36 } }),
+          h('span', { className: 'df-gen-body' }, h('span', { className: 'df-prow-name', style: { fontSize: 14 } }, it.name), h('span', { className: 'df-pick-meta' }, it.detail)),
+          it.status === 'cola' ? h('span', { className: 'df-status df-status-quiet df-status-sm' }, h(Icon, { name: 'clock', strokeWidth: 2 }), 'En cola') : h(StatusBadge, { status: it.status, size: 'sm', label: it.status === 'publicando' ? 'Generando' : undefined }));
+      })));
+  }
+
+  /* SetupChecklist: lo que falta configurar, en Hoy */
+  function SetupChecklist(props) {
+    var items = props.items || [];
+    var done = items.filter(function (i) { return i.done; }).length;
+    return h('section', { className: 'df-card df-setup', 'aria-label': 'Configuración' },
+      h('div', { className: 'df-setup-head' },
+        h('div', { style: { flex: 1 } }, h('div', { className: 'df-conn-name' }, props.title || 'Termina de configurar'), h('div', { className: 'df-conn-acc' }, done + ' de ' + items.length + ' listos')),
+        h(IconButton, { icon: 'x', label: 'Ocultar' })),
+      h(StageMeter, { stages: items.map(function (i) { return i.done ? 'done' : 'locked'; }) }),
+      h('ul', { className: 'df-setup-list' }, items.map(function (it, i) {
+        return h('li', { key: i, className: it.done ? 'is-done' : '' },
+          h('span', { className: 'df-setup-dot' }, it.done ? h(Icon, { name: 'check', size: 'sm', strokeWidth: 2.5 }) : null),
+          h('span', { className: 'df-setup-t' }, it.title, it.desc ? h('small', null, it.desc) : null),
+          !it.done && it.action ? h(Button, { size: 'sm', variant: 'secondary' }, it.action) : null);
+      })));
+  }
+
+  /* =========================================================
      Pantallas de ejemplo (no son componentes: composiciones)
      ========================================================= */
   function Phone(props) {
@@ -535,12 +670,214 @@
           h(CampaignCard, { name: 'Botella térmica · Imagen', imageIndex: 0, verdict: 'vigilar', reason: 'CPA $5.700, cerca del límite y subiendo 3 días seguidos.', actions: null, metrics: [{ label: 'Costo por venta', value: '$5.700', target: 'Límite $6.000', trend: 'warn' }, { label: 'Gasto', value: '$14.200' }] }))));
   }
 
+  /* ---------- Pantallas de onboarding ---------- */
+  function ObBody(props) { return h('div', { className: 'df-scroll df-ob-body', style: props.style }, props.children); }
+  var PERMS_SHOPIFY = [
+    { kind: 'read', text: 'Productos, variantes, imágenes y precios' },
+    { kind: 'read', text: 'Pedidos, para saber qué se vende y cuánto se entrega' },
+    { kind: 'write', text: 'Productos: solo lo que tú apruebes' },
+    { kind: 'never', text: 'Datos de pago ni clientes fuera de tus pedidos' }
+  ];
+  var PERMS_META = [
+    { kind: 'read', text: 'Rendimiento de tus campañas y del píxel' },
+    { kind: 'write', text: 'Campañas, anuncios y presupuestos que tú apruebes' },
+    { kind: 'never', text: 'Publicar en tu página sin tu aprobación' }
+  ];
+  var GEN = [
+    { name: 'Corrector de postura', imageIndex: 1, status: 'generado', detail: '8 textos · 6 imágenes' },
+    { name: 'Lámpara lunar 3D', imageIndex: 2, status: 'publicando', detail: 'Escribiendo textos' },
+    { name: 'Botella térmica 1L', imageIndex: 0, status: 'cola', detail: 'Empieza en ~1 min' }
+  ];
+
+  function ObBienvenida() {
+    return h(Phone, { label: 'O1 · Crear cuenta: la promesa en 3 pasos' },
+      h(ObBody, { style: { padding: '24px 20px 0', display: 'flex', flexDirection: 'column', gap: 20 } },
+        h('div', { className: 'df-rail-brand', style: { padding: 0 } }, h('span', { className: 'df-rail-mark', 'aria-hidden': 'true' }, 'D'), 'DropFlex'),
+        h('div', null,
+          h('h1', { className: 'df-ob-title', style: { fontSize: 28, lineHeight: '34px', margin: 0 } }, 'Tus productos, mejores y listos para vender'),
+          h('p', { className: 'df-ob-desc', style: { margin: '8px 0 0' } }, 'Conecta tu tienda y la IA prepara textos, imágenes y anuncios. Tú decides qué se publica.')),
+        h('ol', { className: 'df-ob-promise' },
+          [['store', 'Conecta Shopify', 'Traemos tus productos en segundos'], ['sparkle', 'La IA los mejora', 'Textos, imágenes y precio sugerido'], ['check', 'Tú apruebas', 'Nada se publica sin tu OK']].map(function (x, i) {
+            return h('li', { key: i }, h('span', { className: 'df-ob-num' }, h(Icon, { name: x[0] })), h('span', null, h('b', null, x[1]), h('small', null, x[2])));
+          }))),
+      h('div', { className: 'df-sticky', style: { flexDirection: 'column', borderTop: 0 } },
+        h(Button, { variant: 'secondary', size: 'lg', block: true }, 'Continuar con Google'),
+        h('div', { className: 'df-ob-or' }, 'o con tu correo'),
+        h(Field, { label: 'Correo', value: 'tu@correo.com', id: 'ob-mail' }),
+        h(Button, { variant: 'primary', size: 'lg', block: true }, 'Crear cuenta gratis'),
+        h('p', { className: 'df-ob-fine' }, '¿Ya tienes cuenta? ', h('a', { href: '#' }, 'Inicia sesión'))));
+  }
+
+  function ObShopify() {
+    return h(Phone, { label: 'O2 · Paso 1: conectar Shopify (obligatorio)' },
+      h(OnboardingHeader, { step: 1, total: 4, optionalSteps: [4], title: 'Conecta tu tienda Shopify', desc: 'De aquí sacamos tus productos para mejorarlos. Te llevaremos a Shopify para que autorices.' }),
+      h(ObBody, null,
+        h(Field, { label: 'Dirección de tu tienda', value: 'mitienda', suffix: '.myshopify.com', id: 'ob-shop', hint: 'La ves en Shopify › Configuración › Dominios' }),
+        h(PermissionList, { title: 'Qué hará DropFlex con tu tienda', items: PERMS_SHOPIFY, note: 'Puedes desconectar en cualquier momento desde Ajustes o desde tu Shopify.' })),
+      h('div', { className: 'df-sticky' }, h(Button, { variant: 'primary', size: 'lg', iconEnd: 'chevron-right' }, 'Conectar con Shopify')));
+  }
+
+  function ObShopifyOk() {
+    return h(Phone, { label: 'O3 · Tienda conectada, importando en segundo plano' },
+      h(OnboardingHeader, { step: 1, total: 4, optionalSteps: [4], title: 'Tienda conectada', desc: 'Estamos trayendo tus productos. Puedes seguir mientras terminamos.' }),
+      h(ObBody, null,
+        h(ConnectionCard, { provider: 'shopify', state: 'importing', account: 'mitienda.myshopify.com', progress: 0.67, detail: '86 de 128 productos importados' }),
+        h(ConnectionCard, { provider: 'shopify', state: 'error', account: 'otratienda.myshopify.com', detail: 'Shopify no encontró esa tienda. Revisa la dirección e intenta de nuevo.', actions: [h(Button, { key: 1, size: 'sm', variant: 'secondary' }, 'Cambiar dirección'), h(Button, { key: 2, size: 'sm', variant: 'ghost' }, 'Reintentar')] }),
+        h('p', { className: 'df-ob-fine', style: { textAlign: 'left' } }, 'Arriba: así se ve cuando todo va bien. Abajo: el error, con qué pasó y qué hacer.')),
+      h('div', { className: 'df-sticky' }, h(Button, { variant: 'primary', size: 'lg', iconEnd: 'chevron-right' }, 'Elegir productos')));
+  }
+
+  function ObProductos() {
+    var rows = [
+      { name: 'Corrector de postura', imageIndex: 1, meta: '$24.990 · 41 ventas en 30 días', issues: ['Sin descripción', '2 imágenes'], score: 'Alta', checked: true },
+      { name: 'Lámpara lunar 3D', imageIndex: 2, meta: '$19.990 · 18 ventas', issues: ['Título de proveedor'], score: 'Alta', checked: true },
+      { name: 'Botella térmica 1L', imageIndex: 0, meta: '$14.990 · 9 ventas', issues: ['Imágenes con texto chino'], score: 'Media', checked: true },
+      { name: 'Masajeador de cuello', imageIndex: 4, meta: '$29.990 · 3 ventas', issues: ['Sin precio tachado'], score: 'Media', checked: false }
+    ];
+    return h(Phone, { label: 'O4 · Paso 2: elegir con qué empezar' },
+      h(OnboardingHeader, { step: 2, total: 4, optionalSteps: [4], back: 'Volver', title: 'Elige con qué empezar', desc: 'Te recomendamos los que más venden y más pueden mejorar.' }),
+      h('div', { style: { padding: '0 16px 12px' } }, h(SegmentedControl, { block: true, value: 'rec', label: 'Productos', options: [{ value: 'rec', label: 'Recomendados', count: 12 }, { value: 'all', label: 'Todos', count: 128 }] })),
+      h(ObBody, { style: { padding: 0 } }, h('div', { className: 'df-group' }, rows.map(function (r, i) { return h(PickRow, Object.assign({ key: i }, r)); }))),
+      h('div', { className: 'df-sticky', style: { flexDirection: 'column', gap: 6 } },
+        h(Button, { variant: 'primary', size: 'lg', block: true, iconEnd: 'chevron-right' }, 'Mejorar 3 productos'),
+        h('p', { className: 'df-ob-fine', style: { margin: 0 } }, 'Tu plan incluye 10 productos al mes.')));
+  }
+
+  function ObNumeros() {
+    return h(Phone, { label: 'O5 · Paso 3: tus números (con valores sugeridos)' },
+      h(OnboardingHeader, { step: 3, total: 4, optionalSteps: [4], back: 'Volver', skip: 'Usar sugeridos', title: 'Tus números', desc: 'Con esto calculamos cuánto ganas por venta y cuándo apagar una campaña. Puedes cambiarlos después.' }),
+      h(ObBody, { style: { display: 'flex', flexDirection: 'column', gap: 16 } },
+        h(Field, { label: 'De cada 10 pedidos, ¿cuántos se entregan?', value: '8', suffix: 'de 10', id: 'ob-del', ai: true, hint: 'Lo calculamos con tus pedidos de Shopify' }),
+        h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 } },
+          h(Field, { label: 'Envío por pedido', prefix: '$', value: '3.500', id: 'ob-env' }),
+          h(Field, { label: 'Máximo por venta en anuncios', prefix: '$', value: '6.000', id: 'ob-cpa', hint: 'Tu CPA límite' })),
+        h('div', { className: 'df-card df-card-pad', style: { display: 'flex', gap: 12, alignItems: 'flex-start' } },
+          h('span', { className: 'df-att-ico k-review' }, h(Icon, { name: 'tag' })),
+          h('div', null, h('div', { className: 'type-heading', style: { fontSize: 15 } }, 'Ejemplo con tu Corrector de postura'), h('div', { className: 'df-att-detail' }, 'A $24.990 ganarías ', h('b', { style: { color: 'var(--success)' } }, '$8.590'), ' por venta entregada, si el anuncio cuesta hasta $6.000.')))),
+      h('div', { className: 'df-sticky' }, h(Button, { variant: 'primary', size: 'lg', iconEnd: 'chevron-right' }, 'Empezar a generar')));
+  }
+
+  function ObMeta() {
+    return h(Phone, { label: 'O6 · Paso 4: Meta Ads mientras la IA trabaja' },
+      h(OnboardingHeader, { step: 4, total: 4, optionalSteps: [4], back: 'Volver', title: 'Conecta Meta Ads', desc: 'Para crear anuncios con tus productos y decirte cuáles funcionan. Si no los usas aún, sáltalo.' }),
+      h(ObBody, { style: { display: 'flex', flexDirection: 'column', gap: 16 } },
+        h('div', { className: 'df-card df-card-pad' }, h(GenerationProgress, { compact: true, items: GEN, eta: 'unos 3 min' })),
+        h(ConnectionCard, { provider: 'meta', state: 'idle', account: 'Cuenta publicitaria, página y píxel' }),
+        h(PermissionList, { title: 'Qué hará DropFlex con Meta', items: PERMS_META })),
+      h('div', { className: 'df-sticky', style: { flexDirection: 'column' } },
+        h(Button, { variant: 'primary', size: 'lg', block: true }, 'Continuar con Facebook'),
+        h(Button, { variant: 'ghost', block: true }, 'Conectar después')));
+  }
+
+  function ObMetaCuentas() {
+    return h(Phone, { label: 'O7 · Elegir cuenta, página y píxel' },
+      h(OnboardingHeader, { step: 4, total: 4, optionalSteps: [4], back: 'Volver', title: 'Elige dónde anunciar', desc: 'Encontramos varias en tu Business Manager.' }),
+      h(ObBody, { style: { display: 'flex', flexDirection: 'column', gap: 20 } },
+        h(OptionList, { label: 'Cuenta publicitaria', name: 'acc', value: 'a1', options: [
+          { value: 'a1', title: 'Mi Tienda CL', meta: 'CLP · activa', tag: 'Sugerida' },
+          { value: 'a2', title: 'Pruebas 2025', meta: 'Deshabilitada por Meta', tone: 'danger', disabled: true }] }),
+        h(OptionList, { label: 'Página de Facebook', name: 'pg', value: 'p1', options: [{ value: 'p1', title: 'Mi Tienda', meta: 'Instagram vinculado' }] }),
+        h(OptionList, { label: 'Píxel', name: 'px', value: 'x1', options: [
+          { value: 'x1', title: 'Píxel Mi Tienda', meta: 'Sin compras en 7 días: revisa que esté en tu tienda', tone: 'warning' }] })),
+      h('div', { className: 'df-sticky' }, h(Button, { variant: 'primary', size: 'lg', icon: 'check' }, 'Guardar y terminar')));
+  }
+
+  function ObListo() {
+    return h(Phone, { label: 'O8 · Listo: el primer producto espera tu revisión' },
+      h(ObBody, { style: { paddingTop: 32, display: 'flex', flexDirection: 'column', gap: 20 } },
+        h('span', { className: 'df-ob-done', 'aria-hidden': 'true' }, h(Icon, { name: 'check', strokeWidth: 2.5 })),
+        h('div', null,
+          h('h1', { className: 'df-ob-title', style: { margin: 0 } }, 'Tu primer producto está listo'),
+          h('p', { className: 'df-ob-desc', style: { margin: '6px 0 0' } }, 'Revisa lo que propuso la IA. Los demás siguen generándose; te avisamos al terminar.')),
+        h('div', { className: 'df-card df-card-pad' }, h(GenerationProgress, { items: GEN, eta: 'unos 2 min' })),
+        h('div', { style: { display: 'flex', flexDirection: 'column', gap: 8 } },
+          h(ConnectionCard, { provider: 'shopify', state: 'connected', account: 'mitienda.myshopify.com' }),
+          h(ConnectionCard, { provider: 'meta', state: 'connected', account: 'Mi Tienda CL · Píxel Mi Tienda' }))),
+      h('div', { className: 'df-sticky', style: { flexDirection: 'column' } },
+        h(Button, { variant: 'primary', size: 'lg', block: true, iconEnd: 'chevron-right' }, 'Revisar Corrector de postura'),
+        h(Button, { variant: 'ghost', block: true }, 'Ir a Hoy')));
+  }
+
+  function ObHoy() {
+    return h(Phone, { label: 'O9 · Hoy, si saltó Meta: la lista de lo pendiente' },
+      h(TopBar, { title: 'Hoy', subtitle: 'Miércoles 23 de septiembre', large: true }),
+      h('div', { className: 'df-scroll' },
+        h('div', { style: { padding: '0 16px' } }, h(SetupChecklist, { items: [
+          { title: 'Conectar Shopify', done: true }, { title: 'Elegir productos', done: true }, { title: 'Definir tus números', done: true },
+          { title: 'Conectar Meta Ads', desc: 'Para lanzar y vigilar anuncios', action: 'Conectar' }] })),
+        h('div', { className: 'df-section-t' }, 'Contenido por revisar'),
+        h('div', { className: 'df-group' },
+          h(AttentionItem, { kind: 'review', title: '14 propuestas nuevas', product: 'Corrector de postura', actions: [h(Button, { key: 1, size: 'sm', variant: 'primary', iconEnd: 'chevron-right' }, 'Revisar ahora')] }),
+          h(AttentionItem, { kind: 'review', title: 'Generando…', product: 'Lámpara lunar 3D · Botella térmica 1L' }))),
+      h(Navigation, { active: 'hoy', badges: { hoy: 2 } }));
+  }
+
+  var OB_STEPS = function (cur) {
+    var t = ['Conectar Shopify', 'Elegir productos', 'Tus números', 'Conectar Meta Ads'];
+    var d = ['mitienda.myshopify.com', '3 elegidos', 'Entrega 8 de 10 · CPA $6.000', 'Puedes hacerlo después'];
+    return t.map(function (x, i) { return { title: x, state: i + 1 < cur ? 'done' : i + 1 === cur ? 'current' : 'locked', desc: d[i], optional: i === 3 }; });
+  };
+  function ObDeskFrame(props) {
+    return h(DeskFrame, { label: props.label },
+      h('div', { className: 'df-ob-side' },
+        h('div', { className: 'df-rail-brand' }, h('span', { className: 'df-rail-mark', 'aria-hidden': 'true' }, 'D'), 'DropFlex'),
+        h('div', { className: 'df-ob-side-t' }, 'Configura tu cuenta'),
+        h(StageList, { stages: OB_STEPS(props.step) }),
+        h('div', { className: 'df-rail-sep' }),
+        props.side || null),
+      props.children);
+  }
+  function ObDeskProductos() {
+    var rows = [
+      { name: 'Corrector de postura', imageIndex: 1, meta: '$24.990 · 41 ventas en 30 días', issues: ['Sin descripción', '2 imágenes'], score: 'Alta', checked: true },
+      { name: 'Lámpara lunar 3D', imageIndex: 2, meta: '$19.990 · 18 ventas', issues: ['Título de proveedor'], score: 'Alta', checked: true },
+      { name: 'Botella térmica 1L', imageIndex: 0, meta: '$14.990 · 9 ventas', issues: ['Imágenes con texto chino'], score: 'Media', checked: true },
+      { name: 'Masajeador de cuello', imageIndex: 4, meta: '$29.990 · 3 ventas', issues: ['Sin precio tachado'], score: 'Media', checked: false },
+      { name: 'Organizador de cables', imageIndex: 3, meta: '$9.990 · 2 ventas', issues: [], score: 'Baja', checked: false }
+    ];
+    return h(ObDeskFrame, { label: 'Escritorio · Paso 2: pasos a la izquierda, lista al centro, resumen fijo abajo', step: 2,
+      side: h('div', { className: 'df-ob-sidenote' }, h(StatusBadge, { status: 'aprobado', label: 'Shopify conectada' }), h('span', null, '128 productos importados · CLP')) },
+      h('div', { className: 'df-desk-main' },
+        h('div', { className: 'df-ob-deskhead' },
+          h('div', { style: { flex: 1 } }, h('div', { className: 'type-display' }, 'Elige con qué empezar'), h('div', { className: 'df-ob-desc', style: { margin: '4px 0 0' } }, 'Te recomendamos los que más venden y más pueden mejorar.')),
+          h(SegmentedControl, { value: 'rec', label: 'Productos', options: [{ value: 'rec', label: 'Recomendados', count: 12 }, { value: 'all', label: 'Todos', count: 128 }] })),
+        h('div', { style: { padding: '0 48px', flex: 1, overflow: 'hidden' } }, h('div', { className: 'df-group', style: { margin: 0, maxWidth: 'var(--size-content)' } }, rows.map(function (r, i) { return h(PickRow, Object.assign({ key: i }, r)); }))),
+        h('div', { className: 'df-ob-deskfoot' },
+          h('span', { className: 'df-ob-desc', style: { flex: 1, margin: 0 } }, '3 elegidos · tu plan incluye 10 al mes'),
+          h(Button, { variant: 'ghost' }, 'Volver'),
+          h(Button, { variant: 'primary', iconEnd: 'chevron-right' }, 'Mejorar 3 productos'))));
+  }
+  function ObDeskMeta() {
+    return h(ObDeskFrame, { label: 'Escritorio · Paso 4: Meta Ads, con la generación avanzando al costado', step: 4,
+      side: h('div', { className: 'df-card df-card-pad' }, h(GenerationProgress, { compact: true, items: GEN, eta: 'unos 3 min' })) },
+      h('div', { className: 'df-desk-main' },
+        h('div', { className: 'df-ob-deskhead' }, h('div', { style: { flex: 1 } }, h('div', { className: 'type-display' }, 'Elige dónde anunciar'), h('div', { className: 'df-ob-desc', style: { margin: '4px 0 0' } }, 'Encontramos estas cuentas en tu Business Manager.'))),
+        h('div', { style: { padding: '0 48px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 300px', gap: 32, alignItems: 'start' } },
+          h('div', { style: { display: 'flex', flexDirection: 'column', gap: 20 } },
+            h(OptionList, { label: 'Cuenta publicitaria', name: 'dacc', value: 'a1', options: [
+              { value: 'a1', title: 'Mi Tienda CL', meta: 'CLP · activa', tag: 'Sugerida' },
+              { value: 'a2', title: 'Pruebas 2025', meta: 'Deshabilitada por Meta', tone: 'danger', disabled: true }] }),
+            h(OptionList, { label: 'Página de Facebook', name: 'dpg', value: 'p1', options: [{ value: 'p1', title: 'Mi Tienda', meta: 'Instagram vinculado' }] }),
+            h(OptionList, { label: 'Píxel', name: 'dpx', value: 'x1', options: [{ value: 'x1', title: 'Píxel Mi Tienda', meta: 'Sin compras en 7 días: revisa que esté en tu tienda', tone: 'warning' }] })),
+          h(PermissionList, { title: 'Qué hará DropFlex con Meta', items: PERMS_META })),
+        h('div', { className: 'df-rail-sep' }),
+        h('div', { className: 'df-ob-deskfoot' },
+          h('span', { style: { flex: 1 } }),
+          h(Button, { variant: 'ghost' }, 'Conectar después'),
+          h(Button, { variant: 'primary', icon: 'check' }, 'Guardar y terminar'))));
+  }
+
   var Screens = {
     Movil1: function () { return h('div', { className: 'df-screens' }, h(ScreenHoy), h(ScreenProductos), h(ScreenProducto)); },
     Movil2: function () { return h('div', { className: 'df-screens' }, h(ScreenRevision), h(ScreenImagenes), h(ScreenPrecio)); },
     Movil3: function () { return h('div', { className: 'df-screens' }, h(ScreenCampanas), h(ScreenAsistente)); },
     Escritorio1: function () { return h('div', { className: 'df-screens' }, h(ScreenDeskProducto)); },
-    Escritorio2: function () { return h('div', { className: 'df-screens' }, h(ScreenDeskCampanas)); }
+    Escritorio2: function () { return h('div', { className: 'df-screens' }, h(ScreenDeskCampanas)); },
+    Onboarding1: function () { return h('div', { className: 'df-screens' }, h(ObBienvenida), h(ObShopify), h(ObShopifyOk)); },
+    Onboarding2: function () { return h('div', { className: 'df-screens' }, h(ObProductos), h(ObNumeros), h(ObMeta)); },
+    Onboarding3: function () { return h('div', { className: 'df-screens' }, h(ObMetaCuentas), h(ObListo), h(ObHoy)); },
+    OnboardingEscritorio1: function () { return h('div', { className: 'df-screens' }, h(ObDeskProductos)); },
+    OnboardingEscritorio2: function () { return h('div', { className: 'df-screens' }, h(ObDeskMeta)); }
   };
 
   window.DropFlex = Object.assign(window.DropFlex || {}, {
@@ -548,6 +885,7 @@
     AttentionItem: AttentionItem, StageList: StageList, ReviewCard: ReviewCard, ImageTile: ImageTile,
     SegmentedControl: SegmentedControl, Field: Field, PriceBreakdown: PriceBreakdown, OfferPreview: OfferPreview,
     Metric: Metric, CampaignCard: CampaignCard, Verdict: Verdict, Navigation: Navigation, TopBar: TopBar, Toast: Toast,
-    AssistantSheet: AssistantSheet, Icon: Icon, productImage: productImage, money: money, Screens: Screens
+    AssistantSheet: AssistantSheet, Icon: Icon,
+    OnboardingHeader: OnboardingHeader, ProviderMark: ProviderMark, ConnectionCard: ConnectionCard, PermissionList: PermissionList, OptionList: OptionList, PickRow: PickRow, GenerationProgress: GenerationProgress, SetupChecklist: SetupChecklist, productImage: productImage, money: money, Screens: Screens
   });
 })();
