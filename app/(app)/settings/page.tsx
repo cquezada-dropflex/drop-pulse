@@ -25,7 +25,7 @@ export default async function AjustesPage() {
   const assumptions = await getAssumptions();
   return (
     <>
-      <PageHeader large title="Ajustes" subtitle="Supuestos, tienda y cuenta" back="Hoy" backHref="/hoy" />
+      <PageHeader large title="Ajustes" subtitle="Supuestos, tienda y cuenta" back="Hoy" backHref="/today" />
       <div className="flex flex-col gap-4 px-4 pb-6 lg:max-w-content lg:px-8 lg:py-6">
         <Section
           id="supuestos"

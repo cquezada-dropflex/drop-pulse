@@ -76,7 +76,7 @@ Las medidas que son múltiplo de 2px (6, 28, 36, 56px…) salen de la escala de 
 | Dinero | `bundle.js` `money()` con regex | Encargo: `Intl.NumberFormat('es-CL')` | `Intl` con `currency: 'CLP'` → `$24.990`; negativos con signo menos tipográfico U+2212 → `−$1.200` |
 | Imágenes de producto | `bundle.js` `productImage()` genera SVG con hex | Regla “sin hex” en `components/` y `app/` | Se mueve a `lib/mock/images.ts` (datos de ejemplo, fuera de la regla); los componentes reciben `src` |
 | Íconos | `bundle.js`: trazados propios | Encargo: `lucide-react` con `strokeWidth={1.75}` y el mapeo dado | lucide. Para los nombres de `IconName` que tu tabla no mapea uso: chevron-right→`ChevronRight`, chevron-left→`ChevronLeft`, plus→`Plus`, chat→`MessageSquare`, image→`Image`, tag→`Tag`, text→`AlignLeft`, store→`Store`, arrow-up→`ArrowUp`, arrow-down→`ArrowDown`, pause→`Pause`, more→`Ellipsis`, search→`Search`, minus→`Minus`, grip→`GripVertical`, star→`Star`. Respeto los `strokeWidth` 2 / 2,25 que `bundle.js` sube en chips, puntos de etapa y veredictos |
-| `/` sin sesión | Encargo: “`/` redirige a `/hoy` si hay sesión” | El proxy excluye `/` de su redirección | `/` redirige a `/hoy` con sesión y a `/auth/login` sin ella (ya no hay landing de marketing). Lo hago en `app/page.tsx`, sin tocar el proxy |
+| `/` sin sesión | Encargo: “`/` redirige a `/today` si hay sesión” | El proxy excluye `/` de su redirección | `/` redirige a `/today` con sesión y a `/auth/login` sin ella (ya no hay landing de marketing). Lo hago en `app/page.tsx`, sin tocar el proxy |
 
 ## 3. Tailwind: cómo quedan los tokens
 
@@ -102,19 +102,19 @@ scripts/referencia/                   ← harness para generar design-system/scr
 
 app/dev/layout.tsx                    ← notFound() fuera de desarrollo
 app/dev/tokens/page.tsx               ← todos los colores de tokens.json (claro y oscuro lado a lado) + escala tipográfica
-app/dev/componentes/page.tsx          ← cada componente en todos sus estados
+app/dev/components/page.tsx          ← cada componente en todos sus estados
 
 app/(app)/layout.tsx                  ← shell: TopBar/Navigation/riel + AssistantProvider + Toaster
-app/(app)/hoy/{page,loading,error}.tsx
-app/(app)/productos/{page,loading,error}.tsx
-app/(app)/productos/[id]/{page,loading,error,not-found}.tsx
-app/(app)/productos/[id]/layout.tsx   ← en escritorio, StageList fija a la izquierda
-app/(app)/productos/[id]/textos/{page,loading,error}.tsx
-app/(app)/productos/[id]/imagenes/{page,loading,error}.tsx
-app/(app)/productos/[id]/precio/{page,loading,error}.tsx
-app/(app)/campanas/{page,loading,error}.tsx
-app/(app)/campanas/[id]/{page,loading,error,not-found}.tsx
-app/(app)/ajustes/{page,loading,error}.tsx   ← supuestos (tasa de entrega, CPA máximo), tema, cerrar sesión
+app/(app)/today/{page,loading,error}.tsx
+app/(app)/products/{page,loading,error}.tsx
+app/(app)/products/[id]/{page,loading,error,not-found}.tsx
+app/(app)/products/[id]/layout.tsx   ← en escritorio, StageList fija a la izquierda
+app/(app)/products/[id]/copy/{page,loading,error}.tsx
+app/(app)/products/[id]/images/{page,loading,error}.tsx
+app/(app)/products/[id]/price/{page,loading,error}.tsx
+app/(app)/campaigns/{page,loading,error}.tsx
+app/(app)/campaigns/[id]/{page,loading,error,not-found}.tsx
+app/(app)/settings/{page,loading,error}.tsx   ← supuestos (tasa de entrega, CPA máximo), tema, cerrar sesión
 
 components/df/                        ← un archivo por componente (inventario abajo)
 components/df/index.ts                ← barrel
@@ -135,7 +135,7 @@ app/layout.tsx             ← lang="es", Geist + Geist Mono, viewport (viewport
 app/page.tsx               ← solo redirección (§2)
 app/auth/*/page.tsx        ← layout de auth restilizado
 components/login-form.tsx, sign-up-form.tsx, forgot-password-form.tsx, update-password-form.tsx, logout-button.tsx
-                           ← con Field/Button de df, en español con tuteo; login redirige a /hoy en lugar de /protected
+                           ← con Field/Button de df, en español con tuteo; login redirige a /today en lugar de /protected
                               (solo cambia la UI y el destino; la llamada a supabase.auth queda igual)
 components/theme-switcher.tsx ← restilizado con IconButton + dropdown, textos “Claro / Oscuro / Sistema”
 components.json            ← con v4: "config": "" ya está; sin cambios salvo lo que pida la CLI
@@ -202,7 +202,7 @@ Además, piezas del shell que no son componentes del sistema: `StickyActions` (l
 
 ## 8. Pantallas (Fase 4)
 
-Textos y cifras literales de `bundle.js` (`ScreenHoy`, `ScreenProductos`, `ScreenProducto`, `ScreenRevision`, `ScreenImagenes`, `ScreenPrecio`, `ScreenCampanas`, `ScreenAsistente`, `ScreenDeskProducto`, `ScreenDeskCampanas`). Las rutas que la referencia no dibuja (`/campanas/[id]`, `/ajustes`, detalle de productos distintos del Corrector) se componen solo con componentes existentes y textos en el mismo tono; lo marco como decisión propia en el resumen final.
+Textos y cifras literales de `bundle.js` (`ScreenHoy`, `ScreenProductos`, `ScreenProducto`, `ScreenRevision`, `ScreenImagenes`, `ScreenPrecio`, `ScreenCampanas`, `ScreenAsistente`, `ScreenDeskProducto`, `ScreenDeskCampanas`). Las rutas que la referencia no dibuja (`/campaigns/[id]`, `/settings`, detalle de productos distintos del Corrector) se componen solo con componentes existentes y textos en el mismo tono; lo marco como decisión propia en el resumen final.
 
 - Por defecto, Server Components; `"use client"` solo en `review-flow`, `image-picker`, `price-editor`, `product-filter` (filtro por `searchParams`, así que la lista sigue siendo server), el asistente, la navegación y el selector de tema.
 - La acción principal va en `StickyActions`: fija abajo en móvil (encima de la barra de pestañas, `z-sticky`) y alineada a la derecha del bloque en escritorio.
@@ -213,7 +213,7 @@ Textos y cifras literales de `bundle.js` (`ScreenHoy`, `ScreenProductos`, `Scree
 | Fase | Verificación |
 |---|---|
 | 1 | `build` + `lint` (tras los `ignores`) + `tsc`; `/dev/tokens` en claro y oscuro revisada en el navegador; `CLAUDE.md` |
-| 2 | `/dev/componentes` capturada con Playwright y comparada con `design-system/screenshots/componentes/` (D1) |
+| 2 | `/dev/components` capturada con Playwright y comparada con `design-system/screenshots/componentes/` (D1) |
 | 3 | Navegación móvil/escritorio, redirecciones con y sin sesión (con env vars de prueba si me las das; si no, verifico la lógica sin sesión real), auth en español |
 | 4 | Las 8 pantallas × 2 anchos contra las capturas de referencia |
 | 5 | `build`/`lint`/`tsc` limpios; capturas en `docs/capturas/`; axe en cada ruta y tema; recorrido con teclado; grep de valores sueltos; resumen |

@@ -8,7 +8,7 @@ import { useDesktop } from "./use-desktop";
 
 // Las pantallas de etapa (revisión, imágenes, precio) ocupan el alto completo con su propia barra
 // de acción, sin barra de pestañas (design-system/reference/bundle.js → ScreenRevision/Imagenes/Precio).
-const STAGE_SCREEN = /^\/productos\/[^/]+\/(textos|imagenes|precio)$/;
+const STAGE_SCREEN = /^\/products\/[^/]+\/(textos|imagenes|precio)$/;
 
 /**
  * Móvil (<1024px): contenido + barra de 3 pestañas abajo. Escritorio: riel de 232px a la izquierda

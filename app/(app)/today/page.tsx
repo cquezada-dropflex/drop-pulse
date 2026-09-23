@@ -55,7 +55,7 @@ export default async function HoyPage() {
         large
         title="Hoy"
         subtitle={longDate(summary.date)}
-        actions={<IconButton icon="settings" label="Ajustes" href="/ajustes" />}
+        actions={<IconButton icon="settings" label="Ajustes" href="/settings" />}
         desktopActions={null}
       />
       <div className="pb-6 lg:max-w-content lg:px-8 lg:py-6 md:max-lg:px-4">

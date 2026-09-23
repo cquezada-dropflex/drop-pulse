@@ -46,7 +46,7 @@ async function main() {
   }
 
   // Atajos de revisión en escritorio.
-  await page.goto(`${BASE}/productos/corrector-de-postura/textos`, { waitUntil: "networkidle" });
+  await page.goto(`${BASE}/products/corrector-de-postura/copy`, { waitUntil: "networkidle" });
   const field = () => page.locator("section[aria-label^='Revisar'] h2").first().textContent();
   const before = await field();
   await page.keyboard.press("a");

@@ -14,24 +14,24 @@ const OUT = join(process.cwd(), "docs/capturas/pantallas");
 const only = process.argv[2];
 
 export const ROUTES: { name: string; path: string; after?: (p: Page) => Promise<void> }[] = [
-  { name: "hoy", path: "/hoy" },
-  { name: "productos", path: "/productos" },
-  { name: "producto", path: "/productos/corrector-de-postura" },
-  { name: "textos", path: "/productos/corrector-de-postura/textos" },
-  { name: "imagenes", path: "/productos/corrector-de-postura/imagenes" },
-  { name: "precio", path: "/productos/corrector-de-postura/precio" },
+  { name: "hoy", path: "/today" },
+  { name: "productos", path: "/products" },
+  { name: "producto", path: "/products/corrector-de-postura" },
+  { name: "textos", path: "/products/corrector-de-postura/copy" },
+  { name: "imagenes", path: "/products/corrector-de-postura/images" },
+  { name: "precio", path: "/products/corrector-de-postura/price" },
   {
     name: "asistente",
-    path: "/productos/corrector-de-postura/precio",
+    path: "/products/corrector-de-postura/price",
     after: async (p) => {
       await p.getByRole("button", { name: "Abrir asistente" }).first().click();
       await p.getByRole("button", { name: "Cerrar asistente" }).waitFor();
       await p.waitForTimeout(600);
     },
   },
-  { name: "campanas", path: "/campanas" },
-  { name: "campana", path: "/campanas/corrector-video-ugc" },
-  { name: "ajustes", path: "/ajustes" },
+  { name: "campanas", path: "/campaigns" },
+  { name: "campana", path: "/campaigns/corrector-video-ugc" },
+  { name: "ajustes", path: "/settings" },
   { name: "login", path: "/auth/login" },
 ];
 

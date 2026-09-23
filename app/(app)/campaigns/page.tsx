@@ -11,19 +11,19 @@ import { money } from "@/lib/format";
 export const metadata: Metadata = { title: "Campañas" };
 
 const PERIODS = [
-  { value: "hoy", label: "Hoy" },
+  { value: "today", label: "Hoy" },
   { value: "7", label: "7 días" },
   { value: "30", label: "30 días" },
 ];
 
-async function Period({ searchParams }: { searchParams: Promise<{ periodo?: string }> }) {
-  const { periodo = "7" } = await searchParams;
-  return <UrlFilter param="periodo" value={periodo} options={PERIODS} label="Periodo" />;
+async function Period({ searchParams }: { searchParams: Promise<{ period?: string }> }) {
+  const { period = "7" } = await searchParams;
+  return <UrlFilter param="period" value={period} options={PERIODS} label="Periodo" />;
 }
 
-async function CampaignList({ searchParams }: { searchParams: Promise<{ periodo?: string }> }) {
-  const { periodo = "7" } = await searchParams;
-  if (periodo !== "7") {
+async function CampaignList({ searchParams }: { searchParams: Promise<{ period?: string }> }) {
+  const { period = "7" } = await searchParams;
+  if (period !== "7") {
     return (
       <EmptyState icon={<Icon name="clock" />} title="Sin cifras para este periodo">
         En esta versión de prueba solo hay datos de los últimos 7 días. Elige “7 días” para verlos.
@@ -51,11 +51,11 @@ async function CampaignList({ searchParams }: { searchParams: Promise<{ periodo?
             paused={c.paused}
             metrics={c.metrics}
             wide
-            href={`/campanas/${c.id}`}
-            menu={<CampaignMenu name={c.name} href={`/campanas/${c.id}`} paused={c.paused} />}
+            href={`/campaigns/${c.id}`}
+            menu={<CampaignMenu name={c.name} href={`/campaigns/${c.id}`} paused={c.paused} />}
             actions={
               c.verdict === "subir" || c.verdict === "apagar"
-                ? [<CampaignActions key="a" verdict={c.verdict} nextBudget={c.nextBudget} name={c.name} detailHref={`/campanas/${c.id}`} />]
+                ? [<CampaignActions key="a" verdict={c.verdict} nextBudget={c.nextBudget} name={c.name} detailHref={`/campaigns/${c.id}`} />]
                 : null
             }
             className="h-full"
@@ -66,7 +66,7 @@ async function CampaignList({ searchParams }: { searchParams: Promise<{ periodo?
   );
 }
 
-export default async function CampanasPage({ searchParams }: { searchParams: Promise<{ periodo?: string }> }) {
+export default async function CampanasPage({ searchParams }: { searchParams: Promise<{ period?: string }> }) {
   const summary = await getCampaignSummary();
   const subtitle = `Últimos 7 días · gasto ${money(summary.spend)}`;
   return (

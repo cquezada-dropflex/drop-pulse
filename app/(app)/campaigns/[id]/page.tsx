@@ -26,7 +26,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ id: s
     campaign.verdict === "subir" || campaign.verdict === "apagar" ? (
       <CampaignActions verdict={campaign.verdict} nextBudget={campaign.nextBudget} name={campaign.name} />
     ) : (
-      <Button href={`/productos/${campaign.productId}`} iconEnd="chevron-right">
+      <Button href={`/products/${campaign.productId}`} iconEnd="chevron-right">
         Ver producto
       </Button>
     );
@@ -35,7 +35,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ id: s
     <>
       <PageHeader
         back="Campañas"
-        backHref="/campanas"
+        backHref="/campaigns"
         title={campaign.name}
         subtitle={`${campaign.paused ? "Pausada" : "Activa"} · ${campaign.meta}`}
       />

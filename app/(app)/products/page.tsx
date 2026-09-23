@@ -6,7 +6,8 @@ import { UrlFilter } from "@/components/screens/filters";
 import { EmptyState, PageHeader, SectionTitle } from "@/components/shell/page-header";
 import { RowsSkeleton } from "@/components/shell/skeletons";
 import { getProductCounts, getProducts } from "@/lib/data/products";
-import type { ProductFilter, StageKey } from "@/lib/types";
+import { FILTER_PARAM, filterFromParam, productHref } from "@/lib/routes";
+import type { ProductFilter } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Productos" };
 
@@ -18,10 +19,6 @@ const EMPTY: Record<ProductFilter, { title: string; text: string }> = {
   publicados: { title: "Aún no publicas productos", text: "Cuando apruebes textos, imágenes y precio, publícalo en tu tienda desde su ruta." },
 };
 
-// La fila lleva al producto en la etapa que lo detiene.
-const stageHref = (id: string, stage: StageKey) =>
-  stage === "textos" || stage === "imagenes" || stage === "precio" ? `/productos/${id}/${stage}` : `/productos/${id}`;
-
 // Cómo se lee el medidor (ScreenProductos → "Así se leen").
 const LEGEND = [
   ["bg-foreground", "Lista"],
@@ -30,9 +27,9 @@ const LEGEND = [
   ["bg-destructive", "Error"],
 ];
 
-async function ProductList({ searchParams }: { searchParams: Promise<{ filtro?: string }> }) {
-  const { filtro } = await searchParams;
-  const filter: ProductFilter = FILTERS.includes(filtro as ProductFilter) ? (filtro as ProductFilter) : "detenidos";
+async function ProductList({ searchParams }: { searchParams: Promise<{ filter?: string }> }) {
+  const { filter: param } = await searchParams;
+  const filter: ProductFilter = filterFromParam(param) ?? "detenidos";
   const [products, counts] = await Promise.all([getProducts(filter), getProductCounts()]);
 
   return (
@@ -40,11 +37,11 @@ async function ProductList({ searchParams }: { searchParams: Promise<{ filtro?: 
       <div className="px-4 pb-2 lg:px-0 lg:pb-4">
         <UrlFilter
           block
-          param="filtro"
-          value={filter}
+          param="filter"
+          value={FILTER_PARAM[filter]}
           label="Filtrar productos"
           className="lg:inline-flex lg:w-auto"
-          options={FILTERS.map((f) => ({ value: f, label: LABEL[f], count: counts[f] }))}
+          options={FILTERS.map((f) => ({ value: FILTER_PARAM[f], label: LABEL[f], count: counts[f] }))}
         />
       </div>
       {products.length === 0 ? (
@@ -64,7 +61,7 @@ async function ProductList({ searchParams }: { searchParams: Promise<{ filtro?: 
                 stages={p.meter}
                 tone={p.tone}
                 reason={p.reason}
-                href={stageHref(p.id, p.nextStage)}
+                href={productHref(p.id, p.nextStage)}
               />
             </li>
           ))}
@@ -83,7 +80,7 @@ async function ProductList({ searchParams }: { searchParams: Promise<{ filtro?: 
   );
 }
 
-export default async function ProductosPage({ searchParams }: { searchParams: Promise<{ filtro?: string }> }) {
+export default async function ProductosPage({ searchParams }: { searchParams: Promise<{ filter?: string }> }) {
   const counts = await getProductCounts();
   return (
     <>

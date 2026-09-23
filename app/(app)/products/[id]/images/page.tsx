@@ -19,7 +19,7 @@ export default async function ImagenesPage({ params }: { params: Promise<{ id: s
       <AssistantScope productId={product.id} product={product.name} stage="Imágenes" stageKey="imagenes" image={product.image} />
       <TopBar
         back={product.name}
-        backHref={`/productos/${product.id}`}
+        backHref={`/products/${product.id}`}
         title="Imágenes"
         subtitle={chosen ? `${chosen} elegidas · la 1 es la portada` : "Elige y ordena 4 a 6"}
         actions={<AssistantButton />}
@@ -33,7 +33,7 @@ export default async function ImagenesPage({ params }: { params: Promise<{ id: s
         <EmptyState
           icon={<Icon name="image" />}
           title="La IA está generando las imágenes"
-          action={<Button href={`/productos/${product.id}`}>Volver a la ruta</Button>}
+          action={<Button href={`/products/${product.id}`}>Volver a la ruta</Button>}
         >
           Te avisamos en Hoy cuando haya opciones para elegir.
         </EmptyState>

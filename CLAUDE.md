@@ -52,7 +52,9 @@ Las medidas de `bundle.css` que no están en `tokens.json` se declaran en el blo
 ## Rutas
 
 - **Las rutas van siempre en inglés** (segmentos de URL, carpetas de `app/`, rutas de API y parámetros de búsqueda): `/today`, `/products/[id]/images`, `/api/onboarding/products`, `?filter=stuck`. Los textos visibles siguen en español.
-- Pendiente: las rutas existentes están en español (`/hoy`, `/productos`, `/campanas`, `/ajustes`, `/auth/crear-cuenta`, `/onboarding/productos|numeros|listo`, `/simulacion/*`, `/api/onboarding/cuenta|productos|numeros|generacion|…`, `?filtro=`, `?periodo=`). Hay que migrarlas; mientras tanto, toda ruta nueva va en inglés.
+- Pantallas: `/today`, `/products?filter=moving|stuck|published`, `/products/[id]` (`/copy`, `/images`, `/price`), `/campaigns?period=today|7|30`, `/campaigns/[id]`, `/settings`. Onboarding: `/auth/create-account`, `/onboarding/shopify|products|numbers|meta|meta/accounts|done`, `/simulation/shopify|meta`.
+- Las claves internas siguen el vocabulario del design system (`StageKey` `textos|imagenes|precio`, `ProductFilter` `detenidos…`); su traducción a URL vive en `lib/routes.ts` (`productHref`, `FILTER_PARAM`). No armes a mano una URL de etapa.
+- Las rutas antiguas en español redirigen de forma permanente (`redirects` en `next.config.ts`). `design-system/arquitectura.md` es la copia del artifact y conserva los nombres originales.
 
 ## Textos de UI
 
@@ -69,8 +71,8 @@ Español neutro con tuteo, nunca voseo ni “usted”: “Revisa”, “Elige”
 
 ## Onboarding
 
-- Rutas: `/auth/crear-cuenta` (O1), `/onboarding/*` (pasos 1–4 y Listo), `SetupChecklist` en Hoy y Conexiones en Ajustes. Pasos en `components/onboarding/steps/`.
-- Backend **simulado** en `lib/onboarding/` (estado en cookie, OAuth con páginas `/simulacion/*`, importación y generación por tiempo) detrás de `app/api/onboarding/*`. Contrato y cómo pasar a producción: `docs/onboarding-backend.md`.
+- Rutas: `/auth/create-account` (O1), `/onboarding/*` (pasos 1–4 y Listo), `SetupChecklist` en Hoy y Conexiones en Ajustes. Pasos en `components/onboarding/steps/`.
+- Backend **simulado** en `lib/onboarding/` (estado en cookie, OAuth con páginas `/simulation/*`, importación y generación por tiempo) detrás de `app/api/onboarding/*`. Contrato y cómo pasar a producción: `docs/onboarding-backend.md`.
 - Los estados de conexión usan `ConnectionCard` / `StateChip`, nunca `StatusBadge` (que es solo para el ciclo de vida del contenido).
 - `ProviderMark` es genérico: no dibujes logos de Shopify, Meta ni Google.
 
@@ -89,9 +91,9 @@ Con `npm run dev` corriendo:
 npm run check:a11y           # axe en cada ruta, 390 y 1280px, claro y oscuro
 npm run check:teclado        # orden de foco, foco visible y atajos A / D / E
 npm run capturas             # docs/capturas/pantallas + montajes contra design-system/screenshots
-npm run capturas:componentes # /dev/componentes contra las capturas de referencia
+npm run capturas:componentes # /dev/components contra las capturas de referencia
 npm run check:onboarding     # recorre el onboarding completo, con capturas y axe
 ```
 
-- `/dev/tokens` y `/dev/componentes` (solo en desarrollo) para revisar tokens y componentes en claro y oscuro.
+- `/dev/tokens` y `/dev/components` (solo en desarrollo) para revisar tokens y componentes en claro y oscuro.
 - Plan y decisiones: `docs/plan-design-system.md`.

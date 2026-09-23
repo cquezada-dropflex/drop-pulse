@@ -1,5 +1,5 @@
 /**
- * Captura cada sección de /dev/componentes (claro y oscuro) en docs/capturas/componentes/,
+ * Captura cada sección de /dev/components (claro y oscuro) en docs/capturas/componentes/,
  * con el mismo nombre que design-system/screenshots/componentes/ para compararlas lado a lado.
  *
  *   npm run dev   # en otra terminal
@@ -29,7 +29,7 @@ async function main() {
   const browser = await chromium.launch();
   for (const scheme of ["light", "dark"] as const) {
     const page = await browser.newPage({ viewport: { width: 1024, height: 900 }, deviceScaleFactor: 2, colorScheme: scheme });
-    await page.goto(`${BASE}/dev/componentes`, { waitUntil: "networkidle" });
+    await page.goto(`${BASE}/dev/components`, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
     for (const [id, name] of Object.entries(NAMES)) {
       const section = page.locator(`[data-componente="${id}"]`);

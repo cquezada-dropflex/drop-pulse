@@ -12,7 +12,7 @@ const ORDER = ["shopify", "productos", "numeros", "meta"] as const;
 export function OnboardingSide() {
   const { snapshot: s } = useOnboarding();
   const pathname = usePathname();
-  const routeStep = ORDER.find((k) => pathname.startsWith(STEP_PATH[k])) ?? (pathname.startsWith("/onboarding/listo") ? "listo" : null);
+  const routeStep = ORDER.find((k) => pathname.startsWith(STEP_PATH[k])) ?? (pathname.startsWith("/onboarding/done") ? "listo" : null);
   const pendingIndex = s.step === "meta-cuentas" ? 3 : s.step === "listo" ? 4 : ORDER.indexOf(s.step as (typeof ORDER)[number]);
   const n = s.numbers ?? { deliveredOf10: 8, maxCpa: 6000 };
 

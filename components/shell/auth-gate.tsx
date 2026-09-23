@@ -16,8 +16,8 @@ export async function AuthGate() {
 
 /** `/`: con sesión va a Hoy; sin sesión, a iniciar sesión. */
 export async function RootRedirect(): Promise<never> {
-  if (!hasEnvVars) redirect("/hoy");
+  if (!hasEnvVars) redirect("/today");
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
-  redirect(data?.claims ? "/hoy" : "/auth/login");
+  redirect(data?.claims ? "/today" : "/auth/login");
 }

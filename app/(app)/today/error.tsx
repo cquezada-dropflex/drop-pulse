@@ -9,7 +9,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
       reset={reset}
       title="No pudimos cargar lo que te toca hoy"
       description="Puede ser tu conexión. Tus productos y campañas siguen igual; reintenta en un momento."
-      backHref="/productos"
+      backHref="/products"
       backLabel="Ver productos"
     />
   );

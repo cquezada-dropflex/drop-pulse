@@ -45,7 +45,7 @@ export function MetaStep() {
     try {
       const { snapshot: next } = await onboardingApi.skipMeta();
       setSnapshot(next);
-      router.push("/onboarding/listo");
+      router.push("/onboarding/done");
     } catch (e) {
       notify(e instanceof ApiError ? e.message : "No pudimos guardar. Intenta de nuevo.");
       setBusy(null);
@@ -54,7 +54,7 @@ export function MetaStep() {
 
   return (
     <OnboardingScreen
-      header={{ ...HEADER, backHref: "/onboarding/numeros" }}
+      header={{ ...HEADER, backHref: "/onboarding/numbers" }}
       title="Conecta Meta Ads"
       desc="Para crear anuncios con tus productos y decirte cuáles funcionan. Si no los usas aún, sáltalo."
       bodyClassName="gap-4"
@@ -96,7 +96,7 @@ export function MetaCuentasStep({ assets }: { assets: MetaAssets }) {
     try {
       const { snapshot } = await onboardingApi.saveMetaAssets({ account, page, pixel });
       setSnapshot(snapshot);
-      router.push("/onboarding/listo");
+      router.push("/onboarding/done");
     } catch (e) {
       notify(e instanceof ApiError ? e.message : "No pudimos guardar. Intenta de nuevo.");
       setBusy(null);
@@ -107,7 +107,7 @@ export function MetaCuentasStep({ assets }: { assets: MetaAssets }) {
     try {
       const { snapshot } = await onboardingApi.skipMeta();
       setSnapshot(snapshot);
-      router.push("/onboarding/listo");
+      router.push("/onboarding/done");
     } catch {
       setBusy(null);
     }

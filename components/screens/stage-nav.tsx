@@ -2,15 +2,13 @@
 
 import { usePathname } from "next/navigation";
 import { StageList, type Stage as ListStage } from "@/components/df";
+import { STAGE_SEGMENT, productHref } from "@/lib/routes";
 import type { Stage, StageKey } from "@/lib/types";
-
-const ROUTED: StageKey[] = ["textos", "imagenes", "precio"];
 
 export function stageHref(productId: string, key: StageKey, state: Stage["state"]): string | undefined {
   if (state === "locked") return undefined;
-  if (ROUTED.includes(key)) return `/productos/${productId}/${key}`;
-  if (key === "anuncios") return "/campanas";
-  return `/productos/${productId}`;
+  if (key === "anuncios") return "/campaigns";
+  return productHref(productId, key);
 }
 
 /**
@@ -19,7 +17,7 @@ export function stageHref(productId: string, key: StageKey, state: Stage["state"
  */
 export function StageNav({ productId, stages, className }: { productId: string; stages: Stage[]; className?: string }) {
   const pathname = usePathname();
-  const onStage = ROUTED.find((k) => pathname.endsWith(`/${k}`));
+  const onStage = (Object.keys(STAGE_SEGMENT) as StageKey[]).find((k) => pathname.endsWith(`/${STAGE_SEGMENT[k]}`));
   const items: ListStage[] = stages.map((s) => {
     let state = s.state;
     if (onStage) {

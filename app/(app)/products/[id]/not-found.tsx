@@ -7,7 +7,7 @@ export default function NotFound() {
       icon={<Icon name="box" />}
       title="No encontramos este producto"
       action={
-        <Button href="/productos" variant="primary">
+        <Button href="/products" variant="primary">
           Ver tus productos
         </Button>
       }

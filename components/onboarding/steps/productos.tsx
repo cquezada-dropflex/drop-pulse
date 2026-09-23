@@ -35,7 +35,7 @@ export function ProductosStep({ initial }: { initial: Lists }) {
   // La importación no bloquea: la lista crece mientras llegan productos.
   useEffect(() => {
     if (snapshot.shop?.status !== "importing") return;
-    fetch("/api/onboarding/shopify/productos", { cache: "no-store" })
+    fetch("/api/onboarding/shopify/products", { cache: "no-store" })
       .then((r) => r.json())
       .then((l: Lists) => setLists(l))
       .catch(() => {});
@@ -50,7 +50,7 @@ export function ProductosStep({ initial }: { initial: Lists }) {
     try {
       const { snapshot: next } = await onboardingApi.saveProducts(selected);
       setSnapshot(next);
-      router.push("/onboarding/numeros");
+      router.push("/onboarding/numbers");
     } catch (e) {
       notify(e instanceof ApiError ? e.message : "No pudimos guardar tu selección. Intenta de nuevo.");
       setSaving(false);

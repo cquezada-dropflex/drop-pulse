@@ -4,15 +4,15 @@ import { EmptyState } from "@/components/shell/page-header";
 export default function NotFound() {
   return (
     <EmptyState
-      icon={<Icon name="box" />}
-      title="No encontramos este producto"
+      icon={<Icon name="megaphone" />}
+      title="No encontramos esta campaña"
       action={
-        <Button href="/productos" variant="primary">
-          Ver tus productos
+        <Button href="/campaigns" variant="primary">
+          Ver tus campañas
         </Button>
       }
     >
-      Puede que lo hayas eliminado o que el enlace esté incompleto.
+      Puede que la hayas eliminado en Meta Ads o que el enlace esté incompleto.
     </EmptyState>
   );
 }

@@ -14,7 +14,7 @@ export function ListoStep() {
   const g = snapshot.generation;
   const first = g?.firstReady;
   const waiting = g?.items[0];
-  const reviewHref = first ? (KNOWN.has(first.id) ? `/productos/${first.id}/textos` : "/productos") : undefined;
+  const reviewHref = first ? (KNOWN.has(first.id) ? `/products/${first.id}/copy` : "/products") : undefined;
   const meta = snapshot.meta;
 
   return (
@@ -24,7 +24,7 @@ export function ListoStep() {
       bodyClassName="gap-5 pt-8 lg:pt-12"
       footer={
         <StickyActions variant="bar" stack="reverse" summary="Los demás siguen generándose; te avisamos en Hoy al terminar.">
-          <Button href="/hoy" variant="ghost" block className="lg:w-auto">
+          <Button href="/today" variant="ghost" block className="lg:w-auto">
             Ir a Hoy
           </Button>
           {reviewHref ? (

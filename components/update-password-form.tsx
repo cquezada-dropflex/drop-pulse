@@ -22,7 +22,7 @@ export function UpdatePasswordForm() {
     try {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
-      router.push("/hoy");
+      router.push("/today");
     } catch (error: unknown) {
       setError(authErrorMessage(error, "No pudimos guardar tu contraseña. Intenta de nuevo en un momento."));
     } finally {

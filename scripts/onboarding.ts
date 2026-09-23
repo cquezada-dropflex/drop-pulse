@@ -29,7 +29,7 @@ async function shot(page: Page, name: string, tag: string) {
 
 async function flow(page: Page, tag: string, desktop: boolean) {
   // O1 · Crear cuenta
-  await page.goto(`${BASE}/auth/crear-cuenta`, { waitUntil: "networkidle" });
+  await page.goto(`${BASE}/auth/create-account`, { waitUntil: "networkidle" });
   await shot(page, "o1-crear-cuenta", tag);
   await page.getByLabel("Correo").fill("comerciante@ejemplo.cl");
   await page.getByRole("button", { name: "Crear cuenta gratis" }).click();
@@ -46,7 +46,7 @@ async function flow(page: Page, tag: string, desktop: boolean) {
   // Autorización cancelada → ConnectionCard en error
   await page.getByLabel("Dirección de tu tienda").fill("mitienda");
   await page.getByRole("button", { name: "Conectar con Shopify" }).click();
-  await page.waitForURL("**/simulacion/shopify**");
+  await page.waitForURL("**/simulation/shopify**");
   await shot(page, "simulacion-shopify", tag);
   await page.getByRole("link", { name: "Cancelar" }).click();
   await page.waitForURL("**/onboarding/shopify");
@@ -55,7 +55,7 @@ async function flow(page: Page, tag: string, desktop: boolean) {
 
   // O3 · Autorizada, importando en segundo plano
   await page.getByRole("button", { name: "Reintentar" }).click();
-  await page.waitForURL("**/simulacion/shopify**");
+  await page.waitForURL("**/simulation/shopify**");
   await page.getByRole("link", { name: "Autorizar" }).click();
   await page.waitForURL("**/onboarding/shopify");
   await page.waitForTimeout(desktop ? 15_000 : 16_000); // ~86 de 128
@@ -63,13 +63,13 @@ async function flow(page: Page, tag: string, desktop: boolean) {
 
   // O4 · Paso 2
   await page.getByRole("button", { name: "Elegir productos" }).first().click();
-  await page.waitForURL("**/onboarding/productos");
+  await page.waitForURL("**/onboarding/products");
   await expect(page.getByRole("button", { name: "Mejorar 3 productos" })).toBeVisible();
   await shot(page, "o4-productos", tag);
 
   // O5 · Paso 3
   await page.getByRole("button", { name: "Mejorar 3 productos" }).click();
-  await page.waitForURL("**/onboarding/numeros");
+  await page.waitForURL("**/onboarding/numbers");
   await expect(page.getByText("$8.590")).toBeVisible();
   await shot(page, "o5-numeros", tag);
 
@@ -81,15 +81,15 @@ async function flow(page: Page, tag: string, desktop: boolean) {
 
   // O7 · Cuentas de Meta
   await page.getByRole("button", { name: "Continuar con Facebook" }).click();
-  await page.waitForURL("**/simulacion/meta**");
+  await page.waitForURL("**/simulation/meta**");
   await page.getByRole("link", { name: "Autorizar" }).click();
-  await page.waitForURL("**/onboarding/meta/cuentas");
+  await page.waitForURL("**/onboarding/meta/accounts");
   await expect(page.getByText("Sugerida")).toBeVisible();
   await shot(page, "o7-meta-cuentas", tag);
 
   // O8 · Listo
   await page.getByRole("button", { name: "Guardar y terminar" }).click();
-  await page.waitForURL("**/onboarding/listo");
+  await page.waitForURL("**/onboarding/done");
   await expect(page.getByRole("link", { name: "Revisar Corrector de postura" })).toBeVisible();
   await shot(page, "o8-listo", tag);
 }
@@ -97,20 +97,20 @@ async function flow(page: Page, tag: string, desktop: boolean) {
 async function skipMetaFlow(page: Page, tag: string) {
   // Camino corto: sugeridos y "Conectar después" → Hoy con SetupChecklist (O9).
   await page.request.delete(`${BASE}/api/onboarding/state`);
-  await page.request.post(`${BASE}/api/onboarding/cuenta`, { data: { email: "comerciante@ejemplo.cl" } });
-  const { authorizeUrl } = await (await page.request.post(`${BASE}/api/onboarding/shopify/conectar`, { data: { shop: "mitienda" } })).json();
+  await page.request.post(`${BASE}/api/onboarding/account`, { data: { email: "comerciante@ejemplo.cl" } });
+  const { authorizeUrl } = await (await page.request.post(`${BASE}/api/onboarding/shopify/connect`, { data: { shop: "mitienda" } })).json();
   await page.goto(BASE + authorizeUrl);
   await page.getByRole("link", { name: "Autorizar" }).click();
   await page.waitForURL("**/onboarding/shopify");
-  await page.goto(`${BASE}/onboarding/productos`);
+  await page.goto(`${BASE}/onboarding/products`);
   await page.getByRole("button", { name: "Mejorar 3 productos" }).click();
-  await page.waitForURL("**/onboarding/numeros");
+  await page.waitForURL("**/onboarding/numbers");
   await page.getByRole("button", { name: "Usar sugeridos" }).first().click();
   await page.waitForURL("**/onboarding/meta");
   await page.getByRole("button", { name: "Conectar después" }).click();
-  await page.waitForURL("**/onboarding/listo");
+  await page.waitForURL("**/onboarding/done");
   await page.getByRole("link", { name: "Ir a Hoy" }).click();
-  await page.waitForURL("**/hoy");
+  await page.waitForURL("**/today");
   await expect(page.getByText("Termina de configurar")).toBeVisible();
   await shot(page, "o9-hoy", tag);
 }

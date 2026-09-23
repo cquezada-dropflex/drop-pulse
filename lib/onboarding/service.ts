@@ -52,7 +52,7 @@ export function startShopify(state: OnboardingState, shopInput: string, nonce: s
   const params = new URLSearchParams({ shop: domain, state: nonce });
   return {
     state: { ...state, shop: { domain, status: "connecting", nonce } },
-    authorizeUrl: `/simulacion/shopify?${params}`,
+    authorizeUrl: `/simulation/shopify?${params}`,
   };
 }
 
@@ -171,7 +171,7 @@ export function startMeta(state: OnboardingState, nonce: string): { state: Onboa
   if (!state.shop || state.shop.status !== "connected") throw new OnboardingError("Primero conecta tu tienda Shopify.", 409);
   return {
     state: { ...state, meta: { status: "authorizing", nonce } },
-    authorizeUrl: `/simulacion/meta?${new URLSearchParams({ state: nonce })}`,
+    authorizeUrl: `/simulation/meta?${new URLSearchParams({ state: nonce })}`,
   };
 }
 

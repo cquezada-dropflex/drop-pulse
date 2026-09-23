@@ -7,6 +7,6 @@ export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams;
   const next = finishMeta(await readOnboarding(), { nonce: q.get("state") ?? "", result: q.get("result") ?? "" });
   await writeOnboarding(next);
-  const to = next.meta?.status === "action" ? "/onboarding/meta/cuentas" : "/onboarding/meta";
+  const to = next.meta?.status === "action" ? "/onboarding/meta/accounts" : "/onboarding/meta";
   return NextResponse.redirect(new URL(to, req.url));
 }

@@ -13,8 +13,8 @@ export const TODAY: AttentionEntry[] = [
     product: "Lámpara lunar 3D",
     detail: "Shopify rechazó 2 imágenes por tamaño.",
     actions: [
-      { label: "Reintentar", href: "/productos/lampara-lunar-3d", variant: "primary" },
-      { label: "Ver detalle", href: "/productos/lampara-lunar-3d", variant: "ghost" },
+      { label: "Reintentar", href: "/products/lampara-lunar-3d", variant: "primary" },
+      { label: "Ver detalle", href: "/products/lampara-lunar-3d", variant: "ghost" },
     ],
   },
   {
@@ -24,7 +24,7 @@ export const TODAY: AttentionEntry[] = [
     title: "Apaga “Masajeador · Video 2”",
     product: "Campaña · 4 días",
     detail: "CPA $9.800, sobre tu límite de $6.000.",
-    actions: [{ label: "Revisar", href: "/campanas/masajeador-video-2" }],
+    actions: [{ label: "Revisar", href: "/campaigns/masajeador-video-2" }],
   },
   {
     id: "a-subir-corrector",
@@ -33,7 +33,7 @@ export const TODAY: AttentionEntry[] = [
     title: "Sube “Corrector · Video UGC”",
     product: "Campaña · 3 días",
     detail: "CPA $4.100, 32% bajo tu límite.",
-    actions: [{ label: "Revisar", href: "/campanas/corrector-video-ugc" }],
+    actions: [{ label: "Revisar", href: "/campaigns/corrector-video-ugc" }],
   },
   {
     id: "a-vigilar-botella",
@@ -42,7 +42,7 @@ export const TODAY: AttentionEntry[] = [
     title: "Vigila “Botella térmica · Imagen”",
     product: "Campaña · 7 días",
     detail: "CPA $5.700, cerca del límite y subiendo 3 días seguidos.",
-    actions: [{ label: "Revisar", href: "/campanas/botella-imagen" }],
+    actions: [{ label: "Revisar", href: "/campaigns/botella-imagen" }],
   },
   {
     id: "a-revisar-corrector",
@@ -50,7 +50,7 @@ export const TODAY: AttentionEntry[] = [
     kind: "review",
     title: "8 propuestas nuevas",
     product: "Corrector de postura",
-    actions: [{ label: "Revisar ahora", href: "/productos/corrector-de-postura/textos", iconEnd: "chevron-right" }],
+    actions: [{ label: "Revisar ahora", href: "/products/corrector-de-postura/copy", iconEnd: "chevron-right" }],
   },
   {
     id: "a-detenido-botella",

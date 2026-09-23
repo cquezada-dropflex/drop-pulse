@@ -45,7 +45,7 @@ export async function Connections({ fallbackStore, fallbackMeta }: { fallbackSto
           state="action"
           account="Business Manager: Mi Tienda"
           detail="Elige cuenta publicitaria, página y píxel para terminar."
-          actions={<Button size="sm" variant="primary" href="/onboarding/meta/cuentas">Elegir</Button>}
+          actions={<Button size="sm" variant="primary" href="/onboarding/meta/accounts">Elegir</Button>}
         />
       ) : meta?.status === "error" ? (
         <ConnectionCard

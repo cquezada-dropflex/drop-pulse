@@ -121,7 +121,7 @@ function ShopConnected() {
             variant="primary"
             size="lg"
             iconEnd="chevron-right"
-            onClick={() => router.push("/onboarding/productos")}
+            onClick={() => router.push("/onboarding/products")}
             className="lg:h-control lg:text-row"
           >
             Elegir productos

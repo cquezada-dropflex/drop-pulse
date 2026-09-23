@@ -2,7 +2,7 @@
 import { CAMPAIGNS } from "@/lib/mock/campaigns";
 import type { Campaign } from "@/lib/types";
 
-export type CampaignPeriod = "hoy" | "7" | "30";
+export type CampaignPeriod = "today" | "7" | "30";
 
 export async function getCampaigns(): Promise<Campaign[]> {
   return CAMPAIGNS;

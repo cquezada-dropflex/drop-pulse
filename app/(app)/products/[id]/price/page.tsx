@@ -18,7 +18,7 @@ export default async function PrecioPage({ params }: { params: Promise<{ id: str
       <AssistantScope productId={product.id} product={product.name} stage="Precio" stageKey="precio" image={product.image} />
       <TopBar
         back={product.name}
-        backHref={`/productos/${product.id}`}
+        backHref={`/products/${product.id}`}
         title="Precio y oferta"
         actions={<AssistantButton />}
         className="sticky top-0 z-sticky lg:hidden"

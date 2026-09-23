@@ -27,7 +27,7 @@ export function LoginForm() {
         password,
       });
       if (error) throw error;
-      router.push("/hoy");
+      router.push("/today");
     } catch (error: unknown) {
       setError(authErrorMessage(error, "No pudimos iniciar sesión. Intenta de nuevo en un momento."));
     } finally {
@@ -67,7 +67,7 @@ export function LoginForm() {
       </form>
       <p className="text-center text-body text-muted-foreground">
         ¿No tienes cuenta?{" "}
-        <Link href="/auth/crear-cuenta" className={linkClass}>
+        <Link href="/auth/create-account" className={linkClass}>
           Crea una
         </Link>
       </p>

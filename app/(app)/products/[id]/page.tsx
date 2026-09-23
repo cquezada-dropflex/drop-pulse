@@ -7,6 +7,7 @@ import { AssistantButton, AssistantScope } from "@/components/shell/assistant-pr
 import { StickyActions } from "@/components/shell/sticky-actions";
 import { getProduct } from "@/lib/data/products";
 import { money } from "@/lib/format";
+import { productHref } from "@/lib/routes";
 import type { Product } from "@/lib/types";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -20,7 +21,7 @@ function NextAction({ product }: { product: Product }) {
   const title = stage?.title ?? "";
   if (product.nextStage === "textos" || product.nextStage === "imagenes" || product.nextStage === "precio") {
     return (
-      <Button href={`/productos/${product.id}/${product.nextStage}`} variant="primary" size="lg" iconEnd="chevron-right">
+      <Button href={productHref(product.id, product.nextStage)} variant="primary" size="lg" iconEnd="chevron-right">
         Continuar: {title}
       </Button>
     );
@@ -41,7 +42,7 @@ function NextAction({ product }: { product: Product }) {
   }
   if (product.nextStage === "anuncios") {
     return (
-      <Button href="/campanas" variant="primary" size="lg" iconEnd="chevron-right">
+      <Button href="/campaigns" variant="primary" size="lg" iconEnd="chevron-right">
         Ver campañas
       </Button>
     );
@@ -64,7 +65,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
       <AssistantScope productId={product.id} product={product.name} image={product.image} />
       <TopBar
         back="Productos"
-        backHref="/productos"
+        backHref="/products"
         title={product.name}
         subtitle={product.summary}
         actions={<AssistantButton />}

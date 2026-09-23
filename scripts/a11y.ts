@@ -12,7 +12,7 @@ import { ROUTES, VIEWPORTS } from "./capturas";
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const EXTRA = [
   { name: "tokens", path: "/dev/tokens" },
-  { name: "componentes", path: "/dev/componentes" },
+  { name: "componentes", path: "/dev/components" },
   { name: "registro", path: "/auth/sign-up" },
   { name: "recuperar", path: "/auth/forgot-password" },
   { name: "nueva-clave", path: "/auth/update-password" },

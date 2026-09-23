@@ -24,7 +24,7 @@ export default async function TextosPage({ params }: { params: Promise<{ id: str
       <AssistantScope productId={product.id} product={product.name} stage="Textos" stageKey="textos" image={product.image} />
       <TopBar
         back={product.name}
-        backHref={`/productos/${product.id}`}
+        backHref={`/products/${product.id}`}
         title="Textos"
         subtitle={items.length ? `${accepted} aceptados · ${pending} pendientes` : undefined}
         actions={<AssistantButton />}
@@ -36,14 +36,14 @@ export default async function TextosPage({ params }: { params: Promise<{ id: str
             <StageMeter stages={meter} />
           </div>
           <div className="px-4 py-2 lg:max-w-content lg:px-8 lg:py-6">
-            <ReviewFlow items={items} nextHref={`/productos/${product.id}/imagenes`} nextLabel="Continuar: Imágenes" />
+            <ReviewFlow items={items} nextHref={`/products/${product.id}/images`} nextLabel="Continuar: Imágenes" />
           </div>
         </>
       ) : (
         <EmptyState
           icon={<Icon name="sparkle" />}
           title="La IA está escribiendo los textos"
-          action={<Button href={`/productos/${product.id}`}>Volver a la ruta</Button>}
+          action={<Button href={`/products/${product.id}`}>Volver a la ruta</Button>}
         >
           Te avisamos en Hoy cuando las propuestas estén listas para revisar.
         </EmptyState>

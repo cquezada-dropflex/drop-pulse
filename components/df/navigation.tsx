@@ -15,12 +15,12 @@ export interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { id: "hoy", label: "Hoy", icon: "inbox", href: "/hoy" },
-  { id: "productos", label: "Productos", icon: "box", href: "/productos" },
-  { id: "campanas", label: "Campañas", icon: "megaphone", href: "/campanas" },
+  { id: "hoy", label: "Hoy", icon: "inbox", href: "/today" },
+  { id: "productos", label: "Productos", icon: "box", href: "/products" },
+  { id: "campanas", label: "Campañas", icon: "megaphone", href: "/campaigns" },
 ];
 
-const SETTINGS: NavItem = { id: "ajustes", label: "Ajustes", icon: "settings", href: "/ajustes" };
+const SETTINGS: NavItem = { id: "ajustes", label: "Ajustes", icon: "settings", href: "/settings" };
 
 export interface NavigationProps {
   /** `bar`: barra inferior (móvil). `rail`: riel lateral (≥1024px). */

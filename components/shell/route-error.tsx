@@ -9,7 +9,7 @@ export function RouteError({
   reset,
   title,
   description = "Puede ser tu conexión. Tus decisiones anteriores están guardadas.",
-  backHref = "/hoy",
+  backHref = "/today",
   backLabel = "Ir a Hoy",
 }: {
   error: Error & { digest?: string };

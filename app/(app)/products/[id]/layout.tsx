@@ -20,7 +20,7 @@ export default async function ProductLayout({ children, params }: { children: Re
   return (
     <>
       <header className="hidden items-center gap-3 border-b px-8 pt-5 pb-4 lg:flex">
-        <IconButton icon="chevron-left" label="Productos" href="/productos" />
+        <IconButton icon="chevron-left" label="Productos" href="/products" />
         <div className="min-w-0 flex-1">
           <h1 className="text-display">{product.name}</h1>
           <p className="text-caption text-muted-foreground">{product.summary}</p>

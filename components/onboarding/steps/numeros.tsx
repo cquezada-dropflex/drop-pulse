@@ -56,7 +56,7 @@ export function NumerosStep({
         total: 4,
         optionalSteps: [4],
         back: "Volver",
-        backHref: "/onboarding/productos",
+        backHref: "/onboarding/products",
         skip: "Usar sugeridos",
         onSkip: () => submit(true),
       }}
