@@ -1,0 +1,14 @@
+<!-- @dsCard group="Estado" height=100 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>StatusBadge</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {className:'df-col'},
+  h('div', {className:'df-row', style:{padding:0}}, ['generado','revision','aprobado','rechazado','publicando','publicado','error'].map(function(s){ return h(D.StatusBadge,{key:s,status:s}); })),
+  h('div', {className:'df-row', style:{padding:0}}, ['generado','revision','aprobado','rechazado','publicando','publicado','error'].map(function(s){ return h(D.StatusBadge,{key:s,status:s,size:'sm'}); }))));
+</script>
+</body>
+</html>

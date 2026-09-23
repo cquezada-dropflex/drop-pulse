@@ -1,0 +1,14 @@
+<!-- @dsCard group="Entrada" height=120 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>SegmentedControl</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {className:'df-col', style:{maxWidth:380}},
+  h(D.SegmentedControl,{block:true, value:'det', label:'Filtrar productos', options:[{value:'avz',label:'Avanzan',count:9},{value:'det',label:'Detenidos',count:3},{value:'pub',label:'Publicados',count:12}]}),
+  h(D.SegmentedControl,{value:'7', label:'Periodo', options:[{value:'hoy',label:'Hoy'},{value:'7',label:'7 días'},{value:'30',label:'30 días'}]})));
+</script>
+</body>
+</html>

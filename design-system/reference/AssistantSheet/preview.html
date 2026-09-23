@@ -1,0 +1,13 @@
+<!-- @dsCard group="Asistente" height=520 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>AssistantSheet</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{padding:16, maxWidth:390, height:500, display:'flex', flexDirection:'column', justifyContent:'flex-end', background:'var(--muted)'}},
+  h(D.AssistantSheet,{style:{height:470}, context:'Corrector de postura · Precio', contextImage:1, messages:[{from:'user', text:'¿Me conviene bajar a $19.990?'},{from:'ai', text:['Con $19.990 ganarías $3.590 por venta (18%). Si tu CPA sube a $7.000, pierdes dinero.','Mejor: mantén $24.990 y ofrece 2 unidades por $39.990.'], apply:'Crear oferta 2×$39.990'}], suggestions:['¿Qué precio usa la competencia?','Escribe una garantía']})));
+</script>
+</body>
+</html>

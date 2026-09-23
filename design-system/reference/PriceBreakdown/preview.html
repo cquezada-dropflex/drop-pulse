@@ -1,0 +1,14 @@
+<!-- @dsCard group="Precio" height=360 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>PriceBreakdown</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:16, padding:16}},
+  h('div',{className:'df-card df-card-pad'}, h(D.PriceBreakdown,{price:24990, parts:[{label:'Costo del producto',value:6900},{label:'Envío',value:3500},{label:'Publicidad por venta',value:6000}]})),
+  h('div',{className:'df-card df-card-pad'}, h(D.PriceBreakdown,{price:14990, parts:[{label:'Costo del producto',value:6900},{label:'Envío',value:3500},{label:'Publicidad por venta',value:6000}], note:'A este precio pierdes en cada venta.'}))));
+</script>
+</body>
+</html>

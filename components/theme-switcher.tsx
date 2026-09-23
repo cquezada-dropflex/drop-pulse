@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,69 +9,45 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Laptop, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
-const ThemeSwitcher = () => {
-  const [mounted, setMounted] = useState(false);
+const OPTIONS = [
+  { value: "light", label: "Claro", Icon: Sun },
+  { value: "dark", label: "Oscuro", Icon: Moon },
+  { value: "system", label: "Sistema", Icon: Laptop },
+] as const;
+
+const subscribe = () => () => {};
+
+export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
-
-  // useEffect only runs on the client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
-  const ICON_SIZE = 16;
+  // El tema solo se conoce en el cliente; en el servidor se dibuja el de "Sistema".
+  const mounted = useSyncExternalStore(subscribe, () => true, () => false);
+  const current = OPTIONS.find((o) => o.value === (mounted ? theme : "system")) ?? OPTIONS[2];
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size={"sm"}>
-          {theme === "light" ? (
-            <Sun
-              key="light"
-              size={ICON_SIZE}
-              className={"text-muted-foreground"}
-            />
-          ) : theme === "dark" ? (
-            <Moon
-              key="dark"
-              size={ICON_SIZE}
-              className={"text-muted-foreground"}
-            />
-          ) : (
-            <Laptop
-              key="system"
-              size={ICON_SIZE}
-              className={"text-muted-foreground"}
-            />
-          )}
-        </Button>
+      <DropdownMenuTrigger
+        aria-label={`Tema: ${current.label}. Cambiar tema`}
+        title="Cambiar tema"
+        className="inline-grid size-touch place-items-center rounded-md text-foreground hover:bg-accent"
+      >
+        <current.Icon className="size-5" strokeWidth={1.75} aria-hidden />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-content" align="start">
-        <DropdownMenuRadioGroup
-          value={theme}
-          onValueChange={(e) => setTheme(e)}
-        >
-          <DropdownMenuRadioItem className="flex gap-2" value="light">
-            <Sun size={ICON_SIZE} className="text-muted-foreground" />{" "}
-            <span>Light</span>
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem className="flex gap-2" value="dark">
-            <Moon size={ICON_SIZE} className="text-muted-foreground" />{" "}
-            <span>Dark</span>
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem className="flex gap-2" value="system">
-            <Laptop size={ICON_SIZE} className="text-muted-foreground" />{" "}
-            <span>System</span>
-          </DropdownMenuRadioItem>
+      <DropdownMenuContent align="end" data-focus="within" className="min-w-40 rounded-md p-1">
+        <DropdownMenuRadioGroup value={mounted ? theme : undefined} onValueChange={setTheme}>
+          {OPTIONS.map(({ value, label, Icon }) => (
+            <DropdownMenuRadioItem
+              key={value}
+              value={value}
+              className="min-h-touch gap-3 rounded-sm pr-3 text-body"
+            >
+              <Icon className="size-4" strokeWidth={1.75} aria-hidden />
+              {label}
+            </DropdownMenuRadioItem>
+          ))}
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
-
-export { ThemeSwitcher };
+}

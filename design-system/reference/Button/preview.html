@@ -1,0 +1,14 @@
+<!-- @dsCard group="Acciones" height=150 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Button</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {className:'df-col'},
+    h('div', {className:'df-row', style:{padding:0}}, h(D.Button,{variant:'primary', icon:'check'},'Aceptar'), h(D.Button,{variant:'secondary'},'Editar'), h(D.Button,{variant:'ghost'},'Cancelar'), h(D.Button,{variant:'destructive', icon:'power'},'Apagar')),
+    h('div', {className:'df-row', style:{padding:0}}, h(D.Button,{variant:'primary', size:'lg', iconEnd:'chevron-right'},'Continuar: Imágenes'), h(D.Button,{variant:'primary', loading:true},'Publicando'), h(D.Button,{variant:'primary', disabled:true},'Publicar'), h(D.Button,{variant:'secondary', size:'sm', icon:'sparkle'},'Generar más'))));
+</script>
+</body>
+</html>

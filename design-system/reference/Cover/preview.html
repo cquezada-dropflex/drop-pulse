@@ -1,0 +1,96 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>DropFlex</title>
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--background); color:var(--foreground); font-family:var(--font-sans); overflow:hidden; }
+  .cover { position:relative; height:288px; overflow:hidden; }
+  .art { position:absolute; top:0; left:480px; width:480px; height:288px; overflow:hidden; }
+  .art svg { display:block; width:480px; height:288px; }
+  .brand { fill:var(--primary); }
+  .tint { fill:var(--primary-soft); }
+  .ink { fill:var(--foreground); }
+  .ok { fill:var(--success); }
+  .warn { fill:var(--warning); }
+  .ground { fill:var(--background); }
+  .blk { rx:var(--radius-lg); }
+  .pill { rx:3px; }
+  .words { position:absolute; left:var(--space-8); bottom:var(--space-8); max-width:440px; }
+  .name { margin:0; font-size:80px; line-height:.92; font-weight:600; letter-spacing:-.035em; color:var(--foreground); }
+  .tag { margin:var(--space-3) 0 0 4px; font-size:14px; line-height:20px; color:var(--muted-foreground); }
+</style>
+</head>
+<body>
+<div class="cover">
+<div class="art" aria-hidden="true">
+<svg viewBox="0 0 480 288" width="480" height="288">
+<!--
+  blocks      primary 144×240 bled off the top (the one accent, largest) · primary-soft 176×200 (tint) · foreground 144×232 bled off the right · success pill 72×24 once (ganancia/publicado) — ≈38% of 960×288
+  arrangement one tall accent slab, a tint field and an ink slab, bottoms on one line at space-6 from the edge, space-4 gutters
+  pattern     the StageMeter itself, from "Retomar donde quedaste": 8 rows of six 6px pills at a space-5 pitch over the tint, done in foreground, current in primary, one stuck in warning, pending cut in background — a staircase of products advancing
+  scales      gutters space-4; pitch space-5 (20px); pill gap 4px (space-1); corners radius-lg, pills radius-full (half of 6px)
+-->
+<rect class="brand blk" x="0" y="-16" width="144" height="240" rx="14"/>
+<rect class="ok" x="0" y="240" width="72" height="24" rx="12"/>
+<rect class="tint blk" x="160" y="64" width="176" height="200" rx="14"/>
+<rect class="ink blk" x="352" y="32" width="144" height="232" rx="14"/>
+<rect class="ink pill" x="172" y="88" width="22" height="6" rx="3"/>
+<rect class="brand pill" x="198" y="88" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="224" y="88" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="250" y="88" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="276" y="88" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="302" y="88" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="172" y="108" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="198" y="108" width="22" height="6" rx="3"/>
+<rect class="brand pill" x="224" y="108" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="250" y="108" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="276" y="108" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="302" y="108" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="172" y="128" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="198" y="128" width="22" height="6" rx="3"/>
+<rect class="warn pill" x="224" y="128" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="250" y="128" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="276" y="128" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="302" y="128" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="172" y="148" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="198" y="148" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="224" y="148" width="22" height="6" rx="3"/>
+<rect class="brand pill" x="250" y="148" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="276" y="148" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="302" y="148" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="172" y="168" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="198" y="168" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="224" y="168" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="250" y="168" width="22" height="6" rx="3"/>
+<rect class="brand pill" x="276" y="168" width="22" height="6" rx="3"/>
+<rect class="ground pill" x="302" y="168" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="172" y="188" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="198" y="188" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="224" y="188" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="250" y="188" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="276" y="188" width="22" height="6" rx="3"/>
+<rect class="brand pill" x="302" y="188" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="172" y="208" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="198" y="208" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="224" y="208" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="250" y="208" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="276" y="208" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="302" y="208" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="172" y="228" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="198" y="228" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="224" y="228" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="250" y="228" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="276" y="228" width="22" height="6" rx="3"/>
+<rect class="ink pill" x="302" y="228" width="22" height="6" rx="3"/>
+</svg>
+</div>
+<div class="words">
+<h1 class="name">DropFlex</h1>
+<p class="tag">La IA propone, tú decides.</p>
+</div>
+</div>
+</body>
+</html>

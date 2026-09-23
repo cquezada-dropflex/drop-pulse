@@ -1,0 +1,553 @@
+/* @ds-bundle: {"format":4,"namespace":"DropFlex","components":[{"name":"Button"},{"name":"IconButton"},{"name":"StatusBadge"},{"name":"StageMeter"},{"name":"ProductRow"},{"name":"AttentionItem"},{"name":"StageList"},{"name":"ReviewCard"},{"name":"ImageTile"},{"name":"SegmentedControl"},{"name":"Field"},{"name":"PriceBreakdown"},{"name":"OfferPreview"},{"name":"Metric"},{"name":"CampaignCard"},{"name":"Navigation"},{"name":"TopBar"},{"name":"Toast"},{"name":"AssistantSheet"},{"name":"Icon"}]} */
+(function () {
+  var React = window.React;
+  var h = React.createElement;
+  var Frag = React.Fragment;
+  function cx() { return Array.prototype.filter.call(arguments, Boolean).join(' '); }
+
+  /* ---------- Icon: trazos de 1.75px, 24×24, currentColor ---------- */
+  var P = {
+    sparkle: 'M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z M18.5 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z',
+    eye: 'M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z M12 9.25a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5z',
+    check: 'M5 12.5l4.5 4.5L19 7.5',
+    x: 'M6.5 6.5l11 11 M17.5 6.5l-11 11',
+    loader: 'M12 3.5a8.5 8.5 0 1 1-8.5 8.5',
+    'check-circle': 'M12 3.25a8.75 8.75 0 1 0 0 17.5 8.75 8.75 0 0 0 0-17.5z M8.25 12.25l2.5 2.5 5-5',
+    alert: 'M12 4L2.75 19.5h18.5z M12 10v4 M12 16.75v.5',
+    'chevron-right': 'M9.5 5.5L16 12l-6.5 6.5',
+    'chevron-left': 'M14.5 5.5L8 12l6.5 6.5',
+    plus: 'M12 5v14 M5 12h14',
+    inbox: 'M3.5 13.5l2.5-8h12l2.5 8v5h-17z M3.5 13.5h5l1 2.5h5l1-2.5h5',
+    box: 'M12 3l8.5 4.5v9L12 21l-8.5-4.5v-9z M3.5 7.5L12 12l8.5-4.5 M12 12v9',
+    megaphone: 'M4 10v4h3l7 4.5v-13L7 10z M17.5 9.5a3.5 3.5 0 0 1 0 5',
+    chat: 'M4 5.5h16v10.5H9.5L5 19.5V16H4z',
+    lock: 'M6.5 10.5h11v9.5h-11z M8.75 10.5V8a3.25 3.25 0 0 1 6.5 0v2.5',
+    image: 'M4 5h16v14H4z M4 16l4.5-4.5 4 4 2.5-2.5L20 17.5 M15 8.25a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5z',
+    tag: 'M3.5 12.5V4h8.5l8.5 8.5-8.5 8.5z M8 7.25a1 1 0 1 0 0 2 1 1 0 0 0 0-2z',
+    text: 'M5 6h14 M5 10.5h14 M5 15h9 M5 19.5h6',
+    store: 'M4 9.5L5.5 4.5h13L20 9.5 M4 9.5v10h16v-10 M4 9.5c0 1.5 1.2 2.5 2.7 2.5s2.6-1 2.6-2.5c0 1.5 1.2 2.5 2.7 2.5s2.7-1 2.7-2.5c0 1.5 1.1 2.5 2.6 2.5S20 11 20 9.5 M10 19.5v-4.5h4v4.5',
+    send: 'M4.5 12L20 4.5 16 20l-4-6.5z M12 13.5l8-9',
+    'arrow-up': 'M12 19V5 M6 11l6-6 6 6',
+    'arrow-down': 'M12 5v14 M6 13l6 6 6-6',
+    pause: 'M8 5.5v13 M16 5.5v13',
+    power: 'M12 3.5v8 M7 6.5a7.5 7.5 0 1 0 10 0',
+    more: 'M5.5 12h.01 M12 12h.01 M18.5 12h.01',
+    undo: 'M9 5.5L4.5 10 9 14.5 M4.5 10H15a4.5 4.5 0 0 1 0 9h-3',
+    edit: 'M4.5 19.5l1-4.5L16 4.5l3.5 3.5L9 18.5z M13.5 7l3.5 3.5',
+    search: 'M10.5 4.25a6.25 6.25 0 1 0 0 12.5 6.25 6.25 0 0 0 0-12.5z M15 15l5 5',
+    clock: 'M12 3.25a8.75 8.75 0 1 0 0 17.5 8.75 8.75 0 0 0 0-17.5z M12 7.5V12l3 2',
+    minus: 'M5 12h14',
+    truck: 'M3 6.5h11v10H3z M14 10h4l3 3.5v3h-7 M7 19a1.75 1.75 0 1 0 0-3.5A1.75 1.75 0 0 0 7 19z M17 19a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5z',
+    trend: 'M3.5 16.5l5.5-5.5 4 4 7.5-7.5 M15 7.5h5.5V13',
+    grip: 'M9 6h.01 M15 6h.01 M9 12h.01 M15 12h.01 M9 18h.01 M15 18h.01',
+    star: 'M12 4l2.4 5 5.3.6-3.9 3.7 1 5.2L12 16l-4.8 2.5 1-5.2-3.9-3.7 5.3-.6z',
+    settings: 'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.1-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2.1 1.2l-2.3-.9-2 3.4 2 1.5a7 7 0 0 0 0 2.4l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2.1 1.2L10 21h4l.5-2.6a7 7 0 0 0 2.1-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z'
+  };
+  function Icon(props) {
+    var d = P[props.name] || P.more;
+    return h('svg', { className: cx('df-ico', props.size === 'sm' && 'df-ico-sm', props.className), viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: props.strokeWidth || 1.75, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': props.label ? undefined : 'true', role: props.label ? 'img' : undefined, 'aria-label': props.label },
+      d.split(' M').map(function (seg, i) { return h('path', { key: i, d: (i ? 'M' : '') + seg }); }));
+  }
+
+  /* ---------- Button ---------- */
+  function Button(props) {
+    var variant = props.variant || 'secondary', size = props.size || 'md';
+    var rest = Object.assign({}, props);
+    ['variant', 'size', 'icon', 'iconEnd', 'loading', 'block', 'className', 'children', 'kbd'].forEach(function (k) { delete rest[k]; });
+    return h('button', Object.assign({ type: 'button' }, rest, {
+      className: cx('df-btn', 'df-btn-' + variant, size !== 'md' && 'df-btn-' + size, props.block && 'df-btn-block', props.className),
+      disabled: props.disabled || props.loading, 'aria-busy': props.loading ? 'true' : undefined
+    }),
+      props.loading ? h(Icon, { name: 'loader', className: 'df-spin', size: 'sm' }) : props.icon ? h(Icon, { name: props.icon, size: size === 'sm' ? 'sm' : undefined }) : null,
+      props.children,
+      props.kbd ? h('span', { className: 'df-kbd', 'aria-hidden': 'true' }, props.kbd) : null,
+      props.iconEnd ? h(Icon, { name: props.iconEnd, size: 'sm' }) : null);
+  }
+  function IconButton(props) {
+    return h('button', { type: 'button', className: cx('df-iconbtn', props.variant === 'primary' && 'df-iconbtn-primary', props.className), 'aria-label': props.label, title: props.label, onClick: props.onClick },
+      h(Icon, { name: props.icon }), props.badge ? h('span', { className: 'df-sr' }, props.badge) : null);
+  }
+
+  /* ---------- StatusBadge: ciclo de vida del contenido ---------- */
+  var STATUS = {
+    generado:   { label: 'Generado',     icon: 'sparkle',      tone: 'neutral' },
+    revision:   { label: 'En revisión',  icon: 'eye',          tone: 'warning' },
+    aprobado:   { label: 'Aprobado',     icon: 'check',        tone: 'success' },
+    rechazado:  { label: 'Rechazado',    icon: 'x',            tone: 'quiet' },
+    publicando: { label: 'Publicándose', icon: 'loader',       tone: 'progress' },
+    publicado:  { label: 'Publicado',    icon: 'check-circle', tone: 'success-solid' },
+    error:      { label: 'Con error',    icon: 'alert',        tone: 'danger' }
+  };
+  function StatusBadge(props) {
+    var s = STATUS[props.status] || STATUS.generado;
+    return h('span', { className: cx('df-status', 'df-status-' + s.tone, props.size === 'sm' && 'df-status-sm'), role: props.status === 'publicando' ? 'status' : undefined },
+      h(Icon, { name: s.icon, className: props.status === 'publicando' ? 'df-spin' : undefined, strokeWidth: 2 }), props.label || s.label);
+  }
+
+  /* ---------- StageMeter: una rayita por etapa ---------- */
+  function StageMeter(props) {
+    var st = props.stages || [];
+    var done = st.filter(function (s) { return s === 'done'; }).length;
+    var req = st.filter(function (s) { return s !== 'optional'; }).length;
+    return h('div', { className: 'df-meter', role: 'img', 'aria-label': done + ' de ' + req + ' etapas completas' },
+      st.map(function (s, i) { return h('span', { key: i, className: 'is-' + s }); }));
+  }
+
+  /* ---------- Imágenes de ejemplo (contenido, no marca) ---------- */
+  var PAL = [['#e9e4dc', '#b8a48a', '#6b5a45'], ['#dfe7ea', '#8fa9b3', '#3f5b66'], ['#ece6ef', '#b39cc0', '#5c4868'], ['#e5ebe0', '#9db38a', '#4d6340'], ['#f1e3dc', '#d19b86', '#7a4a3a'], ['#e6e6e6', '#a3a3a3', '#4a4a4a']];
+  function productImage(i, shape) {
+    var p = PAL[(i || 0) % PAL.length], s = shape == null ? (i || 0) % 4 : shape, body;
+    if (s === 0) body = '<rect x="36" y="22" width="28" height="10" rx="3" fill="' + p[2] + '"/><rect x="30" y="30" width="40" height="52" rx="10" fill="' + p[1] + '"/><rect x="36" y="46" width="28" height="16" rx="3" fill="' + p[0] + '"/>';
+    else if (s === 1) body = '<rect x="22" y="30" width="56" height="44" rx="6" fill="' + p[1] + '"/><path d="M22 42h56" stroke="' + p[2] + '" stroke-width="3"/><rect x="44" y="30" width="12" height="44" fill="' + p[2] + '" opacity=".5"/>';
+    else if (s === 2) body = '<circle cx="50" cy="52" r="24" fill="' + p[1] + '"/><circle cx="50" cy="52" r="10" fill="' + p[0] + '"/><rect x="47" y="22" width="6" height="10" rx="2" fill="' + p[2] + '"/>';
+    else body = '<path d="M30 78c0-22 8-40 20-50 12 10 20 28 20 50z" fill="' + p[1] + '"/><path d="M50 28v50" stroke="' + p[2] + '" stroke-width="3"/>';
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="' + p[0] + '"/><ellipse cx="50" cy="84" rx="26" ry="4" fill="' + p[2] + '" opacity=".18"/>' + body + '</svg>';
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+
+  /* ---------- ProductRow ---------- */
+  function ProductRow(props) {
+    var tone = props.tone || 'muted';
+    var whyIcon = { warning: 'clock', danger: 'alert', success: 'check-circle', primary: 'chevron-right', muted: 'minus' }[tone];
+    return h('button', { type: 'button', className: 'df-prow', onClick: props.onClick },
+      h('img', { className: 'df-thumb', src: props.image || productImage(props.imageIndex || 0), alt: '' }),
+      h('span', { className: 'df-prow-body' },
+        h('span', { className: 'df-prow-name' }, props.name),
+        props.stages ? h(StageMeter, { stages: props.stages }) : null,
+        props.reason ? h('span', { className: cx('df-prow-why', 't-' + tone) }, h(Icon, { name: whyIcon, size: 'sm', strokeWidth: 2 }), h('span', null, props.reason)) : null),
+      h('span', { className: 'df-prow-end' }, props.end || h(Icon, { name: 'chevron-right', size: 'sm' })));
+  }
+
+  /* ---------- AttentionItem: una decisión pendiente en Hoy ---------- */
+  var KIND = { review: 'sparkle', error: 'alert', ads: 'megaphone', 'ads-up': 'trend', stuck: 'clock' };
+  function AttentionItem(props) {
+    var k = props.kind || 'review';
+    return h('div', { className: 'df-att' },
+      h('span', { className: 'df-att-ico k-' + k }, h(Icon, { name: KIND[k] })),
+      h('div', null,
+        h('div', { className: 'df-att-title' }, props.title),
+        props.product ? h('div', { className: 'df-att-meta' }, props.product) : null,
+        props.detail ? h('div', { className: 'df-att-detail' }, props.detail) : null,
+        props.actions ? h('div', { className: 'df-att-actions' }, props.actions) : null));
+  }
+
+  /* ---------- StageList: la ruta de un producto ---------- */
+  var STAGE_ICON = { done: 'check', review: 'eye', error: 'alert', locked: 'lock' };
+  function StageList(props) {
+    return h('ol', { className: 'df-stages', 'aria-label': props.label || 'Etapas del producto' },
+      (props.stages || []).map(function (s, i) {
+        var locked = s.state === 'locked';
+        return h('li', { key: i },
+          h('button', { type: 'button', className: cx('df-stage', 's-' + s.state, s.optional && s.state === 'available' && 's-optional'), 'aria-disabled': locked ? 'true' : undefined, 'aria-current': s.state === 'current' ? 'step' : undefined },
+            h('span', { className: 'df-stage-dot' }, STAGE_ICON[s.state] ? h(Icon, { name: STAGE_ICON[s.state], strokeWidth: 2.25 }) : String(i + 1)),
+            h('span', null,
+              h('span', { className: 'df-stage-title' }, s.title, s.optional ? h('span', { className: 'df-stage-opt' }, 'Opcional') : null),
+              s.desc ? h('span', { className: 'df-stage-desc', style: { display: 'block' } }, s.desc) : null),
+            h('span', { className: 'df-stage-end' }, s.end || (locked ? null : h(Icon, { name: 'chevron-right', size: 'sm' })))));
+      }));
+  }
+
+  /* ---------- ReviewCard: original vs. propuesta ---------- */
+  function ReviewCard(props) {
+    var state = props.state || 'pending';
+    var editing = state === 'editing';
+    return h('section', { className: cx('df-review', 'st-' + state), 'aria-label': 'Revisar ' + props.field },
+      h('div', { className: 'df-review-head' },
+        h('span', { className: 'df-review-field' }, props.field),
+        props.total ? h('span', { className: 'df-review-count' }, props.index + ' de ' + props.total) : null),
+      props.original != null ? h('div', { className: 'df-orig' },
+        h('div', { className: 'df-orig-label' }, 'Original'),
+        h('div', { className: 'df-orig-text' }, props.original)) : null,
+      h('div', { className: 'df-prop' },
+        h('div', { className: 'df-prop-label' }, h(Icon, { name: 'sparkle', size: 'sm' }), editing ? 'Tu versión' : 'Propuesta',
+          state === 'accepted' ? h('span', { style: { marginLeft: 'auto' } }, h(StatusBadge, { status: 'aprobado', size: 'sm' })) : null,
+          state === 'discarded' ? h('span', { style: { marginLeft: 'auto' } }, h(StatusBadge, { status: 'rechazado', size: 'sm' })) : null),
+        editing ? h('textarea', { defaultValue: props.proposalText || '', 'aria-label': 'Editar propuesta' }) : h('div', { className: 'df-prop-text' }, props.proposal)),
+      props.hideActions ? null : editing
+        ? h('div', { className: 'df-review-actions', style: { gridTemplateColumns: '1fr 1.4fr' } },
+            h(Button, { variant: 'ghost' }, 'Cancelar'),
+            h(Button, { variant: 'primary', icon: 'check' }, 'Guardar y aceptar'))
+        : h('div', { className: 'df-review-actions' },
+            h(Button, { variant: 'secondary', icon: 'x', kbd: props.keys ? 'D' : null }, 'Descartar'),
+            h(Button, { variant: 'secondary', icon: 'edit', kbd: props.keys ? 'E' : null }, 'Editar'),
+            h(Button, { variant: 'primary', icon: 'check', kbd: props.keys ? 'A' : null }, 'Aceptar')));
+  }
+
+  /* ---------- ImageTile ---------- */
+  function ImageTile(props) {
+    var st = props.state || 'idle';
+    if (st === 'generating') return h('div', { className: 'df-tile is-generating', role: 'status' }, h('span', { className: 'df-tile-center' }, h(Icon, { name: 'sparkle' }), 'Generando'));
+    if (st === 'error') return h('button', { type: 'button', className: 'df-tile is-error' }, h('span', { className: 'df-tile-center' }, h(Icon, { name: 'alert' }), 'Reintentar'));
+    var sel = st === 'selected';
+    return h('button', { type: 'button', className: cx('df-tile', sel && 'is-selected', st === 'discarded' && 'is-discarded'), 'aria-pressed': sel ? 'true' : 'false', 'aria-label': (props.alt || 'Imagen') + (sel ? ', posición ' + props.order : st === 'discarded' ? ', descartada' : ', sin elegir') },
+      h('img', { src: props.src || productImage(props.imageIndex || 0, props.shape), alt: '' }),
+      sel ? h('span', { className: 'df-tile-order' }, props.order) : st === 'discarded' ? null : h('span', { className: 'df-tile-check' }),
+      sel && props.order === 1 ? h('span', { className: 'df-tile-cover' }, 'Portada') : null,
+      st === 'discarded' ? h('span', { className: 'df-tile-tag' }, h(Icon, { name: 'undo', size: 'sm' }), 'Recuperar') : null);
+  }
+
+  /* ---------- SegmentedControl ---------- */
+  function SegmentedControl(props) {
+    return h('div', { className: cx('df-seg', props.block && 'df-seg-block'), role: 'group', 'aria-label': props.label },
+      (props.options || []).map(function (o) {
+        var v = typeof o === 'string' ? o : o.value;
+        return h('button', { key: v, type: 'button', 'aria-pressed': props.value === v ? 'true' : 'false', onClick: props.onChange ? function () { props.onChange(v); } : undefined },
+          o.label || v, o.count != null ? h('span', { className: 'df-seg-count' }, o.count) : null);
+      }));
+  }
+
+  /* ---------- Field ---------- */
+  function Field(props) {
+    var id = props.id || ('f-' + String(props.label).replace(/\W+/g, '-').toLowerCase());
+    return h('div', { className: cx('df-field', props.error && 'is-error', props.disabled && 'is-disabled', props.ai && 'is-ai') },
+      h('label', { className: 'df-field-label', htmlFor: id }, props.label),
+      h('div', { className: 'df-field-box' },
+        props.prefix ? h('span', { className: 'df-field-affix' }, props.prefix) : null,
+        h('input', { id: id, defaultValue: props.value, inputMode: props.inputMode || (props.prefix === '$' ? 'numeric' : undefined), disabled: props.disabled, 'aria-invalid': props.error ? 'true' : undefined }),
+        props.suffix ? h('span', { className: 'df-field-affix' }, props.suffix) : null),
+      (props.error || props.hint) ? h('span', { className: 'df-field-hint' }, props.ai && !props.error ? h(Icon, { name: 'sparkle', size: 'sm' }) : null, props.error || props.hint) : null);
+  }
+
+  /* ---------- PriceBreakdown ---------- */
+  function money(n) { var neg = n < 0; n = Math.round(Math.abs(n)); return (neg ? '−$' : '$') + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function PriceBreakdown(props) {
+    var price = props.price, parts = props.parts || [];
+    var cost = parts.reduce(function (a, p) { return a + p.value; }, 0);
+    var profit = price - cost;
+    var colors = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--chart-5)'];
+    var segs = parts.map(function (p, i) { return { label: p.label, value: p.value, color: p.color || colors[i % colors.length] }; });
+    if (profit > 0) segs.push({ label: 'Tu ganancia', value: profit, color: 'var(--chart-4)', strong: true });
+    var total = Math.max(price, cost);
+    return h('div', { className: 'df-col', style: { padding: 0, gap: 'var(--space-4)' } },
+      h('div', { className: 'df-profit' },
+        h('div', null,
+          h('div', { className: 'df-metric-l' }, 'Ganas por cada venta entregada'),
+          h('div', { className: cx('df-profit-v', profit >= 0 ? 'is-pos' : 'is-neg') }, money(profit))),
+        h('div', { style: { textAlign: 'right' } },
+          h('div', { className: 'df-metric-l' }, 'Margen'),
+          h('div', { className: 'df-metric-v' }, Math.round(profit / price * 100) + '%'))),
+      h('div', { className: 'df-bar', role: 'img', 'aria-label': 'De ' + money(price) + ': ' + segs.map(function (s) { return s.label + ' ' + money(s.value); }).join(', ') },
+        segs.map(function (s, i) { return h('span', { key: i, style: { flex: s.value / total, background: s.color } }); })),
+      h('ul', { className: 'df-legend' },
+        segs.map(function (s, i) {
+          return h('li', { key: i },
+            h('span', { className: 'df-legend-sw', style: { background: s.color } }),
+            h('span', { style: s.strong ? { fontWeight: 600 } : null }, s.label),
+            h('span', { className: 'df-legend-v', style: s.strong ? { color: 'var(--success)' } : null }, money(s.value)),
+            h('span', { className: 'df-legend-p' }, Math.round(s.value / price * 100) + '%'));
+        })),
+      props.note ? h('div', { className: 'df-field-hint' }, props.note) : null);
+  }
+
+  /* ---------- OfferPreview: cómo lo ve el comprador ---------- */
+  function OfferPreview(props) {
+    var off = props.compareAt ? Math.round((1 - props.price / props.compareAt) * 100) : 0;
+    return h('div', null,
+      h('div', { className: 'df-offer-frame' }, h('span', null, 'Vista del comprador'), h('span', null, props.store || 'tutienda.cl')),
+      h('div', { className: 'df-offer' },
+        h('img', { className: 'df-offer-img', src: props.image || productImage(props.imageIndex || 0), alt: '' }),
+        h('div', { className: 'df-offer-body' },
+          h('div', { className: 'df-offer-title' }, props.title),
+          h('div', { className: 'df-offer-price' },
+            h('span', { className: 'df-offer-now' }, money(props.price)),
+            props.compareAt ? h('span', { className: 'df-offer-was' }, money(props.compareAt)) : null,
+            off > 0 ? h('span', { className: 'df-offer-off' }, '−' + off + '%') : null),
+          h('div', { className: 'df-offer-cod' }, h(Icon, { name: 'truck', size: 'sm' }), 'Paga al recibir · Envío gratis'),
+          h('div', { className: 'df-offer-cta' }, props.cta || 'Pedir ahora, pagar al recibir'))));
+  }
+
+  /* ---------- Metric ---------- */
+  function Metric(props) {
+    var t = props.trend;
+    return h('div', { className: 'df-metric' },
+      h('span', { className: 'df-metric-l' }, props.label),
+      h('span', { className: 'df-metric-v' }, props.value),
+      props.target ? h('span', { className: cx('df-metric-t', t && 't-' + t) },
+        t === 'good' ? h(Icon, { name: 'check', size: 'sm', strokeWidth: 2.25 }) : t === 'bad' ? h(Icon, { name: 'alert', size: 'sm', strokeWidth: 2 }) : t === 'warn' ? h(Icon, { name: 'clock', size: 'sm', strokeWidth: 2 }) : null,
+        props.target) : null);
+  }
+
+  /* ---------- CampaignCard + veredicto ---------- */
+  var VERDICT = {
+    subir:       { k: 'Sube el presupuesto', icon: 'arrow-up', cta: 'Subir a ' },
+    seguir:      { k: 'Déjala seguir',        icon: 'check' },
+    vigilar:     { k: 'Vigílala',             icon: 'eye' },
+    apagar:      { k: 'Apágala',              icon: 'power', cta: 'Apagar campaña' },
+    aprendiendo: { k: 'Aún aprendiendo',      icon: 'clock' }
+  };
+  function Verdict(props) {
+    var v = VERDICT[props.verdict] || VERDICT.seguir;
+    return h('div', { className: 'df-verdict v-' + props.verdict, role: 'note' },
+      h('span', { className: 'df-verdict-ico' }, h(Icon, { name: v.icon, strokeWidth: 2.25 })),
+      h('div', null, h('div', { className: 'df-verdict-k' }, props.title || v.k), h('div', { className: 'df-verdict-r' }, props.reason)));
+  }
+  function CampaignCard(props) {
+    var v = props.verdict || 'seguir';
+    var actions = props.actions;
+    if (actions === undefined) {
+      if (v === 'subir') actions = [h(Button, { key: 'a', variant: 'secondary' }, 'Ver detalle'), h(Button, { key: 'b', variant: 'primary', icon: 'arrow-up' }, 'Subir a ' + (props.nextBudget || '$15.000'))];
+      else if (v === 'apagar') actions = [h(Button, { key: 'a', variant: 'secondary' }, 'Mantener'), h(Button, { key: 'b', variant: 'destructive', icon: 'power' }, 'Apagar')];
+      else actions = null;
+    }
+    return h('article', { className: 'df-card df-camp' },
+      h('div', { className: 'df-camp-head' },
+        h('img', { className: 'df-thumb', style: { width: 40, height: 40 }, src: productImage(props.imageIndex || 0), alt: '' }),
+        h('div', { style: { minWidth: 0 } },
+          h('div', { className: 'df-camp-name' }, props.name),
+          h('div', { className: 'df-camp-sub' }, h('span', { className: cx('df-live', props.paused && 'off') }), props.paused ? 'Pausada' : 'Activa', ' · ', props.meta || 'Meta Ads · 3 días')),
+        h(IconButton, { icon: 'more', label: 'Más opciones' })),
+      h(Verdict, { verdict: v, reason: props.reason, title: props.verdictTitle }),
+      props.metrics ? h('div', { className: 'df-metrics' }, props.metrics.map(function (m, i) { return h(Metric, Object.assign({ key: i }, m)); })) : null,
+      actions ? h('div', { className: 'df-camp-actions' }, actions) : null);
+  }
+
+  /* ---------- Navigation: barra inferior (móvil) o riel (escritorio) ---------- */
+  var NAV = [
+    { id: 'hoy', label: 'Hoy', icon: 'inbox' },
+    { id: 'productos', label: 'Productos', icon: 'box' },
+    { id: 'campanas', label: 'Campañas', icon: 'megaphone' }
+  ];
+  function Navigation(props) {
+    var rail = props.variant === 'rail';
+    var items = (props.items || NAV).map(function (it) {
+      return h('a', { key: it.id, href: '#' + it.id, className: 'df-tab', 'aria-current': props.active === it.id ? 'page' : undefined },
+        h('span', { className: 'df-tab-pill' }, h(Icon, { name: it.icon }), !rail && props.badges && props.badges[it.id] ? h('span', { className: 'df-tab-badge' }, props.badges[it.id]) : null),
+        h('span', null, it.label),
+        rail && props.badges && props.badges[it.id] ? h('span', { className: 'df-tab-badge' }, props.badges[it.id]) : null);
+    });
+    if (!rail) return h('nav', { className: 'df-tabbar', 'aria-label': 'Principal' }, items);
+    return h('nav', { className: 'df-rail', 'aria-label': 'Principal' },
+      h('div', { className: 'df-rail-brand' }, h('span', { className: 'df-rail-mark', 'aria-hidden': 'true' }, 'D'), 'DropFlex'),
+      items,
+      h('div', { className: 'df-rail-sep' }),
+      h('a', { href: '#ajustes', className: 'df-tab' }, h('span', { className: 'df-tab-pill' }, h(Icon, { name: 'settings' })), h('span', null, 'Ajustes')));
+  }
+
+  /* ---------- TopBar ---------- */
+  function TopBar(props) {
+    return h('header', { className: cx('df-topbar', props.large && 'is-large') },
+      props.back ? h(IconButton, { icon: 'chevron-left', label: props.back }) : null,
+      h('div', { className: cx('df-topbar-title', !props.back && 'no-back') },
+        h('div', { className: 'df-topbar-t' }, props.title),
+        props.subtitle ? h('div', { className: 'df-topbar-s' }, props.subtitle) : null),
+      props.actions);
+  }
+
+  /* ---------- Toast ---------- */
+  function Toast(props) {
+    return h('div', { className: 'df-toast', role: 'status' }, h('span', null, props.message), props.action ? h('button', { type: 'button' }, props.action) : null);
+  }
+
+  /* ---------- AssistantSheet ---------- */
+  function AssistantSheet(props) {
+    var panel = props.variant === 'panel';
+    return h('aside', { className: cx('df-sheet', panel && 'is-panel'), 'aria-label': 'Asistente', style: props.style },
+      panel ? null : h('div', { className: 'df-sheet-grab', 'aria-hidden': 'true' }),
+      h('div', { className: 'df-sheet-head' },
+        h(Icon, { name: 'sparkle' }), h('strong', null, 'Asistente'),
+        h(IconButton, { icon: 'x', label: 'Cerrar asistente' })),
+      props.context ? h('span', { className: 'df-ctx' }, h('img', { src: productImage(props.contextImage || 0), alt: '' }), 'Sobre ', h('b', null, props.context)) : null,
+      h('div', { className: 'df-msgs' },
+        (props.messages || []).map(function (m, i) {
+          return h('div', { key: i, className: 'df-msg from-' + m.from },
+            m.from === 'ai' ? (Array.isArray(m.text) ? m.text.map(function (t, j) { return h('p', { key: j }, t); }) : h('p', null, m.text)) : m.text,
+            m.apply ? h('div', { className: 'df-msg-apply' }, h(Button, { size: 'sm', variant: 'secondary', icon: 'check' }, m.apply)) : null);
+        })),
+      props.suggestions ? h('div', { className: 'df-sugs' }, props.suggestions.map(function (s, i) { return h('button', { key: i, type: 'button', className: 'df-chipbtn' }, s); })) : null,
+      h('div', { className: 'df-compose' },
+        h('input', { placeholder: props.placeholder || 'Pregunta sobre este producto', 'aria-label': 'Mensaje para el asistente' }),
+        h(IconButton, { icon: 'send', label: 'Enviar', variant: 'primary' })));
+  }
+
+  /* =========================================================
+     Pantallas de ejemplo (no son componentes: composiciones)
+     ========================================================= */
+  function Phone(props) {
+    return h('div', null,
+      h('p', { className: 'df-phone-label' }, props.label),
+      h('div', { className: 'df-phone' },
+        h('div', { className: 'df-status-strip', 'aria-hidden': 'true' }, h('span', null, '9:41'), h('span', null, '●●● 5G')),
+        props.children));
+  }
+  var ST = function (s) { return s.split(','); };
+
+  function ScreenHoy() {
+    return h(Phone, { label: '1 · Hoy — qué requiere tu atención' },
+      h(TopBar, { title: 'Hoy', subtitle: 'Miércoles 23 de septiembre', large: true, actions: h(IconButton, { icon: 'search', label: 'Buscar' }) }),
+      h('div', { className: 'df-scroll' },
+        h('div', { className: 'df-summary' },
+          h('div', { className: 'df-sum' }, h('div', { className: 'df-sum-v' }, '6'), h('div', { className: 'df-sum-l' }, h('span', { className: 'df-dot', style: { background: 'var(--warning)' } }), 'Por decidir')),
+          h('div', { className: 'df-sum' }, h('div', { className: 'df-sum-v' }, '1'), h('div', { className: 'df-sum-l' }, h('span', { className: 'df-dot', style: { background: 'var(--destructive)' } }), 'Con error')),
+          h('div', { className: 'df-sum' }, h('div', { className: 'df-sum-v' }, '12'), h('div', { className: 'df-sum-l' }, h('span', { className: 'df-dot', style: { background: 'var(--success)' } }), 'Publicados'))),
+        h('div', { className: 'df-section-t' }, 'Primero esto'),
+        h('div', { className: 'df-group' },
+          h(AttentionItem, { kind: 'error', title: 'No se pudo publicar en tu tienda', product: 'Lámpara lunar 3D', detail: 'Shopify rechazó 2 imágenes por tamaño.', actions: [h(Button, { key: 1, size: 'sm', variant: 'primary' }, 'Reintentar'), h(Button, { key: 2, size: 'sm', variant: 'ghost' }, 'Ver detalle')] }),
+          h(AttentionItem, { kind: 'ads', title: 'Apaga “Masajeador · Video 2”', product: 'Campaña · 4 días', detail: 'CPA $9.800, sobre tu límite de $6.000.', actions: [h(Button, { key: 1, size: 'sm', variant: 'secondary' }, 'Revisar')] })),
+        h('div', { className: 'df-section-t' }, 'Contenido por revisar'),
+        h('div', { className: 'df-group' },
+          h(AttentionItem, { kind: 'review', title: '8 propuestas nuevas', product: 'Corrector de postura', actions: [h(Button, { key: 1, size: 'sm', variant: 'secondary', iconEnd: 'chevron-right' }, 'Revisar ahora')] }),
+          h(AttentionItem, { kind: 'stuck', title: 'Falta definir el precio', product: 'Botella térmica 1L · detenido hace 3 días' }))),
+      h(Navigation, { active: 'hoy', badges: { hoy: 6 } }));
+  }
+
+  function ScreenProductos() {
+    return h(Phone, { label: '2 · Productos — dónde está cada uno' },
+      h(TopBar, { title: 'Productos', subtitle: '24 productos', large: true, actions: [h(IconButton, { key: 1, icon: 'search', label: 'Buscar' }), h(IconButton, { key: 2, icon: 'plus', label: 'Nuevo producto', variant: 'primary' })] }),
+      h('div', { style: { padding: '0 16px 8px' } }, h(SegmentedControl, { block: true, value: 'det', label: 'Filtrar productos', options: [{ value: 'avz', label: 'Avanzan', count: 9 }, { value: 'det', label: 'Detenidos', count: 3 }, { value: 'pub', label: 'Publicados', count: 12 }] })),
+      h('div', { className: 'df-scroll' },
+        h('div', { className: 'df-group' },
+          h(ProductRow, { name: 'Lámpara lunar 3D', imageIndex: 2, stages: ST('done,done,done,done,error,optional'), tone: 'danger', reason: 'Error al publicar · 2 imágenes' }),
+          h(ProductRow, { name: 'Corrector de postura', imageIndex: 1, stages: ST('done,current,locked,locked,locked,optional'), tone: 'warning', reason: 'Espera tu revisión · 8 textos' }),
+          h(ProductRow, { name: 'Botella térmica 1L', imageIndex: 0, stages: ST('done,done,done,stuck,locked,optional'), tone: 'warning', reason: 'Detenido: falta el precio · 3 días' })),
+        h('div', { className: 'df-section-t' }, 'Así se leen'),
+        h('div', { style: { padding: '0 16px', display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 12, color: 'var(--muted-foreground)' } },
+          [['var(--foreground)', 'Lista'], ['var(--primary)', 'En curso'], ['var(--warning)', 'Detenida'], ['var(--destructive)', 'Error']].map(function (x, i) { return h('span', { key: i, style: { display: 'inline-flex', gap: 6, alignItems: 'center' } }, h('span', { style: { width: 14, height: 6, borderRadius: 9, background: x[0] } }), x[1]); }))),
+      h(Navigation, { active: 'productos', badges: { hoy: 6 } }));
+  }
+
+  var STAGES = [
+    { title: 'Producto importado', state: 'done', desc: 'Proveedor · costo $6.900' },
+    { title: 'Textos', state: 'review', desc: '8 propuestas esperan tu revisión' },
+    { title: 'Imágenes', state: 'current', desc: 'Elige y ordena 4 a 6' },
+    { title: 'Precio y oferta', state: 'available', desc: 'Calcula cuánto ganas' },
+    { title: 'Publicar en tu tienda', state: 'locked', desc: 'Necesita textos, imágenes y precio aprobados' },
+    { title: 'Anuncios', state: 'locked', optional: true, desc: 'Se habilita al publicar' }
+  ];
+  function ScreenProducto() {
+    return h(Phone, { label: '3 · Producto — retomar la ruta' },
+      h(TopBar, { back: 'Productos', title: 'Corrector de postura', subtitle: '2 de 5 etapas · editado hace 2 h', actions: h(IconButton, { icon: 'sparkle', label: 'Abrir asistente' }) }),
+      h('div', { className: 'df-scroll' },
+        h('div', { style: { padding: '4px 16px 12px' } }, h(StageMeter, { stages: ST('done,review,current,locked,locked,optional') })),
+        h(StageList, { stages: STAGES })),
+      h('div', { className: 'df-sticky' }, h(Button, { variant: 'primary', size: 'lg', iconEnd: 'chevron-right' }, 'Continuar: Imágenes')),
+      h(Navigation, { active: 'productos', badges: { hoy: 6 } }));
+  }
+
+  function ScreenRevision() {
+    return h(Phone, { label: '4 · Revisar lo que generó la IA' },
+      h(TopBar, { back: 'Corrector de postura', title: 'Textos', subtitle: '3 aceptados · 5 pendientes' }),
+      h('div', { style: { padding: '0 16px 8px' } }, h(StageMeter, { stages: ST('done,done,done,current,locked,locked,locked,locked') })),
+      h('div', { className: 'df-scroll', style: { padding: '8px 16px' } },
+        h(ReviewCard, { field: 'Título del producto', index: 4, total: 8, original: 'Corrector Postura Espalda Ajustable Unisex Hombre Mujer Talla Única', proposal: 'Corrector de postura ajustable: espalda recta en 15 minutos al día', hideActions: true }),
+        h('div', { style: { marginTop: 12, fontSize: 12, color: 'var(--muted-foreground)', display: 'flex', gap: 6, alignItems: 'center' } }, h(Icon, { name: 'sparkle', size: 'sm' }), 'Más corto, con el beneficio al frente. 62 caracteres.')),
+      h('div', { style: { padding: '0 16px 12px' } }, h(Toast, { message: 'Descripción aceptada', action: 'Deshacer' })),
+      h('div', { className: 'df-sticky', style: { display: 'block' } },
+        h('div', { className: 'df-review-actions' },
+          h(Button, { variant: 'secondary', icon: 'x' }, 'Descartar'),
+          h(Button, { variant: 'secondary', icon: 'edit' }, 'Editar'),
+          h(Button, { variant: 'primary', icon: 'check' }, 'Aceptar'))));
+  }
+
+  function ScreenImagenes() {
+    var tiles = [
+      { state: 'selected', order: 1, imageIndex: 1, shape: 1 }, { state: 'selected', order: 2, imageIndex: 3, shape: 1 }, { state: 'idle', imageIndex: 0, shape: 1 },
+      { state: 'selected', order: 3, imageIndex: 4, shape: 1 }, { state: 'discarded', imageIndex: 5, shape: 1 }, { state: 'idle', imageIndex: 2, shape: 1 },
+      { state: 'generating' }, { state: 'generating' }, { state: 'error' }
+    ];
+    return h(Phone, { label: '5 · Curar imágenes' },
+      h(TopBar, { back: 'Corrector de postura', title: 'Imágenes', subtitle: '3 elegidas · la 1 es la portada', actions: h(IconButton, { icon: 'sparkle', label: 'Abrir asistente' }) }),
+      h('div', { style: { padding: '0 16px 12px' } }, h(SegmentedControl, { block: true, value: 'all', label: 'Ver', options: [{ value: 'all', label: 'Opciones', count: 9 }, { value: 'sel', label: 'Elegidas', count: 3 }, { value: 'dis', label: 'Descartadas', count: 1 }] })),
+      h('div', { className: 'df-scroll', style: { padding: '0 16px' } },
+        h('div', { className: 'df-grid3' }, tiles.map(function (t, i) { return h(ImageTile, Object.assign({ key: i, alt: 'Opción ' + (i + 1) }, t)); })),
+        h('p', { style: { fontSize: 12, lineHeight: '16px', color: 'var(--muted-foreground)', margin: '12px 0 0' } }, 'Toca para elegir; el número es el orden en tu tienda. Mantén presionado para reordenar.')),
+      h('div', { className: 'df-sticky' },
+        h(Button, { variant: 'secondary', icon: 'sparkle' }, 'Generar más'),
+        h(Button, { variant: 'primary', icon: 'check' }, 'Aprobar 3')));
+  }
+
+  function ScreenPrecio() {
+    return h(Phone, { label: '6 · Definir el precio' },
+      h(TopBar, { back: 'Corrector de postura', title: 'Precio y oferta', actions: h(IconButton, { icon: 'sparkle', label: 'Abrir asistente' }) }),
+      h('div', { className: 'df-scroll', style: { padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 16 } },
+        h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 } },
+          h(Field, { label: 'Precio de venta', prefix: '$', value: '24.990', id: 'pv' }),
+          h(Field, { label: 'Precio tachado', prefix: '$', value: '39.990', id: 'pt' })),
+        h('div', { className: 'df-card df-card-pad' },
+          h(PriceBreakdown, { price: 24990, parts: [{ label: 'Costo del producto', value: 6900 }, { label: 'Envío', value: 3500 }, { label: 'Publicidad por venta', value: 6000 }], note: 'Supone 1 de cada 5 pedidos sin entregar. Cambia supuestos en Ajustes.' })),
+        h(OfferPreview, { title: 'Corrector de postura ajustable', price: 24990, compareAt: 39990, imageIndex: 1 })),
+      h('div', { className: 'df-sticky' }, h(Button, { variant: 'primary', size: 'lg', icon: 'check' }, 'Aprobar precio')));
+  }
+
+  function ScreenCampanas() {
+    return h(Phone, { label: '7 · Campañas — qué hacer con cada una' },
+      h(TopBar, { title: 'Campañas', subtitle: 'Últimos 7 días · gasto $86.400', large: true }),
+      h('div', { className: 'df-scroll', style: { padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 12 } },
+        h(CampaignCard, { name: 'Corrector · Video UGC', imageIndex: 1, verdict: 'subir', reason: 'CPA $4.100 por 3 días, 32% bajo tu límite de $6.000.', nextBudget: '$15.000',
+          metrics: [{ label: 'Costo por venta', value: '$4.100', target: 'Límite $6.000', trend: 'good' }, { label: 'Ventas confirmadas', value: '23', target: '82% confirma', trend: 'good' }] }),
+        h(CampaignCard, { name: 'Masajeador · Video 2', imageIndex: 4, verdict: 'apagar', reason: 'CPA $9.800 por 4 días; cada venta te deja −$1.200.',
+          metrics: [{ label: 'Costo por venta', value: '$9.800', target: 'Límite $6.000', trend: 'bad' }, { label: 'Ventas confirmadas', value: '6', target: '61% confirma', trend: 'warn' }] })),
+      h(Navigation, { active: 'campanas', badges: { hoy: 6 } }));
+  }
+
+  function ScreenAsistente() {
+    return h(Phone, { label: '8 · Asistente sin perder el contexto' },
+      h('div', { style: { position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 } },
+        h(TopBar, { back: 'Corrector de postura', title: 'Precio y oferta' }),
+        h('div', { style: { padding: '0 16px' } }, h('div', { className: 'df-card df-card-pad' }, h(PriceBreakdown, { price: 24990, parts: [{ label: 'Costo del producto', value: 6900 }, { label: 'Envío', value: 3500 }, { label: 'Publicidad por venta', value: 6000 }] }))),
+        h('div', { style: { position: 'absolute', inset: 0, background: 'var(--scrim)' } }),
+        h(AssistantSheet, { style: { position: 'absolute', left: 0, right: 0, bottom: 0, height: '62%' }, context: 'Corrector de postura · Precio', contextImage: 1,
+          messages: [{ from: 'user', text: '¿Me conviene bajar a $19.990?' }, { from: 'ai', text: ['Con $19.990 ganarías $3.590 por venta (18%). Si tu CPA sube a $7.000, pierdes dinero.', 'Mejor: mantén $24.990 y ofrece 2 unidades por $39.990.'], apply: 'Crear oferta 2×$39.990' }],
+          suggestions: ['¿Qué precio usa la competencia?', 'Escribe una garantía', 'Otra oferta'] })));
+  }
+
+  function DeskFrame(props) {
+    return h('div', null, h('p', { className: 'df-phone-label' }, props.label), h('div', { className: cx('df-desk', props.panel && 'has-panel') }, props.children));
+  }
+  function ScreenDeskProducto() {
+    return h(DeskFrame, { label: 'Escritorio · Producto: ruta a la izquierda, trabajo al centro, asistente a la derecha', panel: true },
+      h(Navigation, { variant: 'rail', active: 'productos', badges: { hoy: 6 } }),
+      h('div', { className: 'df-desk-main' },
+        h('div', { className: 'df-desk-head' },
+          h(IconButton, { icon: 'chevron-left', label: 'Productos' }),
+          h('div', { style: { flex: 1 } }, h('div', { className: 'type-display' }, 'Corrector de postura'), h('div', { className: 'df-topbar-s' }, '2 de 5 etapas · editado hace 2 h')),
+          h(StatusBadge, { status: 'revision' })),
+        h('div', { style: { display: 'grid', gridTemplateColumns: '264px 1fr', flex: 1, minHeight: 0 } },
+          h('div', { style: { borderRight: '1px solid var(--border)', paddingTop: 12 } }, h(StageList, { stages: STAGES.map(function (s) { return s.title === 'Textos' ? Object.assign({}, s, { state: 'current', desc: 'Propuesta 4 de 8' }) : s.title === 'Imágenes' ? Object.assign({}, s, { state: 'available' }) : s; }) })),
+          h('div', { style: { padding: '24px 32px', overflow: 'hidden' } },
+            h('div', { className: 'df-review-head', style: { marginBottom: 12 } }, h('span', { className: 'type-heading' }, 'Título del producto'), h('span', { className: 'df-review-count' }, '4 de 8 · 3 aceptados')),
+            h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 } },
+              h('div', { className: 'df-orig' }, h('div', { className: 'df-orig-label' }, 'Original'), h('div', { className: 'df-orig-text' }, 'Corrector Postura Espalda Ajustable Unisex Hombre Mujer Talla Única')),
+              h('div', { className: 'df-prop' }, h('div', { className: 'df-prop-label' }, h(Icon, { name: 'sparkle', size: 'sm' }), 'Propuesta'), h('div', { className: 'df-prop-text' }, 'Corrector de postura ajustable: espalda recta en 15 minutos al día'))),
+            h('div', { className: 'df-btn-row', style: { justifyContent: 'flex-end' } },
+              h(Button, { variant: 'secondary', icon: 'x', kbd: 'D' }, 'Descartar'),
+              h(Button, { variant: 'secondary', icon: 'edit', kbd: 'E' }, 'Editar'),
+              h(Button, { variant: 'primary', icon: 'check', kbd: 'A' }, 'Aceptar')),
+            h('div', { className: 'df-section-t', style: { padding: '28px 0 8px' } }, 'Siguientes'),
+            h('div', { className: 'df-group', style: { margin: 0 } },
+              ['Descripción corta', 'Beneficio 1', 'Beneficio 2', 'Preguntas frecuentes'].map(function (f, i) {
+                return h('div', { key: i, className: 'df-prow', style: { gridTemplateColumns: '1fr auto', cursor: 'default' } }, h('span', { className: 'df-prow-name' }, f), h(StatusBadge, { status: 'generado', size: 'sm' }));
+              }))))),
+      h(AssistantSheet, { variant: 'panel', context: 'Corrector de postura · Textos', contextImage: 1,
+        messages: [{ from: 'user', text: '¿El título suena exagerado?' }, { from: 'ai', text: '“15 minutos al día” es concreto y creíble. Evita “cura” o “elimina el dolor”: Meta puede rechazar el anuncio.' }],
+        suggestions: ['Más corto', 'Tono más cercano'] }));
+  }
+  function ScreenDeskCampanas() {
+    return h(DeskFrame, { label: 'Escritorio · Campañas en dos columnas con la cifra que justifica cada veredicto' },
+      h(Navigation, { variant: 'rail', active: 'campanas', badges: { hoy: 6 } }),
+      h('div', { className: 'df-desk-main' },
+        h('div', { className: 'df-desk-head' },
+          h('div', { style: { flex: 1 } }, h('div', { className: 'type-display' }, 'Campañas'), h('div', { className: 'df-topbar-s' }, 'Últimos 7 días · gasto $86.400 · 41 ventas confirmadas')),
+          h(SegmentedControl, { value: '7', label: 'Periodo', options: [{ value: 'hoy', label: 'Hoy' }, { value: '7', label: '7 días' }, { value: '30', label: '30 días' }] })),
+        h('div', { style: { padding: '24px 32px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignContent: 'start' } },
+          h(CampaignCard, { name: 'Corrector · Video UGC', imageIndex: 1, verdict: 'subir', reason: 'CPA $4.100 por 3 días, 32% bajo tu límite de $6.000.', metrics: [{ label: 'Costo por venta', value: '$4.100', target: 'Límite $6.000', trend: 'good' }, { label: 'Ventas confirmadas', value: '23', target: '82% confirma', trend: 'good' }, { label: 'Gasto', value: '$38.200' }, { label: 'Retorno', value: '2,6×' }] }),
+          h(CampaignCard, { name: 'Masajeador · Video 2', imageIndex: 4, verdict: 'apagar', reason: 'CPA $9.800 por 4 días; cada venta te deja −$1.200.', metrics: [{ label: 'Costo por venta', value: '$9.800', target: 'Límite $6.000', trend: 'bad' }, { label: 'Ventas confirmadas', value: '6', target: '61% confirma', trend: 'warn' }, { label: 'Gasto', value: '$29.400' }, { label: 'Retorno', value: '0,9×' }] }),
+          h(CampaignCard, { name: 'Lámpara lunar · Carrusel', imageIndex: 2, verdict: 'aprendiendo', reason: '14 h activa. Espera 48 h o 10 ventas antes de decidir.', actions: null, metrics: [{ label: 'Costo por venta', value: '—' }, { label: 'Gasto', value: '$4.600' }] }),
+          h(CampaignCard, { name: 'Botella térmica · Imagen', imageIndex: 0, verdict: 'vigilar', reason: 'CPA $5.700, cerca del límite y subiendo 3 días seguidos.', actions: null, metrics: [{ label: 'Costo por venta', value: '$5.700', target: 'Límite $6.000', trend: 'warn' }, { label: 'Gasto', value: '$14.200' }] }))));
+  }
+
+  var Screens = {
+    Movil1: function () { return h('div', { className: 'df-screens' }, h(ScreenHoy), h(ScreenProductos), h(ScreenProducto)); },
+    Movil2: function () { return h('div', { className: 'df-screens' }, h(ScreenRevision), h(ScreenImagenes), h(ScreenPrecio)); },
+    Movil3: function () { return h('div', { className: 'df-screens' }, h(ScreenCampanas), h(ScreenAsistente)); },
+    Escritorio1: function () { return h('div', { className: 'df-screens' }, h(ScreenDeskProducto)); },
+    Escritorio2: function () { return h('div', { className: 'df-screens' }, h(ScreenDeskCampanas)); }
+  };
+
+  window.DropFlex = Object.assign(window.DropFlex || {}, {
+    Button: Button, IconButton: IconButton, StatusBadge: StatusBadge, StageMeter: StageMeter, ProductRow: ProductRow,
+    AttentionItem: AttentionItem, StageList: StageList, ReviewCard: ReviewCard, ImageTile: ImageTile,
+    SegmentedControl: SegmentedControl, Field: Field, PriceBreakdown: PriceBreakdown, OfferPreview: OfferPreview,
+    Metric: Metric, CampaignCard: CampaignCard, Verdict: Verdict, Navigation: Navigation, TopBar: TopBar, Toast: Toast,
+    AssistantSheet: AssistantSheet, Icon: Icon, productImage: productImage, money: money, Screens: Screens
+  });
+})();

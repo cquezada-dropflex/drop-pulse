@@ -1,51 +1,35 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
+import { AuthCard } from "@/components/auth/auth-card";
+import { Button } from "@/components/df";
+import { authErrorMessage } from "@/lib/auth-errors";
 
-async function ErrorContent({
-  searchParams,
-}: {
-  searchParams: Promise<{ error: string }>;
-}) {
+export const metadata: Metadata = { title: "No pudimos continuar" };
+
+async function ErrorContent({ searchParams }: { searchParams: Promise<{ error: string }> }) {
   const params = await searchParams;
-
   return (
-    <>
-      {params?.error ? (
-        <p className="text-sm text-muted-foreground">
-          Code error: {params.error}
-        </p>
-      ) : (
-        <p className="text-sm text-muted-foreground">
-          An unspecified error occurred.
-        </p>
-      )}
-    </>
+    <p className="text-body text-muted-foreground">
+      {authErrorMessage(params?.error, "Algo falló al validar tu acceso. Vuelve a iniciar sesión o pide un enlace nuevo.")}
+    </p>
   );
 }
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ error: string }>;
-}) {
+export default function Page({ searchParams }: { searchParams: Promise<{ error: string }> }) {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">
-                Sorry, something went wrong.
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Suspense>
-                <ErrorContent searchParams={searchParams} />
-              </Suspense>
-            </CardContent>
-          </Card>
-        </div>
+    <AuthCard title="No pudimos continuar">
+      <Suspense>
+        <ErrorContent searchParams={searchParams} />
+      </Suspense>
+      <div className="flex flex-col gap-2">
+        <Button href="/auth/login" variant="primary" size="lg" block>
+          Iniciar sesión
+        </Button>
+        <Link href="/auth/forgot-password" className="py-3 text-center text-body text-primary underline underline-offset-4">
+          Pedir un enlace nuevo
+        </Link>
       </div>
-    </div>
+    </AuthCard>
   );
 }

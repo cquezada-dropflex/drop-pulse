@@ -1,0 +1,16 @@
+<!-- @dsCard group="Campañas" height=140 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Metric</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{padding:16, maxWidth:520}}, h('div',{className:'df-metrics', style:{gridTemplateColumns:'repeat(4,1fr)'}},
+  h(D.Metric,{label:'Costo por venta', value:'$4.100', target:'Límite $6.000', trend:'good'}),
+  h(D.Metric,{label:'Costo por venta', value:'$9.800', target:'Límite $6.000', trend:'bad'}),
+  h(D.Metric,{label:'Confirmadas', value:'61%', target:'Meta 75%', trend:'warn'}),
+  h(D.Metric,{label:'Gasto', value:'$38.200'}))));
+</script>
+</body>
+</html>

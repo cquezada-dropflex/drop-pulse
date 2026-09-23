@@ -1,0 +1,122 @@
+// Tipos de dominio de DropFlex. Hoy los llenan los mocks de lib/mock/; mañana, Supabase
+// (ver docs/esquema-supabase.md). La UI solo los recibe a través de lib/data/*.
+
+import type { ContentStatus } from "@/components/df/status-badge";
+import type { MeterStage } from "@/components/df/stage-meter";
+import type { StageState } from "@/components/df/stage-list";
+import type { Verdict } from "@/components/df/campaign-card";
+import type { MetricProps } from "@/components/df/metric";
+import type { AttentionKind } from "@/components/df/attention-item";
+
+export type { ContentStatus, Verdict };
+
+/** Etapas de la ruta de un producto, en orden. */
+export type StageKey = "importado" | "textos" | "imagenes" | "precio" | "publicar" | "anuncios";
+
+export interface Stage {
+  key: StageKey;
+  title: string;
+  state: StageState;
+  desc?: string;
+  optional?: boolean;
+}
+
+/** Filtro de la lista de productos: Avanzan · Detenidos · Publicados. */
+export type ProductFilter = "avanzan" | "detenidos" | "publicados";
+
+export interface Product {
+  id: string;
+  name: string;
+  image: string;
+  sku: string;
+  filter: ProductFilter;
+  /** Una rayita por etapa (StageMeter). */
+  meter: MeterStage[];
+  /** Por qué está donde está: “Detenido: falta el precio · 3 días”. */
+  reason: string;
+  tone: "warning" | "danger" | "success" | "primary" | "muted";
+  /** Etapa a la que lleva la fila y “Continuar”. */
+  nextStage: StageKey;
+  stages: Stage[];
+  /** “2 de 5 etapas · editado hace 2 h”. */
+  summary: string;
+  status: ContentStatus;
+  supplierCost: number;
+}
+
+/** Una propuesta de la IA para un campo del producto. */
+export interface ContentItem {
+  id: string;
+  productId: string;
+  field: string;
+  original?: string;
+  proposal: string;
+  status: ContentStatus;
+  /** Por qué la IA lo propone: “Más corto, con el beneficio al frente. 62 caracteres.” */
+  note?: string;
+}
+
+export type ImageStatus = "idle" | "selected" | "discarded" | "generating" | "error";
+
+export interface ImageOption {
+  id: string;
+  productId: string;
+  src?: string;
+  alt: string;
+  status: ImageStatus;
+  /** Posición en la tienda cuando está elegida (1 = portada). */
+  order?: number;
+}
+
+export interface Pricing {
+  productId: string;
+  price: number;
+  compareAt?: number;
+  costs: { label: string; value: number }[];
+  /** Supuestos del cálculo (se cambian en Ajustes). */
+  note: string;
+  status: ContentStatus;
+}
+
+export interface Campaign {
+  id: string;
+  productId: string;
+  name: string;
+  image: string;
+  verdict: Verdict;
+  verdictTitle?: string;
+  reason: string;
+  meta: string;
+  paused?: boolean;
+  nextBudget?: string;
+  /** Métricas por orden de importancia; en móvil se muestran las dos primeras. */
+  metrics: MetricProps[];
+  budget: number;
+  history: { day: string; spend: number; sales: number; cpa: number | null }[];
+}
+
+export interface AttentionEntry {
+  id: string;
+  group: "primero" | "revisar";
+  kind: AttentionKind;
+  title: string;
+  product: string;
+  detail?: string;
+  actions: { label: string; href: string; variant?: "primary" | "secondary" | "ghost"; iconEnd?: "chevron-right" }[];
+}
+
+export interface TodaySummary {
+  /** Fecha del resumen (ISO), para el subtítulo de Hoy. */
+  date: string;
+  pending: number;
+  errors: number;
+  published: number;
+}
+
+export interface Assumptions {
+  /** Pedidos entregados de cada 5 (1 de cada 5 sin entregar → 0,8). */
+  deliveryRate: number;
+  maxCpa: number;
+  store: string;
+  metaAccount: string;
+}

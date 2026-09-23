@@ -1,0 +1,16 @@
+<!-- @dsCard group="Productos" height=450 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>AttentionItem</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{padding:16, maxWidth:420}}, h('div',{className:'df-group', style:{margin:0}},
+  h(D.AttentionItem,{kind:'error', title:'No se pudo publicar en tu tienda', product:'Lámpara lunar 3D', detail:'Shopify rechazó 2 imágenes por tamaño.', actions:[h(D.Button,{key:1,size:'sm',variant:'primary'},'Reintentar'), h(D.Button,{key:2,size:'sm',variant:'ghost'},'Ver detalle')]}),
+  h(D.AttentionItem,{kind:'review', title:'8 propuestas nuevas', product:'Corrector de postura', actions:[h(D.Button,{key:1,size:'sm',variant:'secondary',iconEnd:'chevron-right'},'Revisar ahora')]}),
+  h(D.AttentionItem,{kind:'ads-up', title:'Sube “Corrector · Video UGC”', product:'Campaña · 3 días', detail:'CPA $4.100, 32% bajo tu límite.'}),
+  h(D.AttentionItem,{kind:'stuck', title:'Falta definir el precio', product:'Botella térmica 1L · detenido hace 3 días'}))));
+</script>
+</body>
+</html>

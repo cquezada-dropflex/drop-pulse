@@ -1,0 +1,17 @@
+<!-- @dsCard group="Imágenes" height=150 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>ImageTile</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{padding:16, maxWidth:640}}, h('div',{className:'df-grid3', style:{gridTemplateColumns:'repeat(6,1fr)'}},
+  h(D.ImageTile,{state:'selected', order:1, imageIndex:1, shape:1, alt:'Opción 1'}),
+  h(D.ImageTile,{state:'selected', order:2, imageIndex:3, shape:1, alt:'Opción 2'}),
+  h(D.ImageTile,{state:'idle', imageIndex:0, shape:1, alt:'Opción 3'}),
+  h(D.ImageTile,{state:'discarded', imageIndex:5, shape:1, alt:'Opción 4'}),
+  h(D.ImageTile,{state:'generating'}), h(D.ImageTile,{state:'error'}))));
+</script>
+</body>
+</html>

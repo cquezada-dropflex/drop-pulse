@@ -1,0 +1,321 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap');
+
+/* DropFlex — estilos de componentes. Todo valor sale de tokens.css. */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-family: var(--font-sans); background: var(--background); color: var(--foreground); font-size: 15px; line-height: 22px; -webkit-font-smoothing: antialiased; }
+.df-num { font-variant-numeric: tabular-nums; }
+.df-row { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; padding: var(--space-4); }
+.df-col { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4); }
+.df-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.df-ico { width: 20px; height: 20px; flex: none; display: block; }
+.df-ico-sm { width: 16px; height: 16px; }
+.df-muted { color: var(--muted-foreground); }
+
+/* Foco: 2px de fondo + 2px sólidos de ring. Igual en todos los controles. */
+.df-focus:focus-visible, .df-btn:focus-visible, .df-iconbtn:focus-visible, .df-seg button:focus-visible, .df-tab:focus-visible, .df-tile:focus-visible, .df-field input:focus-visible, .df-chipbtn:focus-visible, .df-stage:focus-visible, .df-prow:focus-visible {
+  outline: none; box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+}
+
+/* Button */
+.df-btn { font: inherit; font-size: 15px; font-weight: 500; line-height: 20px; height: var(--size-control); min-width: var(--size-touch); padding: 0 var(--space-4); display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); border-radius: var(--radius-md); border: 1px solid transparent; cursor: pointer; white-space: nowrap; transition: background-color var(--duration-fast) var(--ease-standard), transform var(--duration-fast) var(--ease-standard); -webkit-tap-highlight-color: transparent; }
+.df-btn:active:not(:disabled) { transform: scale(0.98); }
+.df-btn-sm { height: 32px; padding: 0 var(--space-3); font-size: 13px; }
+.df-btn-lg { height: 48px; padding: 0 var(--space-5); font-size: 16px; }
+.df-btn-block { width: 100%; }
+.df-btn-primary { background: var(--primary); color: var(--primary-foreground); }
+.df-btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+.df-btn-secondary { background: var(--card); color: var(--foreground); border-color: var(--input); }
+.df-btn-secondary:hover:not(:disabled) { background: var(--accent); }
+.df-btn-ghost { background: transparent; color: var(--foreground); }
+.df-btn-ghost:hover:not(:disabled) { background: var(--accent); }
+.df-btn-destructive { background: var(--destructive); color: var(--destructive-foreground); }
+.df-btn-destructive-soft { background: var(--destructive-soft); color: var(--destructive); }
+.df-btn:disabled { cursor: not-allowed; background: var(--muted); color: var(--muted-foreground); border-color: transparent; }
+.df-btn[aria-busy="true"] { cursor: progress; }
+.df-spin { animation: df-spin 0.9s linear infinite; }
+@keyframes df-spin { to { transform: rotate(360deg); } }
+
+.df-iconbtn { font: inherit; width: var(--size-touch); height: var(--size-touch); display: inline-grid; place-items: center; border-radius: var(--radius-md); border: 0; background: transparent; color: var(--foreground); cursor: pointer; }
+.df-iconbtn:hover { background: var(--accent); }
+.df-iconbtn-primary { background: var(--primary); color: var(--primary-foreground); border-radius: var(--radius-full); }
+.df-iconbtn-primary:hover { background: var(--primary-hover); }
+
+/* StatusBadge: color + ícono + palabra, siempre los tres */
+.df-status { display: inline-flex; align-items: center; gap: var(--space-1); height: 24px; padding: 0 var(--space-2) 0 6px; border-radius: var(--radius-full); font-size: 12px; line-height: 16px; font-weight: 500; white-space: nowrap; }
+.df-status .df-ico { width: 14px; height: 14px; }
+.df-status-neutral { background: var(--muted); color: var(--foreground); }
+.df-status-quiet { background: transparent; color: var(--muted-foreground); box-shadow: inset 0 0 0 1px var(--border); }
+.df-status-warning { background: var(--warning-soft); color: var(--warning); }
+.df-status-success { background: var(--success-soft); color: var(--success); }
+.df-status-success-solid { background: var(--success); color: var(--background); }
+.df-status-danger { background: var(--destructive-soft); color: var(--destructive); }
+.df-status-progress { background: var(--muted); color: var(--foreground); }
+.df-status-sm { height: 20px; font-size: 11px; padding: 0 6px 0 4px; }
+
+/* StageMeter */
+.df-meter { display: flex; gap: 3px; height: 6px; }
+.df-meter span { flex: 1; border-radius: var(--radius-full); background: var(--muted); box-shadow: inset 0 0 0 1px var(--border); }
+.df-meter .is-done { background: var(--foreground); box-shadow: none; }
+.df-meter .is-current { background: var(--primary); box-shadow: none; }
+.df-meter .is-stuck, .df-meter .is-review { background: var(--warning); box-shadow: none; }
+.df-meter .is-error { background: var(--destructive); box-shadow: none; }
+.df-meter .is-optional { background: transparent; box-shadow: inset 0 0 0 1px var(--input); }
+
+/* Card */
+.df-card { background: var(--card); color: var(--card-foreground); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.df-card-pad { padding: var(--space-4); }
+
+/* ProductRow */
+.df-prow { display: grid; grid-template-columns: 48px 1fr auto; gap: var(--space-3); align-items: center; padding: var(--space-3) var(--space-4); background: var(--card); color: inherit; text-decoration: none; border: 0; width: 100%; text-align: left; font: inherit; cursor: pointer; }
+.df-prow + .df-prow { border-top: 1px solid var(--border); }
+.df-prow:hover { background: var(--accent); }
+.df-thumb { width: 48px; height: 48px; border-radius: var(--radius-sm); object-fit: cover; background: var(--muted); display: block; }
+.df-prow-name { font-size: 15px; line-height: 20px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.df-prow-body { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.df-prow-why { display: flex; align-items: center; gap: var(--space-1); font-size: 12px; line-height: 16px; color: var(--muted-foreground); min-width: 0; }
+.df-prow-why span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.df-prow-why.t-warning { color: var(--warning); }
+.df-prow-why.t-danger { color: var(--destructive); }
+.df-prow-why.t-success { color: var(--success); }
+.df-prow-why.t-primary { color: var(--primary); }
+.df-prow-end { color: var(--muted-foreground); display: flex; align-items: center; }
+
+/* AttentionItem (Hoy) */
+.df-att { display: grid; grid-template-columns: 36px 1fr; gap: var(--space-3); padding: var(--space-4); background: var(--card); }
+.df-att + .df-att { border-top: 1px solid var(--border); }
+.df-att-ico { width: 36px; height: 36px; border-radius: var(--radius-md); display: grid; place-items: center; }
+.df-att-ico.k-review { background: var(--muted); color: var(--foreground); }
+.df-att-ico.k-error { background: var(--destructive-soft); color: var(--destructive); }
+.df-att-ico.k-ads { background: var(--warning-soft); color: var(--warning); }
+.df-att-ico.k-ads-up { background: var(--success-soft); color: var(--success); }
+.df-att-ico.k-stuck { background: var(--warning-soft); color: var(--warning); }
+.df-att-title { font-size: 15px; line-height: 20px; font-weight: 500; }
+.df-att-meta { font-size: 12px; line-height: 16px; color: var(--muted-foreground); margin-top: 2px; }
+.df-att-detail { font-size: 13px; line-height: 18px; color: var(--muted-foreground); margin-top: var(--space-1); }
+.df-att-actions { display: flex; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap; }
+
+/* Stage (ruta del producto) */
+.df-stages { list-style: none; margin: 0; padding: 0; }
+.df-stage { position: relative; display: grid; grid-template-columns: 28px 1fr auto; gap: var(--space-3); align-items: start; padding: var(--space-3) var(--space-4); background: transparent; border: 0; width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.df-stage:hover:not([aria-disabled="true"]) { background: var(--accent); }
+.df-stage[aria-disabled="true"] { cursor: default; }
+.df-stage-dot { position: relative; z-index: 1; width: 28px; height: 28px; border-radius: var(--radius-full); display: grid; place-items: center; font-size: 12px; font-weight: 600; background: var(--background); box-shadow: inset 0 0 0 1.5px var(--input); color: var(--muted-foreground); }
+.df-stage-dot .df-ico { width: 16px; height: 16px; }
+.df-stage::before { content: ""; position: absolute; left: calc(var(--space-4) + 13px); top: 0; bottom: 0; width: 2px; background: var(--border); }
+.df-stages > li:first-child .df-stage::before { top: 50%; }
+.df-stages > li:last-child .df-stage::before { bottom: 50%; }
+.df-stage.s-done .df-stage-dot { background: var(--foreground); color: var(--background); box-shadow: none; }
+.df-stage.s-current .df-stage-dot { background: var(--primary); color: var(--primary-foreground); box-shadow: 0 0 0 4px var(--primary-soft); }
+.df-stage.s-current { background: var(--primary-soft); }
+.df-stage.s-current:hover { background: var(--primary-soft); }
+.df-stage.s-review .df-stage-dot { background: var(--warning-soft); color: var(--warning); box-shadow: inset 0 0 0 1.5px var(--warning); }
+.df-stage.s-error .df-stage-dot { background: var(--destructive-soft); color: var(--destructive); box-shadow: inset 0 0 0 1.5px var(--destructive); }
+.df-stage.s-locked .df-stage-dot { box-shadow: inset 0 0 0 1.5px var(--border); }
+.df-stage.s-locked .df-stage-title { color: var(--muted-foreground); }
+.df-stage.s-optional .df-stage-dot { box-shadow: inset 0 0 0 1.5px var(--input); background: var(--background); border: 0; }
+.df-stage-title { font-size: 15px; line-height: 20px; font-weight: 500; display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; padding-top: 4px; }
+.df-stage-opt { font-size: 11px; line-height: 16px; font-weight: 500; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: var(--radius-full); padding: 0 6px; }
+.df-stage-desc { font-size: 13px; line-height: 18px; color: var(--muted-foreground); margin-top: 2px; }
+.df-stage.s-error .df-stage-desc { color: var(--destructive); }
+.df-stage.s-review .df-stage-desc { color: var(--warning); }
+.df-stage-end { padding-top: 4px; color: var(--muted-foreground); }
+
+/* ReviewCard */
+.df-review { display: flex; flex-direction: column; gap: var(--space-3); }
+.df-review-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.df-review-field { font-size: 13px; line-height: 18px; font-weight: 500; color: var(--muted-foreground); }
+.df-review-count { font-size: 12px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+.df-orig { background: var(--muted); border-radius: var(--radius-md); padding: var(--space-3); }
+.df-orig-label, .df-prop-label { font-size: 11px; line-height: 16px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted-foreground); display: flex; align-items: center; gap: var(--space-1); }
+.df-orig-text { font-size: 14px; line-height: 20px; color: var(--muted-foreground); margin-top: var(--space-1); }
+.df-orig-text del { text-decoration-color: var(--destructive); }
+.df-prop { border: 1.5px solid var(--foreground); border-radius: var(--radius-md); padding: var(--space-3); background: var(--card); }
+.df-prop-text { font-size: 15px; line-height: 22px; margin-top: var(--space-1); }
+.df-prop-text ins { text-decoration: none; background: var(--success-soft); color: inherit; border-radius: 3px; padding: 0 2px; }
+.df-prop textarea { width: 100%; min-height: 88px; font: inherit; font-size: 15px; line-height: 22px; color: var(--foreground); background: transparent; border: 0; resize: vertical; padding: 0; margin-top: var(--space-1); outline: none; }
+.df-review.st-editing .df-prop { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+.df-review.st-accepted .df-prop { border-color: var(--success); }
+.df-review.st-discarded .df-prop { border-style: dashed; border-color: var(--input); opacity: 0.7; }
+.df-review-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+.df-review-actions .df-btn { width: 100%; min-width: 0; padding: 0 var(--space-2); gap: 6px; font-size: 14px; }
+.df-kbd { font-family: var(--font-mono); font-size: 11px; line-height: 16px; padding: 0 5px; border-radius: 4px; border: 1px solid currentColor; opacity: 0.7; }
+
+/* ImageTile */
+.df-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+.df-tile { position: relative; aspect-ratio: 1; border-radius: var(--radius-md); overflow: hidden; border: 0; padding: 0; background: var(--muted); cursor: pointer; display: block; width: 100%; }
+.df-tile img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity var(--duration-base) var(--ease-standard); }
+.df-tile.is-selected { box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary); }
+.df-tile-order { position: absolute; top: 6px; left: 6px; min-width: 24px; height: 24px; border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); font-size: 12px; font-weight: 600; display: grid; place-items: center; padding: 0 6px; font-variant-numeric: tabular-nums; }
+.df-tile-check { position: absolute; top: 6px; left: 6px; width: 24px; height: 24px; border-radius: var(--radius-full); background: rgba(255,255,255,0.85); box-shadow: inset 0 0 0 1.5px #5a606b; }
+.df-tile-cover { position: absolute; left: 6px; bottom: 6px; font-size: 11px; line-height: 16px; font-weight: 600; padding: 2px 6px; border-radius: var(--radius-sm); background: var(--foreground); color: var(--background); }
+.df-tile.is-discarded img { opacity: 0.35; filter: grayscale(1); }
+.df-tile-tag { position: absolute; inset: auto 6px 6px 6px; font-size: 11px; line-height: 16px; font-weight: 500; padding: 2px 6px; border-radius: var(--radius-sm); background: var(--card); color: var(--foreground); display: flex; align-items: center; gap: 4px; justify-content: center; }
+.df-tile.is-generating { background: var(--muted); display: grid; place-items: center; color: var(--muted-foreground); }
+.df-tile.is-generating::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, var(--background) 50%, transparent 70%); opacity: 0.6; animation: df-shimmer 1.4s linear infinite; }
+@keyframes df-shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+.df-tile.is-error { background: var(--destructive-soft); color: var(--destructive); display: grid; place-items: center; }
+.df-tile-center { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; position: relative; z-index: 1; }
+
+/* SegmentedControl */
+.df-seg { display: inline-flex; padding: 3px; gap: 2px; background: var(--secondary); border-radius: var(--radius-md); }
+.df-seg-block { display: flex; width: 100%; }
+.df-seg button { flex: 1; font: inherit; font-size: 13px; font-weight: 500; height: 32px; padding: 0 var(--space-3); border: 0; border-radius: 7px; background: transparent; color: var(--muted-foreground); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }
+.df-seg button[aria-pressed="true"], .df-seg button[aria-selected="true"] { background: var(--background); color: var(--foreground); box-shadow: var(--shadow-sm), inset 0 0 0 1px var(--border); }
+.df-seg-count { font-size: 11px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+
+/* Field */
+.df-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.df-field-label { font-size: 13px; line-height: 18px; font-weight: 500; }
+.df-field-box { display: flex; align-items: center; height: var(--size-control); border: 1px solid var(--input); border-radius: var(--radius-md); background: var(--background); padding: 0 var(--space-3); gap: var(--space-2); }
+.df-field-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+.df-field input { flex: 1; min-width: 0; width: 100%; font: inherit; font-size: 16px; border: 0; outline: 0; background: transparent; color: var(--foreground); font-variant-numeric: tabular-nums; height: 100%; }
+.df-field-affix { color: var(--muted-foreground); font-size: 15px; }
+.df-field-hint { font-size: 12px; line-height: 16px; color: var(--muted-foreground); }
+.df-field.is-error .df-field-box { border-color: var(--destructive); }
+.df-field.is-error .df-field-hint { color: var(--destructive); }
+.df-field.is-disabled .df-field-box { background: var(--muted); border-color: var(--border); }
+.df-field.is-ai .df-field-hint { display: flex; gap: 4px; align-items: center; }
+
+/* PriceBreakdown */
+.df-bar { display: flex; height: 12px; border-radius: var(--radius-full); overflow: hidden; gap: 2px; background: var(--background); }
+.df-bar span { display: block; height: 100%; }
+.df-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.df-legend li { display: grid; grid-template-columns: 10px 1fr auto auto; gap: var(--space-2); align-items: center; padding: var(--space-2) 0; font-size: 14px; line-height: 20px; }
+.df-legend li + li { border-top: 1px solid var(--border); }
+.df-legend-sw { width: 10px; height: 10px; border-radius: 3px; }
+.df-legend-v { font-variant-numeric: tabular-nums; font-weight: 500; text-align: right; }
+.df-legend-p { font-variant-numeric: tabular-nums; color: var(--muted-foreground); font-size: 12px; min-width: 36px; text-align: right; }
+.df-profit { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); }
+.df-profit-v { font-size: 28px; line-height: 32px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.df-profit-v.is-pos { color: var(--success); }
+.df-profit-v.is-neg { color: var(--destructive); }
+
+/* OfferPreview */
+.df-offer { border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: #ffffff; color: #15171c; }
+.df-offer-img { aspect-ratio: 4 / 3; width: 100%; object-fit: cover; display: block; background: #f3f4f6; }
+.df-offer-body { padding: var(--space-3) var(--space-4) var(--space-4); display: flex; flex-direction: column; gap: 6px; }
+.df-offer-title { font-size: 15px; line-height: 20px; font-weight: 600; }
+.df-offer-price { display: flex; align-items: baseline; gap: var(--space-2); font-variant-numeric: tabular-nums; }
+.df-offer-now { font-size: 20px; font-weight: 600; }
+.df-offer-was { font-size: 13px; color: #5a606b; text-decoration: line-through; }
+.df-offer-off { font-size: 12px; font-weight: 600; color: #12784a; }
+.df-offer-cod { font-size: 12px; color: #5a606b; display: flex; align-items: center; gap: 4px; }
+.df-offer-cta { margin-top: 6px; height: 40px; border-radius: 8px; background: #15171c; color: #ffffff; font-size: 14px; font-weight: 600; display: grid; place-items: center; }
+.df-offer-frame { font-size: 11px; line-height: 16px; color: var(--muted-foreground); display: flex; justify-content: space-between; margin-bottom: var(--space-2); }
+
+/* Metric */
+.df-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border); }
+.df-metric { background: var(--card); padding: var(--space-3); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.df-metric-l { font-size: 12px; line-height: 16px; color: var(--muted-foreground); }
+.df-metric-v { font-size: 18px; line-height: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.df-metric-t { font-size: 12px; line-height: 16px; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 4px; color: var(--muted-foreground); }
+.df-metric-t.t-good { color: var(--success); }
+.df-metric-t.t-bad { color: var(--destructive); }
+.df-metric-t.t-warn { color: var(--warning); }
+
+/* CampaignCard + Verdict */
+.df-camp { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4); }
+.df-camp-head { display: grid; grid-template-columns: 40px 1fr auto; gap: var(--space-3); align-items: center; }
+.df-camp-name { font-size: 15px; line-height: 20px; font-weight: 600; }
+.df-camp-sub { font-size: 12px; line-height: 16px; color: var(--muted-foreground); display: flex; align-items: center; gap: 6px; }
+.df-live { width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; }
+.df-live.off { background: var(--input); }
+.df-verdict { display: grid; grid-template-columns: auto 1fr; gap: var(--space-3); padding: var(--space-3); border-radius: var(--radius-md); align-items: start; }
+.df-verdict-ico { width: 32px; height: 32px; border-radius: var(--radius-sm); display: grid; place-items: center; }
+.df-verdict-k { font-size: 15px; line-height: 20px; font-weight: 600; }
+.df-verdict-r { font-size: 13px; line-height: 18px; margin-top: 2px; color: var(--foreground); }
+.df-verdict.v-subir { background: var(--success-soft); }
+.df-verdict.v-subir .df-verdict-ico { background: var(--success); color: var(--background); }
+.df-verdict.v-subir .df-verdict-k { color: var(--success); }
+.df-verdict.v-seguir { background: var(--muted); }
+.df-verdict.v-seguir .df-verdict-ico { background: var(--foreground); color: var(--background); }
+.df-verdict.v-vigilar { background: var(--warning-soft); }
+.df-verdict.v-vigilar .df-verdict-ico { background: var(--warning); color: var(--background); }
+.df-verdict.v-vigilar .df-verdict-k { color: var(--warning); }
+.df-verdict.v-apagar { background: var(--destructive-soft); }
+.df-verdict.v-apagar .df-verdict-ico { background: var(--destructive); color: var(--background); }
+.df-verdict.v-apagar .df-verdict-k { color: var(--destructive); }
+.df-verdict.v-aprendiendo { background: transparent; box-shadow: inset 0 0 0 1px var(--border); }
+.df-verdict.v-aprendiendo .df-verdict-ico { background: var(--muted); color: var(--muted-foreground); }
+.df-camp-actions { display: grid; grid-template-columns: 1fr 1.5fr; gap: var(--space-2); }
+.df-camp-actions .df-btn { min-width: 0; padding: 0 var(--space-3); }
+
+/* Navigation: barra inferior (móvil) y riel (escritorio) */
+.df-tabbar { display: flex; height: var(--size-tabbar); background: var(--background); border-top: 1px solid var(--border); }
+.df-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font: inherit; font-size: 11px; line-height: 14px; font-weight: 500; color: var(--muted-foreground); background: transparent; border: 0; cursor: pointer; position: relative; text-decoration: none; }
+.df-tab[aria-current="page"] { color: var(--primary); }
+.df-tab[aria-current="page"] .df-tab-pill { background: var(--primary-soft); }
+.df-tab-pill { width: 56px; height: 28px; border-radius: var(--radius-full); display: grid; place-items: center; position: relative; transition: background-color var(--duration-base) var(--ease-standard); }
+.df-tab-badge { position: absolute; top: -2px; left: 34px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: var(--radius-full); background: var(--foreground); color: var(--background); font-size: 11px; line-height: 18px; font-weight: 600; text-align: center; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px var(--background); }
+.df-rail { width: var(--size-rail); background: var(--sidebar); border-right: 1px solid var(--sidebar-border); color: var(--sidebar-foreground); display: flex; flex-direction: column; padding: var(--space-4) var(--space-3); gap: 2px; height: 100%; }
+.df-rail-brand { font-weight: 600; font-size: 16px; letter-spacing: -0.01em; padding: var(--space-1) var(--space-3) var(--space-5); display: flex; align-items: center; gap: var(--space-2); }
+.df-rail-mark { width: 22px; height: 22px; border-radius: 6px; background: var(--foreground); color: var(--background); display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+.df-rail .df-tab { flex: none; flex-direction: row; justify-content: flex-start; gap: var(--space-3); height: 40px; padding: 0 var(--space-3); border-radius: var(--radius-md); font-size: 14px; color: var(--sidebar-foreground); }
+.df-rail .df-tab:hover { background: var(--accent); }
+.df-rail .df-tab[aria-current="page"] { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+.df-rail .df-tab-pill { width: auto; height: auto; background: transparent !important; }
+.df-rail .df-tab-badge { position: static; margin-left: auto; box-shadow: none; }
+.df-rail-sep { flex: 1; }
+
+/* TopBar */
+.df-topbar { display: flex; align-items: center; gap: var(--space-1); height: var(--size-topbar); padding: 0 var(--space-1); background: var(--background); }
+.df-topbar-title { flex: 1; min-width: 0; padding: 0 var(--space-2); }
+.df-topbar-title.no-back { padding-left: var(--space-3); }
+.df-topbar-t { font-size: 17px; line-height: 22px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.df-topbar-s { font-size: 12px; line-height: 16px; color: var(--muted-foreground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.df-topbar.is-large { height: auto; flex-wrap: wrap; padding-bottom: var(--space-2); }
+.df-topbar.is-large .df-topbar-t { font-size: 20px; line-height: 26px; }
+
+/* Toast */
+.df-toast { display: flex; align-items: center; gap: var(--space-3); padding: 0 var(--space-2) 0 var(--space-4); min-height: 48px; border-radius: var(--radius-md); background: var(--foreground); color: var(--background); box-shadow: var(--shadow-md); font-size: 14px; line-height: 20px; }
+.df-toast span { flex: 1; }
+.df-toast button { font: inherit; font-size: 14px; font-weight: 600; background: transparent; border: 0; color: var(--background); height: 40px; padding: 0 var(--space-3); border-radius: var(--radius-sm); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* AssistantSheet */
+.df-sheet { background: var(--popover); color: var(--popover-foreground); border-radius: var(--radius-lg) var(--radius-lg) 0 0; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; min-height: 0; }
+.df-sheet.is-panel { border-radius: 0; box-shadow: none; border-left: 1px solid var(--border); height: 100%; }
+.df-sheet-grab { width: 36px; height: 4px; border-radius: var(--radius-full); background: var(--input); margin: var(--space-2) auto 0; }
+.df-sheet-head { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4); }
+.df-sheet-head strong { flex: 1; font-size: 16px; line-height: 22px; font-weight: 600; }
+.df-ctx { display: inline-flex; align-items: center; gap: 6px; margin: 0 var(--space-4); padding: 4px 8px 4px 4px; border-radius: var(--radius-full); background: var(--muted); font-size: 12px; line-height: 16px; color: var(--muted-foreground); align-self: flex-start; max-width: calc(100% - 32px); }
+.df-ctx img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+.df-ctx b { color: var(--foreground); font-weight: 500; }
+.df-msgs { flex: 1; overflow: auto; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); min-height: 0; }
+.df-msg { max-width: 88%; font-size: 14px; line-height: 20px; }
+.df-msg.from-user { align-self: flex-end; background: var(--muted); padding: var(--space-2) var(--space-3); border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg); }
+.df-msg.from-ai { align-self: flex-start; }
+.df-msg.from-ai p { margin: 0 0 var(--space-2); }
+.df-msg-apply { display: flex; gap: var(--space-2); margin-top: var(--space-2); }
+.df-sugs { display: flex; gap: var(--space-2); overflow-x: auto; padding: 0 var(--space-4) var(--space-2); scrollbar-width: none; }
+.df-chipbtn { font: inherit; font-size: 13px; line-height: 18px; height: 32px; padding: 0 var(--space-3); border-radius: var(--radius-full); border: 1px solid var(--input); background: var(--background); color: var(--foreground); white-space: nowrap; cursor: pointer; }
+.df-compose { display: flex; gap: var(--space-2); align-items: center; padding: var(--space-2) var(--space-3) var(--space-3); border-top: 1px solid var(--border); }
+.df-compose input { flex: 1; font: inherit; font-size: 16px; height: 44px; border: 1px solid var(--input); border-radius: var(--radius-full); padding: 0 var(--space-4); background: var(--background); color: var(--foreground); outline: none; }
+.df-compose input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+
+/* Screens (pantallas de ejemplo) */
+.df-screens { display: flex; gap: 40px; padding: 32px; align-items: flex-start; background: var(--muted); min-height: 100vh; }
+.df-phone { width: 390px; height: 800px; flex: none; border-radius: 36px; border: 1px solid var(--border); background: var(--background); overflow: hidden; position: relative; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.df-phone-label { font-size: 13px; font-weight: 500; color: var(--muted-foreground); margin: 0 0 12px 8px; }
+.df-status-strip { height: 36px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.df-scroll { flex: 1; overflow: hidden; position: relative; }
+.df-section-t { font-size: 13px; line-height: 18px; font-weight: 600; color: var(--muted-foreground); padding: var(--space-4) var(--space-4) var(--space-2); display: flex; justify-content: space-between; align-items: center; }
+.df-group { margin: 0 var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--card); }
+.df-sticky { padding: var(--space-3) var(--space-4); background: var(--background); border-top: 1px solid var(--border); display: flex; gap: var(--space-2); }
+.df-sticky .df-btn { flex: 1; }
+.df-desk { width: 1440px; height: 800px; flex: none; border-radius: 12px; border: 1px solid var(--border); background: var(--background); overflow: hidden; display: grid; grid-template-columns: var(--size-rail) 1fr; }
+.df-desk.has-panel { grid-template-columns: var(--size-rail) 1fr 340px; }
+.df-desk-main { overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.df-desk-head { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-5) var(--space-8) var(--space-4); border-bottom: 1px solid var(--border); }
+.df-summary { display: flex; gap: var(--space-2); padding: 0 var(--space-4); }
+.df-sum { flex: 1; border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-2) var(--space-3); background: var(--card); }
+.df-sum-v { font-size: 20px; line-height: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.df-sum-l { font-size: 12px; line-height: 16px; color: var(--muted-foreground); display: flex; align-items: center; gap: 4px; }
+.df-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .df-btn, .df-tile img, .df-tab-pill { transition: none; }
+  .df-tile.is-generating::after { animation: none; }
+}
+
+.df-btn-row { display: flex; gap: var(--space-2); align-items: center; }
+.df-btn-row .df-btn { flex: none; }

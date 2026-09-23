@@ -1,0 +1,16 @@
+<!-- @dsCard group="Productos" height=350 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>ProductRow</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{padding:16, maxWidth:420}}, h('div',{className:'df-group', style:{margin:0}},
+  h(D.ProductRow,{name:'Lámpara lunar 3D', imageIndex:2, stages:'done,done,done,done,error,optional'.split(','), tone:'danger', reason:'Error al publicar · 2 imágenes'}),
+  h(D.ProductRow,{name:'Corrector de postura', imageIndex:1, stages:'done,current,locked,locked,locked,optional'.split(','), tone:'warning', reason:'Espera tu revisión · 8 textos'}),
+  h(D.ProductRow,{name:'Botella térmica 1L', imageIndex:0, stages:'done,done,done,stuck,locked,optional'.split(','), tone:'warning', reason:'Detenido: falta el precio · 3 días'}),
+  h(D.ProductRow,{name:'Masajeador de cuello', imageIndex:4, stages:'done,done,done,done,done,done'.split(','), tone:'success', reason:'Publicado · 2 campañas activas'}))));
+</script>
+</body>
+</html>

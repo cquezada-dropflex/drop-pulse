@@ -1,32 +1,23 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { AuthCard, linkClass } from "@/components/auth/auth-card";
+import { Icon } from "@/components/df";
+
+export const metadata: Metadata = { title: "Confirma tu correo" };
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">
-                Thank you for signing up!
-              </CardTitle>
-              <CardDescription>Check your email to confirm</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                You&apos;ve successfully signed up. Please check your email to
-                confirm your account before signing in.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
+    <AuthCard
+      title="Confirma tu correo"
+      description="Te enviamos un enlace. Ábrelo para activar tu cuenta y luego inicia sesión."
+    >
+      <p className="flex items-center gap-2 text-label font-normal text-muted-foreground">
+        <Icon name="clock" size="sm" />
+        Si no llega en unos minutos, revisa la carpeta de spam.
+      </p>
+      <Link href="/auth/login" className={`text-body ${linkClass}`}>
+        Ir a iniciar sesión
+      </Link>
+    </AuthCard>
   );
 }

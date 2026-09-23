@@ -1,0 +1,14 @@
+<!-- @dsCard group="Navegación" height=300 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Navigation</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{display:'flex', gap:24, padding:16, alignItems:'flex-start'}},
+  h('div',{style:{width:390, border:'1px solid var(--border)', borderRadius:12, overflow:'hidden'}}, h(D.Navigation,{active:'hoy', badges:{hoy:6}})),
+  h('div',{style:{height:260, border:'1px solid var(--border)', borderRadius:12, overflow:'hidden'}}, h(D.Navigation,{variant:'rail', active:'productos', badges:{hoy:6}}))));
+</script>
+</body>
+</html>

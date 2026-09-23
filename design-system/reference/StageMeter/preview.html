@@ -1,0 +1,13 @@
+<!-- @dsCard group="Estado" height=160 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>StageMeter</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {className:'df-col', style:{maxWidth:320}},
+  [['done,done,done,done,done,optional','Listo para publicar'],['done,current,locked,locked,locked,optional','Avanza'],['done,done,done,stuck,locked,optional','Detenido'],['done,done,done,done,error,optional','Con error']].map(function(r,i){ return h('div',{key:i, style:{display:'grid', gridTemplateColumns:'140px 1fr', gap:12, alignItems:'center', fontSize:12, color:'var(--muted-foreground)'}}, r[1], h(D.StageMeter,{stages:r[0].split(',')})); })));
+</script>
+</body>
+</html>

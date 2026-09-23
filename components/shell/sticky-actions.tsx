@@ -1,0 +1,60 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+
+/**
+ * Barra de la acción principal (.df-sticky). En móvil queda fija abajo, en la zona del pulgar,
+ * sobre la barra de pestañas; en escritorio (≥lg) se alinea a la derecha del bloque.
+ * Publica su alto en --df-sticky-h para que el toast aparezca encima.
+ */
+export function StickyActions({
+  children,
+  className,
+  stack,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  /** Contenido en bloque (por ejemplo, la grilla de 3 acciones de revisión) en vez de fila. */
+  stack?: boolean;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const root = document.documentElement;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => {
+      const fixed = !mq.matches;
+      root.style.setProperty("--df-sticky-h", fixed ? `${el.offsetHeight}px` : "0px");
+    };
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    mq.addEventListener("change", update);
+    update();
+    return () => {
+      ro.disconnect();
+      mq.removeEventListener("change", update);
+      root.style.removeProperty("--df-sticky-h");
+    };
+  }, []);
+
+  return (
+    <>
+      {/* Reserva el espacio de la barra fija para que no tape el final del contenido. */}
+      <div aria-hidden className="h-[var(--df-sticky-h,0px)] lg:hidden" />
+      <div
+        ref={ref}
+        className={cn(
+          "fixed inset-x-0 bottom-[var(--df-tabbar-h,0px)] z-sticky flex gap-2 border-t bg-background px-4 pt-3 pb-[calc(var(--space-3)+var(--df-sticky-safe,env(safe-area-inset-bottom)))] shadow-md",
+          "lg:static lg:z-auto lg:justify-end lg:border-0 lg:bg-transparent lg:px-0 lg:pt-0 lg:pb-0 lg:shadow-none",
+          stack ? "flex-col" : "max-lg:[&>*]:flex-1",
+          className,
+        )}
+      >
+        {children}
+      </div>
+    </>
+  );
+}

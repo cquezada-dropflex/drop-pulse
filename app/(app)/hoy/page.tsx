@@ -1,0 +1,101 @@
+import type { Metadata } from "next";
+import { AttentionItem, Button, Icon, IconButton } from "@/components/df";
+import { EmptyState, Group, PageHeader, SectionTitle } from "@/components/shell/page-header";
+import { getTodayQueue, getTodaySummary } from "@/lib/data/today";
+import { longDate } from "@/lib/format";
+import type { AttentionEntry } from "@/lib/types";
+import { cn } from "@/lib/utils";
+
+export const metadata: Metadata = { title: "Hoy" };
+
+function Summary({ value, label, dot }: { value: number; label: string; dot: string }) {
+  return (
+    <div className="flex-1 rounded-md border bg-card px-3 py-2">
+      <div className="text-title tracking-normal">{value}</div>
+      <div className="flex items-center gap-1 text-caption text-muted-foreground">
+        <span aria-hidden className={cn("inline-block size-2 rounded-full", dot)} />
+        {label}
+      </div>
+    </div>
+  );
+}
+
+function Item({ entry }: { entry: AttentionEntry }) {
+  return (
+    <AttentionItem
+      kind={entry.kind}
+      title={entry.title}
+      product={entry.product}
+      detail={entry.detail}
+      actions={
+        entry.actions.length ? (
+          <>
+            {entry.actions.map((a) => (
+              <Button key={a.label} href={a.href} size="sm" variant={a.variant} iconEnd={a.iconEnd}>
+                {a.label}
+              </Button>
+            ))}
+          </>
+        ) : undefined
+      }
+    />
+  );
+}
+
+export default async function HoyPage() {
+  const [queue, summary] = await Promise.all([getTodayQueue(), getTodaySummary()]);
+  const first = queue.filter((e) => e.group === "primero");
+  const review = queue.filter((e) => e.group === "revisar");
+
+  return (
+    <>
+      <PageHeader
+        large
+        title="Hoy"
+        subtitle={longDate(summary.date)}
+        actions={<IconButton icon="settings" label="Ajustes" href="/ajustes" />}
+        desktopActions={null}
+      />
+      <div className="pb-6 lg:max-w-content lg:px-8 lg:py-6 md:max-lg:px-4">
+        <div className="flex gap-2 px-4 lg:px-0 md:max-lg:px-0">
+          <Summary value={summary.pending} label="Por decidir" dot="bg-warning" />
+          <Summary value={summary.errors} label="Con error" dot="bg-destructive" />
+          <Summary value={summary.published} label="Publicados" dot="bg-success" />
+        </div>
+
+        {queue.length === 0 ? (
+          <EmptyState icon={<Icon name="check" />} title="No tienes nada por decidir">
+            Todo avanza solo. Te avisamos aquí cuando algo necesite tu decisión.
+          </EmptyState>
+        ) : (
+          <div className="md:grid md:grid-cols-2 md:gap-x-4 lg:block">
+            {first.length ? (
+              <section aria-labelledby="primero">
+                <SectionTitle className="md:max-lg:px-0">
+                  <span id="primero">Primero esto</span>
+                </SectionTitle>
+                <Group className="md:max-lg:mx-0">
+                  {first.map((e) => (
+                    <Item key={e.id} entry={e} />
+                  ))}
+                </Group>
+              </section>
+            ) : null}
+            {review.length ? (
+              <section aria-labelledby="revisar">
+                <SectionTitle className="md:max-lg:px-0">
+                  <span id="revisar">Contenido por revisar</span>
+                </SectionTitle>
+                <Group className="md:max-lg:mx-0">
+                  {review.map((e) => (
+                    <Item key={e.id} entry={e} />
+                  ))}
+                </Group>
+              </section>
+            ) : null}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}

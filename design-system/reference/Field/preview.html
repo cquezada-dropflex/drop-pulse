@@ -1,0 +1,17 @@
+<!-- @dsCard group="Entrada" height=340 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Field</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{display:'grid', gridTemplateColumns:'repeat(2, minmax(0, 200px))', gap:16, padding:16}},
+  h(D.Field,{label:'Precio de venta', prefix:'$', value:'24.990', id:'a'}),
+  h(D.Field,{label:'Costo del producto', prefix:'$', value:'6.900', hint:'Del proveedor', id:'b'}),
+  h(D.Field,{label:'Precio tachado', prefix:'$', value:'19.990', error:'Debe ser mayor que el precio de venta', id:'c'}),
+  h(D.Field,{label:'Publicidad por venta', prefix:'$', value:'6.000', ai:true, hint:'Estimado por la IA', id:'d'}),
+  h(D.Field,{label:'Envío', prefix:'$', value:'3.500', disabled:true, hint:'Tarifa fija de tu transportista', id:'e'})));
+</script>
+</body>
+</html>

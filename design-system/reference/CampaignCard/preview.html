@@ -1,0 +1,16 @@
+<!-- @dsCard group="Campañas" height=640 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>CampaignCard</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))', gap:16, padding:16}},
+  h(D.CampaignCard,{name:'Corrector · Video UGC', imageIndex:1, verdict:'subir', reason:'CPA $4.100 por 3 días, 32% bajo tu límite de $6.000.', metrics:[{label:'Costo por venta', value:'$4.100', target:'Límite $6.000', trend:'good'},{label:'Ventas confirmadas', value:'23', target:'82% confirma', trend:'good'}]}),
+  h(D.CampaignCard,{name:'Masajeador · Video 2', imageIndex:4, verdict:'apagar', reason:'CPA $9.800 por 4 días; cada venta te deja −$1.200.', metrics:[{label:'Costo por venta', value:'$9.800', target:'Límite $6.000', trend:'bad'},{label:'Ventas confirmadas', value:'6', target:'61% confirma', trend:'warn'}]}),
+  h(D.CampaignCard,{name:'Botella térmica · Imagen', imageIndex:0, verdict:'vigilar', reason:'CPA $5.700, cerca del límite y subiendo 3 días seguidos.'}),
+  h(D.CampaignCard,{name:'Lámpara lunar · Carrusel', imageIndex:2, verdict:'aprendiendo', paused:false, reason:'14 h activa. Espera 48 h o 10 ventas antes de decidir.'})));
+</script>
+</body>
+</html>

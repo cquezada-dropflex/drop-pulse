@@ -1,0 +1,16 @@
+<!-- @dsCard group="Revisión" height=640 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>ReviewCard</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:24, padding:16}},
+  h(D.ReviewCard,{field:'Título del producto', index:4, total:8, original:'Corrector Postura Espalda Ajustable Unisex Hombre Mujer Talla Única', proposal:'Corrector de postura ajustable: espalda recta en 15 minutos al día'}),
+  h(D.ReviewCard,{field:'Beneficio 1', index:5, total:8, state:'editing', original:'Material transpirable', proposalText:'Tela transpirable que puedes usar bajo la ropa todo el día'}),
+  h(D.ReviewCard,{field:'Descripción corta', index:3, total:8, state:'accepted', proposal:'Alivia la tensión de espalda y hombros. Ajuste con velcro, talla única.', hideActions:true}),
+  h(D.ReviewCard,{field:'Garantía', index:6, total:8, state:'discarded', proposal:'Garantía de por vida o te devolvemos tu dinero.', hideActions:true})));
+</script>
+</body>
+</html>

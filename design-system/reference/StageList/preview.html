@@ -1,0 +1,19 @@
+<!-- @dsCard group="Productos" height=490 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>StageList</title></head>
+<body>
+<div id="root"></div>
+<script>
+  var D = window.DropFlex, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', {style:{maxWidth:420, paddingTop:8}}, h(D.StageList,{stages:[
+  {title:'Producto importado', state:'done', desc:'Proveedor · costo $6.900'},
+  {title:'Textos', state:'review', desc:'8 propuestas esperan tu revisión'},
+  {title:'Imágenes', state:'current', desc:'Elige y ordena 4 a 6'},
+  {title:'Precio y oferta', state:'available', desc:'Calcula cuánto ganas'},
+  {title:'Publicar en tu tienda', state:'error', desc:'Shopify rechazó 2 imágenes'},
+  {title:'Anuncios', state:'locked', optional:true, desc:'Se habilita al publicar'},
+  {title:'Video corto', state:'available', optional:true, desc:'Genera un video de 15 s'}]})));
+</script>
+</body>
+</html>
