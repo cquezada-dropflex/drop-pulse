@@ -91,6 +91,18 @@ Español neutro con tuteo, nunca voseo ni “usted”: “Revisa”, “Elige”
 - Los estados de conexión usan `ConnectionCard` / `StateChip`, nunca `StatusBadge` (que es solo para el ciclo de vida del contenido).
 - `ProviderMark` es genérico: no dibujes logos de Shopify, Meta ni Google.
 
+## Base de datos local
+
+```bash
+supabase start        # aplica supabase/migrations/ la primera vez; usa los puertos 553xx
+supabase db reset     # borra todo y vuelve a aplicar las migraciones
+supabase stop
+```
+
+- Configuración en `supabase/config.toml`: puertos 553xx (API `55321`, DB `55322`, Studio `55323`, correos `55324`) para no chocar con otros proyectos en 543xx; `analytics` apagado (con Colima, el contenedor de logs no monta el socket de Docker).
+- `.env.local` apunta a la base local (`supabase status -o env` da las claves). Shopify, Meta y `ANTHROPIC_API_KEY` se completan a mano.
+- Una migración nueva: `supabase migration new <nombre>` y luego `supabase migration up` (o `db reset`).
+
 ## Verificación
 
 ```bash
