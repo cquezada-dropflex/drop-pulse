@@ -210,6 +210,8 @@
   /* 11/16: .df-status-sm, .df-stage-opt, .df-orig-label, .df-kbd, .df-tile-cover,
      .df-tile-tag, .df-seg-count, .df-offer-frame. Más chico que type-caption (12px). */
   --text-micro: 11px;    --text-micro--line-height: 16px;
+  /* 10/16: .df-grid3[style*="repeat(4"] .df-ref-src (origen de la imagen en la grilla de 4 columnas). */
+  --text-nano: 10px;     --text-nano--line-height: 16px;
   /* 11/14: .df-tab (etiqueta de pestaña). */
   --text-tab: 11px;      --text-tab--line-height: 14px;      --text-tab--font-weight: 500;
   /* 14/20: .df-orig-text, .df-legend li, .df-msg, .df-toast, .df-rail .df-tab, .df-offer-cta. */

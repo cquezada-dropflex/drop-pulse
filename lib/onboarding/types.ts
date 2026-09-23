@@ -52,9 +52,18 @@ export interface ImportStatus {
   domain?: string;
   imported: number;
   total: number;
-  /** ISO 4217 de la tienda (vacío hasta conectar). */
+  /** ISO 4217 de la tienda (vacío hasta conectar). Si el comerciante confirmó el mercado, la suya. */
   currency: string;
   error?: string;
+  /** Mercado sugerido desde Shopify o ya confirmado (lib/market.ts). Solo con la tienda conectada. */
+  market?: MarketStatus;
+}
+
+export interface MarketStatus {
+  countryCode: string;
+  currency: string;
+  language: string;
+  confirmed: boolean;
 }
 
 export interface GenerationRow {

@@ -12,6 +12,7 @@ import {
   GripVertical,
   Image,
   Inbox,
+  Link,
   LoaderCircle,
   Lock,
   Megaphone,
@@ -34,6 +35,7 @@ import {
   TriangleAlert,
   Truck,
   Undo2,
+  Upload,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -44,7 +46,8 @@ export type IconName =
   | "chevron-right" | "chevron-left" | "plus" | "inbox" | "box" | "megaphone"
   | "chat" | "lock" | "image" | "tag" | "text" | "store" | "send" | "arrow-up"
   | "arrow-down" | "pause" | "power" | "more" | "undo" | "edit" | "search"
-  | "clock" | "minus" | "truck" | "trend" | "grip" | "star" | "settings" | "shield";
+  | "clock" | "minus" | "truck" | "trend" | "grip" | "star" | "settings" | "shield"
+  | "upload" | "link";
 
 // Significados fijos (design-system/README.md → Iconografía): destello = IA, ojo = en revisión,
 // check = aprobado, triángulo = error, reloj = detenido, candado = bloqueada.
@@ -85,6 +88,8 @@ const ICONS: Record<IconName, LucideIcon> = {
   star: Star,
   settings: Settings,
   shield: ShieldCheck,
+  upload: Upload,
+  link: Link,
 };
 
 export interface IconProps {

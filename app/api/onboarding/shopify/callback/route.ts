@@ -4,6 +4,7 @@ import { sessionUser } from "@/lib/integrations/session";
 import { shopifyRequest, ShopifyAuthError } from "@/lib/integrations/shopify/client";
 import { getShopifyConnection, markConnected, markShopifyError } from "@/lib/integrations/shopify/connection";
 import { kickImport } from "@/lib/integrations/shopify/import";
+import { detectWithToken } from "@/lib/integrations/shopify/market";
 import { exchangeCode, isShopDomain, missingScopes, ShopifyTokenError, verifyShopifyRequest } from "@/lib/integrations/shopify/oauth";
 import { SHOP_QUERY, type ShopQuery } from "@/lib/integrations/shopify/queries";
 import type { ConnectionErrorCode } from "@/lib/onboarding/errors";
@@ -47,6 +48,8 @@ export async function GET(req: NextRequest) {
       currency: info.shop.currencyCode,
       total: info.productsCount?.count ?? 0,
     });
+    // País y zona horaria para sugerir el mercado en “Tienda conectada”. Si falla, no rompe la conexión.
+    await detectWithToken(user.id, shop, token.accessToken);
   } catch (e) {
     if (e instanceof ShopifyTokenError) return failWith(e.status >= 500 ? "unavailable" : "expired", e.message);
     if (e instanceof ShopifyAuthError) return failWith("insufficient_scope", e.message);

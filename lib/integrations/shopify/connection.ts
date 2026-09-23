@@ -13,6 +13,9 @@ export interface ShopifyConnection {
   shop_gid: string | null;
   shop_name: string | null;
   currency: string | null;
+  /** País y zona horaria que Shopify tiene para la tienda (lib/integrations/shopify/market.ts). */
+  country_code: string | null;
+  timezone: string | null;
   scopes: string[];
   status: "connecting" | "action" | "connected" | "error" | "revoked";
   error_code: string | null;
@@ -60,6 +63,9 @@ async function forgetOtherShop(userId: string, shop: string) {
   const db = adminClient();
   fail("Borrar el catálogo anterior", (await db.from("catalog_items").delete().eq("user_id", userId)).error);
   fail("Reiniciar la selección", (await db.from("onboarding").update({ selected: [], generation: null }).eq("user_id", userId)).error);
+  // Los productos y el mercado eran de la otra tienda (las imágenes, corridas y propuestas caen en cascada).
+  fail("Borrar los productos anteriores", (await db.from("products").delete().eq("user_id", userId)).error);
+  fail("Olvidar el mercado anterior", (await db.from("merchant_settings").delete().eq("user_id", userId)).error);
   await deleteToken("shopify", userId);
   await deleteToken("shopify_refresh", userId);
 }
@@ -109,6 +115,8 @@ export async function markConnected(
         shop_gid: info.gid,
         shop_name: info.name,
         currency: info.currency,
+        country_code: null,
+        timezone: null,
         scopes: token.scopes,
         status: "connected",
         error_code: null,

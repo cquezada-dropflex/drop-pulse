@@ -1,4 +1,5 @@
 // Cliente tipado de la API de onboarding (para componentes "use client").
+import type { Market } from "@/lib/market";
 import type { MetaAssets, Numbers, OnboardingSnapshot } from "./types";
 
 export class ApiError extends Error {
@@ -29,6 +30,7 @@ const post = <T>(path: string, data?: unknown) => call<T>(path, { method: "POST"
 export const onboardingApi = {
   state: () => call<OnboardingSnapshot>("/state"),
   connectShopify: (shop: string) => post<{ authorizeUrl: string }>("/shopify/connect", { shop }),
+  saveMarket: (m: Pick<Market, "countryCode" | "currency" | "language">) => post<{ snapshot: OnboardingSnapshot }>("/market", m),
   saveProducts: (ids: string[]) => post<{ snapshot: OnboardingSnapshot }>("/products", { ids }),
   saveNumbers: (n: Numbers | { sugeridos: true }) => post<{ snapshot: OnboardingSnapshot }>("/numbers", n),
   connectMeta: () => post<{ authorizeUrl: string }>("/meta/connect"),

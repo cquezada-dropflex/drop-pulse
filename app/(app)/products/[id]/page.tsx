@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { Button, StageMeter, TopBar } from "@/components/df";
+import { notFound, redirect } from "next/navigation";
+import { Suspense } from "react";
+import { Button, StageList, StageMeter, TopBar } from "@/components/df";
 import { RetryPublishButton } from "@/components/screens/actions";
 import { StageNav } from "@/components/screens/stage-nav";
 import { AssistantButton, AssistantScope } from "@/components/shell/assistant-provider";
@@ -58,6 +59,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const { id } = await params;
   const product = await getProduct(id);
   if (!product) notFound();
+  // Un producto sin su información base lista abre en esa etapa (design-system/arquitectura.md › 8).
+  if (product.stages.find((s) => s.key === "importado")?.state !== "done") redirect(productHref(product.id, "importado"));
   const next = product.stages.find((s) => s.key === product.nextStage);
 
   return (
@@ -77,7 +80,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         <div className="px-4 pt-1 pb-3">
           <StageMeter stages={product.meter} />
         </div>
-        <StageNav productId={product.id} stages={product.stages} />
+        <Suspense fallback={<StageList stages={product.stages.map(({ title, state, desc, optional }) => ({ title, state, desc, optional }))} />}>
+          <StageNav productId={product.id} stages={product.stages} />
+        </Suspense>
       </div>
 
       {/* Escritorio: la ruta está a la izquierda; al centro, lo siguiente y los datos del producto. */}
@@ -93,12 +98,12 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         </div>
         <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-md border bg-border">
           <div className="bg-card p-3">
-            <dt className="text-caption text-muted-foreground">SKU</dt>
-            <dd className="font-mono text-code">{product.sku}</dd>
+            <dt className="text-caption text-muted-foreground">Precio en tu tienda</dt>
+            <dd className="text-metric">{product.price ? money(product.price, product.currency) : "Sin precio"}</dd>
           </div>
           <div className="bg-card p-3">
             <dt className="text-caption text-muted-foreground">Costo del proveedor</dt>
-            <dd className="text-metric">{money(product.supplierCost)}</dd>
+            <dd className="text-metric">{product.supplierCost ? money(product.supplierCost, product.currency) : "Sin costo"}</dd>
           </div>
         </dl>
       </section>

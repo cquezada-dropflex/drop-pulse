@@ -1,0 +1,102 @@
+// Dónde está un producto en su ruta, derivado de lo que hay en la base: la última optimización y la
+// última propuesta de cliente ideal. Puro: lo usan lib/data (lista, ruta, Hoy) y los tests.
+// Textos de design-system/reference/bundle.js (PP_STAGES, pantallas de producto sin optimizar).
+
+import type { MeterStage } from "@/components/df/stage-meter";
+import { money } from "@/lib/format";
+import type { ContentStatus, ProductFilter, RunStatus, Stage, StageKey } from "@/lib/types";
+
+export interface ProductFacts {
+  price: number;
+  currency: string;
+  run?: { status: RunStatus; error?: string | null; createdAt: string } | null;
+  avatar?: { status: ContentStatus; createdAt: string } | null;
+}
+
+export type BasePhase = "new" | "optimizing" | "failed" | "review" | "done";
+
+export interface ProductPosition {
+  phase: BasePhase;
+  stages: Stage[];
+  meter: MeterStage[];
+  filter: ProductFilter;
+  reason: string;
+  tone: "warning" | "danger" | "success" | "primary" | "muted";
+  nextStage: StageKey;
+  summary: string;
+  /** Estado del contenido que se ve en el encabezado; sin optimizar no hay nada que mostrar. */
+  status?: ContentStatus;
+}
+
+const pending = (s?: ContentStatus) => s === "generado" || s === "revision";
+
+export function basePhase(f: ProductFacts): BasePhase {
+  const run = f.run;
+  if (run && (run.status === "queued" || run.status === "running")) return "optimizing";
+  const avatarIsNewer = f.avatar && (!run || f.avatar.createdAt >= run.createdAt);
+  if (run?.status === "failed" && !avatarIsNewer) return "failed";
+  if (f.avatar?.status === "aprobado") return "done";
+  if (pending(f.avatar?.status)) return "review";
+  if (run?.status === "failed") return "failed";
+  return "new";
+}
+
+const BASE_DESC: Record<BasePhase, string> = {
+  new: "Lo que sabes del producto e imágenes de referencia",
+  optimizing: "La IA está definiendo a tu cliente ideal",
+  failed: "No se pudo optimizar",
+  review: "Tu cliente ideal espera tu revisión",
+  done: "Cliente ideal aprobado",
+};
+
+const BASE_STATE: Record<BasePhase, Stage["state"]> = {
+  new: "current",
+  optimizing: "current",
+  failed: "error",
+  review: "review",
+  done: "done",
+};
+
+const BASE_METER: Record<BasePhase, MeterStage> = {
+  new: "current",
+  optimizing: "current",
+  failed: "error",
+  review: "review",
+  done: "done",
+};
+
+export function productPosition(f: ProductFacts): ProductPosition {
+  const phase = basePhase(f);
+  const done = phase === "done";
+  const stages: Stage[] = [
+    {
+      key: "importado",
+      title: "Información base",
+      state: BASE_STATE[phase],
+      desc: phase === "failed" && f.run?.error ? f.run.error : BASE_DESC[phase],
+    },
+    { key: "textos", title: "Textos", state: "locked", desc: "Se generan con la información base" },
+    { key: "imagenes", title: "Imágenes", state: "locked", desc: "Se generan desde tus imágenes de referencia" },
+    { key: "precio", title: "Precio y oferta", state: done ? "current" : "available", desc: done ? "Calcula cuánto ganas" : "Puedes adelantarlo" },
+    { key: "publicar", title: "Publicar en tu tienda", state: "locked", desc: "Necesita textos, imágenes y precio aprobados" },
+    { key: "anuncios", title: "Anuncios", state: "locked", optional: true, desc: "Se habilita al publicar" },
+  ];
+  const meter: MeterStage[] = [BASE_METER[phase], "locked", "locked", done ? "current" : "locked", "locked", "optional"];
+  const price = f.price > 0 ? ` · ${money(f.price, f.currency)}` : "";
+
+  switch (phase) {
+    case "new":
+      return { phase, stages, meter, filter: "avanzan", tone: "primary", reason: "Sin optimizar · agrega lo que sabes", nextStage: "importado", summary: `Importado de Shopify · sin optimizar${price}` };
+    case "optimizing":
+      return { phase, stages, meter, filter: "avanzan", tone: "primary", reason: "Optimizando con IA", nextStage: "importado", summary: `Optimizando con IA${price}` };
+    case "failed":
+      return { phase, stages, meter, filter: "detenidos", tone: "danger", reason: "No se pudo optimizar · reintenta", nextStage: "importado", summary: `No se pudo optimizar${price}`, status: "error" };
+    case "review":
+      return { phase, stages, meter, filter: "detenidos", tone: "warning", reason: "Espera tu revisión · cliente ideal", nextStage: "importado", summary: `Cliente ideal por revisar${price}`, status: "revision" };
+    case "done":
+      return { phase, stages, meter, filter: "avanzan", tone: "primary", reason: "Siguiente: precio y oferta", nextStage: "precio", summary: `Información base lista${price}`, status: "aprobado" };
+  }
+}
+
+/** En qué fase la ficha del producto muestra la pantalla de información base (y no la ruta). */
+export const showsBaseScreen = (phase: BasePhase) => phase !== "done";

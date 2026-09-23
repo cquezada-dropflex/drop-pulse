@@ -52,7 +52,7 @@ Las medidas de `bundle.css` que no están en `tokens.json` se declaran en el blo
 ## Rutas
 
 - **Las rutas van siempre en inglés** (segmentos de URL, carpetas de `app/`, rutas de API y parámetros de búsqueda): `/today`, `/products/[id]/images`, `/api/onboarding/products`, `?filter=stuck`. Los textos visibles siguen en español.
-- Pantallas: `/today`, `/products?filter=moving|stuck|published`, `/products/[id]` (`/copy`, `/images`, `/price`), `/campaigns?period=today|7|30`, `/campaigns/[id]`, `/settings`. Onboarding: `/auth/create-account`, `/onboarding/shopify|products|numbers|meta|meta/accounts|done`. Integraciones: `/api/onboarding/*`, `/api/webhooks/*`, `/api/cron/*`.
+- Pantallas: `/today`, `/products?filter=moving|stuck|published`, `/products/[id]` (`/base`, `/copy`, `/images`, `/price`), `/campaigns?period=today|7|30`, `/campaigns/[id]`, `/settings`. Onboarding: `/auth/create-account`, `/onboarding/shopify|products|numbers|meta|meta/accounts|done`. Integraciones: `/api/onboarding/*`, `/api/products/*`, `/api/webhooks/*`, `/api/cron/*`.
 - Las claves internas siguen el vocabulario del design system (`StageKey` `textos|imagenes|precio`, `ProductFilter` `detenidos…`); su traducción a URL vive en `lib/routes.ts` (`productHref`, `FILTER_PARAM`). No armes a mano una URL de etapa.
 - Las rutas antiguas en español redirigen de forma permanente (`redirects` en `next.config.ts`). `design-system/arquitectura.md` es la copia del artifact y conserva los nombres originales.
 
@@ -66,13 +66,26 @@ Español neutro con tuteo, nunca voseo ni “usted”: “Revisa”, “Elige”
 
 ## Datos
 
-- Tipos en `lib/types.ts`; datos de ejemplo en `lib/mock/`. La UI lee **solo** a través de `lib/data/*.ts` (`getTodayQueue()`, `getProducts(filter)`, `getProduct(id)`…). Para pasar a Supabase se cambia el cuerpo de esas funciones: ver `docs/esquema-supabase.md`.
+- **Todo el modelo de datos va en inglés**: tablas, columnas, enums y sus valores, claves de JSON guardado, tipos de dominio del backend y rutas de API (`products`, `customer_avatars`, `content_status = 'in_review'`). El español queda para lo que ve el comerciante (textos de UI, mensajes de error) y para los comentarios. Los valores que la UI muestra en español (los estados de `StatusBadge`: `generado`, `revision`…) se traducen en `lib/products/store.ts` (`toUiStatus`), nunca se guardan así.
+- Tipos en `lib/types.ts`. La UI lee **solo** a través de `lib/data/*.ts` (`getTodayQueue()`, `getProducts(filter)`, `getProduct(id)`, `getProductBase(id)`…).
+- **Reales en Supabase**: productos (`products`, creados desde los elegidos en el onboarding por `lib/products/sync.ts`), imágenes de referencia (`product_reference_images` + bucket privado `product-references`), el mercado (`merchant_settings`) y el pipeline de IA (`pipeline_runs`, `product_briefs`, `customer_avatars`, `ai_generations`). Migración: `supabase/migrations/20260924000000_products_and_optimization.sql`. Lecturas del dueño con RLS; escrituras solo con `service_role` desde el servidor (`lib/products/store.ts`).
+- **Todavía de ejemplo** (`lib/mock/`): textos e imágenes generados, campañas, supuestos y el asistente. `docs/esquema-supabase.md` es la propuesta original para esas partes (conceptos en español: al implementarlas, pásalas a inglés).
 - Pantallas en `app/(app)/`; piezas interactivas de pantalla en `components/screens/`; shell (layout, asistente, barra fija, estados) en `components/shell/`.
+- Rutas con `[id]` de producto no tienen `generateStaticParams`: con `cacheComponents`, todo lo que usa `usePathname` bajo ellas va dentro de `<Suspense>` (ver `AppShell` y `StageNav`).
+
+## IA: "Optimizar con IA"
+
+- Primera parte del pipeline de agentes creativos: **ficha de producto → cliente ideal** (`lib/pipeline/optimize.ts`). La siguiente iteración suma `angle-router` y los agentes de ángulo, que leen esa ficha y ese avatar. Detalle: `docs/pipeline-ia.md`.
+- Claude (`@anthropic-ai/sdk`) en `lib/ai/claude.ts`: `claude-opus-5`, pensamiento adaptativo, salida estructurada validada con zod (`lib/ai/schemas.ts`) y `fallbacks: "default"`. Prompts puros en `lib/ai/prompts.ts` (system estable por mercado, para la caché). Cada llamada queda en `ai_generations` con su costo.
+- LATAM con pago contra entrega: el mercado (país, moneda, idioma) se detecta en Shopify al conectar y el comerciante lo confirma en “Tienda conectada” o en Ajustes (`lib/market.ts`, `lib/settings/market.ts`). Todo prompt lleva `marketBlock(market)`.
+- La IA propone y el comerciante decide: el cliente ideal entra como `generated` y solo cambia por su acción (aceptar, editar, volver a generar).
+- Variable de entorno: `ANTHROPIC_API_KEY` (solo servidor).
 
 ## Onboarding
 
 - Rutas: `/auth/create-account` (O1), `/onboarding/*` (pasos 1–4 y Listo), `SetupChecklist` en Hoy y Conexiones en Ajustes. Pasos en `components/onboarding/steps/`.
-- Backend **real**: estado en Supabase (`lib/onboarding/store.ts`), Shopify y Meta en `lib/integrations/` (`server-only`), tokens en Vault, migración en `supabase/migrations/`. Solo la generación con IA sigue simulada. Contrato, rutas y puesta en marcha: `docs/onboarding-backend.md`; decisiones: `docs/spec-migracion-conexiones.md`.
+- Backend **real**: estado en Supabase (`lib/onboarding/store.ts`), Shopify y Meta en `lib/integrations/` (`server-only`), tokens en Vault, migración en `supabase/migrations/`. El avance de generación del onboarding (`GenerationProgress` en los pasos 3 y 4) sigue simulado; la IA real corre por producto con “Optimizar con IA”.
+- “Tienda conectada” muestra el mercado detectado (país, moneda, idioma) y lo guarda al tocar “Elegir productos” (`POST /api/onboarding/market`). Contrato, rutas y puesta en marcha: `docs/onboarding-backend.md`; decisiones: `docs/spec-migracion-conexiones.md`.
 - Shopify: app no embebida con instalación administrada (`shopify.app.toml` / `shopify.app.dev.toml`); los alcances viven ahí y en `SHOPIFY_SCOPES` de `lib/integrations/shopify/oauth.ts`, siempre iguales.
 - Dinero del catálogo en la moneda de la tienda: `money(value, currency)`; CLP es el valor por defecto.
 - Los estados de conexión usan `ConnectionCard` / `StateChip`, nunca `StatusBadge` (que es solo para el ciclo de vida del contenido).

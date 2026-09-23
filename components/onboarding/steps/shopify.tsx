@@ -6,6 +6,7 @@ import { Button, ConnectionCard, Field, PermissionList } from "@/components/df";
 import { StickyActions } from "@/components/shell/sticky-actions";
 import { count } from "@/lib/format";
 import { ApiError, onboardingApi } from "@/lib/onboarding/client";
+import { MarketCard, type MarketValue } from "../market";
 import { PERMS_SHOPIFY } from "../permissions";
 import { useOnboarding } from "../provider";
 import { OnboardingScreen } from "../screen";
@@ -107,10 +108,40 @@ function ShopForm({ pendingShop }: { pendingShop?: string }) {
 }
 
 function ShopConnected() {
-  const { snapshot } = useOnboarding();
+  const { snapshot, setSnapshot } = useOnboarding();
   const router = useRouter();
   const shop = snapshot.shop!;
   const importing = shop.status === "importing";
+  const detected = shop.market;
+  // Lo sugerido llega con el snapshot (se refresca mientras importa); lo editado manda sobre eso.
+  const [edited, setMarket] = useState<MarketValue>();
+  const market: MarketValue | undefined =
+    edited ?? (detected ? { countryCode: detected.countryCode, currency: detected.currency, language: detected.language } : undefined);
+  const [errors, setErrors] = useState<Partial<Record<keyof MarketValue, string>>>();
+  const [error, setError] = useState<string>();
+  const [saving, setSaving] = useState(false);
+
+  // Confirmar el mercado es parte de seguir: se guarda al tocar “Elegir productos”.
+  const next = async () => {
+    setError(undefined);
+    setErrors(undefined);
+    const changed =
+      market && detected && (market.countryCode !== detected.countryCode || market.currency !== detected.currency || market.language !== detected.language);
+    if (market && (!detected?.confirmed || changed)) {
+      setSaving(true);
+      try {
+        const res = await onboardingApi.saveMarket(market);
+        setSnapshot(res.snapshot);
+      } catch (e) {
+        setSaving(false);
+        if (e instanceof ApiError && e.field) setErrors({ [e.field]: e.message });
+        else setError(e instanceof ApiError ? e.message : "No pudimos guardar dónde vendes. Intenta de nuevo.");
+        return;
+      }
+    }
+    router.push("/onboarding/products");
+  };
+
   return (
     <OnboardingScreen
       header={HEADER}
@@ -122,7 +153,8 @@ function ShopConnected() {
             variant="primary"
             size="lg"
             iconEnd="chevron-right"
-            onClick={() => router.push("/onboarding/products")}
+            loading={saving}
+            onClick={next}
             className="lg:h-control lg:text-row"
           >
             Elegir productos
@@ -139,16 +171,16 @@ function ShopConnected() {
           detail={`${count(shop.imported)} de ${count(shop.total)} productos importados`}
         />
       ) : (
-        <ConnectionCard
-          provider="shopify"
-          state="connected"
-          account={shop.domain}
-          facts={[
-            ["Productos", count(shop.total)],
-            ["Moneda", shop.currency],
-          ]}
-        />
+        <ConnectionCard provider="shopify" state="connected" account={shop.domain} facts={[["Productos", count(shop.total)]]} />
       )}
+      {market && detected ? (
+        <MarketCard value={market} onChange={setMarket} confirmed={detected.confirmed} errors={errors} />
+      ) : null}
+      {error ? (
+        <p role="alert" className="text-label font-normal text-destructive">
+          {error}
+        </p>
+      ) : null}
     </OnboardingScreen>
   );
 }

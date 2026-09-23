@@ -7,7 +7,8 @@ import { LogoutButton } from "@/components/logout-button";
 import { AssumptionsForm } from "@/components/screens/assumptions-form";
 import { PageHeader } from "@/components/shell/page-header";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { getAssumptions } from "@/lib/data/settings";
+import { getAssumptions, getMarketSettings } from "@/lib/data/settings";
+import { MarketSettings } from "@/components/screens/market-settings";
 
 export const metadata: Metadata = { title: "Ajustes" };
 
@@ -22,7 +23,7 @@ function Section({ id, title, children, description }: { id: string; title: stri
 }
 
 export default async function AjustesPage() {
-  const assumptions = await getAssumptions();
+  const [assumptions, market] = await Promise.all([getAssumptions(), getMarketSettings()]);
   return (
     <>
       <PageHeader large title="Ajustes" subtitle="Supuestos, tienda y cuenta" back="Hoy" backHref="/today" />
@@ -34,6 +35,11 @@ export default async function AjustesPage() {
         >
           <AssumptionsForm initial={assumptions} />
         </Section>
+        {market ? (
+          <Section id="mercado" title="Dónde vendes" description="La IA escribe en este idioma y calcula en esta moneda, con pago contra entrega.">
+            <MarketSettings initial={market.value} confirmed={market.confirmed} />
+          </Section>
+        ) : null}
         <Section id="conexiones" title="Conexiones" description="Tu tienda Shopify y tu cuenta de Meta Ads.">
           <Suspense fallback={<Skeleton className="h-40" />}>
             <div className="flex flex-col gap-3">

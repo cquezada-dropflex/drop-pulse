@@ -30,3 +30,7 @@ export { PickRow, type PickRowProps } from "./pick-row";
 export { GenerationProgress, type GenerationItem, type GenerationProgressProps } from "./generation-progress";
 export { SetupChecklist, type SetupChecklistProps, type SetupItem } from "./setup-checklist";
 export { StateChip } from "./state-chip";
+// Producto sin optimizar (design-system/arquitectura.md › 8)
+export { ProductInfoInput, INFO_TOPICS, type ProductInfoInputProps } from "./product-info-input";
+export { ReferenceImage, ReferenceAddTile, type ReferenceImageProps, type ReferenceImageState } from "./reference-image";
+export { ImageUploader, ACCEPTED_TYPES, type ImageUploaderProps, type UploadItem, type UploaderMode } from "./image-uploader";

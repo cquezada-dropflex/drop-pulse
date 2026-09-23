@@ -69,3 +69,72 @@ export interface OrdersQuery {
     pageInfo: { hasNextPage: boolean; endCursor: string | null };
   };
 }
+
+// País y zona horaria de la tienda, para sugerir el mercado (lib/market.ts). Va aparte de SHOP_QUERY
+// para que, si Shopify negara algún campo, la conexión no falle: el mercado cae al valor por defecto.
+export const SHOP_MARKET_QUERY = /* GraphQL */ `
+  query DropFlexShopMarket {
+    shop { currencyCode ianaTimezone billingAddress { countryCodeV2 } }
+  }
+`;
+
+export interface ShopMarketQuery {
+  shop: { currencyCode: string; ianaTimezone: string | null; billingAddress: { countryCodeV2: string | null } | null };
+}
+
+// Detalle de un producto para su información base: descripción completa, opciones y todas sus
+// imágenes (hasta 20), acotadas a 1600 px para que la IA las lea sin pedir el original.
+export const PRODUCT_DETAIL_QUERY = (withCost: boolean) => /* GraphQL */ `
+  query DropFlexProduct($id: ID!) {
+    product(id: $id) {
+      id
+      title
+      handle
+      status
+      vendor
+      productType
+      tags
+      description
+      category { fullName }
+      options { name values }
+      featuredMedia { id }
+      media(first: 20) {
+        nodes {
+          id
+          alt
+          mediaContentType
+          ... on MediaImage { image { url(transform: { maxWidth: 1600, maxHeight: 1600 }) width height } }
+        }
+      }
+      variants(first: 1) {
+        nodes {
+          price
+          compareAtPrice
+          ${withCost ? "inventoryItem { unitCost { amount } }" : ""}
+        }
+      }
+    }
+  }
+`;
+
+export interface ProductDetailNode {
+  id: string;
+  title: string;
+  handle: string;
+  status: string;
+  vendor: string | null;
+  productType: string | null;
+  tags: string[];
+  description: string;
+  category: { fullName: string } | null;
+  options: { name: string; values: string[] }[];
+  featuredMedia: { id: string } | null;
+  media: {
+    nodes: { id: string; alt: string | null; mediaContentType: string; image?: { url: string; width: number | null; height: number | null } | null }[];
+  };
+  variants: ProductNode["variants"];
+}
+
+export interface ProductDetailQuery {
+  product: ProductDetailNode | null;
+}

@@ -7,6 +7,7 @@ import type { StageState } from "@/components/df/stage-list";
 import type { Verdict } from "@/components/df/campaign-card";
 import type { MetricProps } from "@/components/df/metric";
 import type { AttentionKind } from "@/components/df/attention-item";
+import type { CustomerAvatar } from "@/lib/ai/schemas";
 
 export type { ContentStatus, Verdict };
 
@@ -40,8 +41,60 @@ export interface Product {
   stages: Stage[];
   /** “2 de 5 etapas · editado hace 2 h”. */
   summary: string;
-  status: ContentStatus;
+  /** Estado del contenido en el encabezado; un producto sin optimizar no tiene. */
+  status?: ContentStatus;
   supplierCost: number;
+  /** Precio actual en la tienda y su moneda (ISO 4217). */
+  price?: number;
+  currency?: string;
+}
+
+/** Estado de una corrida del pipeline de IA (pipeline_runs.status). */
+export type RunStatus = "queued" | "running" | "succeeded" | "failed";
+
+/** Una imagen de origen que la IA usa como referencia (ReferenceImage). */
+export interface ReferenceImage {
+  id: string;
+  src: string;
+  alt: string;
+  source: "shopify" | "upload" | "url";
+  excluded: boolean;
+  /** Portada actual en la tienda. */
+  cover: boolean;
+}
+
+export interface OptimizationRun {
+  id: string;
+  status: RunStatus;
+  step: "product_brief" | "customer_avatar" | null;
+  /** Qué pasó y qué hacer, en español. */
+  error?: string;
+  createdAt: string;
+  startedAt?: string;
+  finishedAt?: string;
+}
+
+/** Propuesta de cliente ideal: la IA propone, el comerciante acepta, edita o regenera. */
+export interface AvatarProposal {
+  id: string;
+  status: ContentStatus;
+  avatar: CustomerAvatar;
+  createdAt: string;
+  editedAt?: string;
+}
+
+/** Todo lo que necesita la etapa Información base. */
+export interface ProductBase {
+  product: Product;
+  baseInfo: string;
+  baseInfoUpdatedAt?: string;
+  /** El texto partió de la descripción de Shopify. */
+  fromShopify: boolean;
+  images: ReferenceImage[];
+  run?: OptimizationRun;
+  avatar?: AvatarProposal;
+  /** Lo que la ficha dice que falta, como preguntas para el comerciante. */
+  missingInputs: { field: string; question: string }[];
 }
 
 /** Una propuesta de la IA para un campo del producto. */

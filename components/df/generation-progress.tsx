@@ -16,6 +16,8 @@ export interface GenerationProgressProps {
   items: GenerationItem[];
   eta?: string;
   title?: string;
+  /** Reemplaza “N de M productos listos” cuando lo que avanza no son productos (p. ej., pasos). */
+  progressLabel?: string;
   /** Solo encabezado y barra (mientras conecta Meta). */
   compact?: boolean;
   action?: React.ReactNode;
@@ -23,7 +25,7 @@ export interface GenerationProgressProps {
 }
 
 /** Avance de la IA generando contenido. Un producto con error no detiene a los demás. */
-export function GenerationProgress({ items, eta, title, compact, action, className }: GenerationProgressProps) {
+export function GenerationProgress({ items, eta, title, progressLabel, compact, action, className }: GenerationProgressProps) {
   const done = items.filter((i) => i.status === "generado" || i.status === "aprobado").length;
   const working = done < items.length && items.some((i) => i.status === "publicando" || i.status === "cola");
   return (
@@ -33,14 +35,15 @@ export function GenerationProgress({ items, eta, title, compact, action, classNa
         <div className="min-w-0 flex-1">
           <p className="text-row font-semibold">{title ?? (working ? "Generando contenido" : "Todo listo para revisar")}</p>
           <p className="text-caption text-muted-foreground" aria-live="polite">
-            {done} de {items.length} productos listos{eta && working ? ` · ${eta}` : ""}
+            {progressLabel ?? `${done} de ${items.length} productos listos`}
+            {eta && working ? ` · ${eta}` : ""}
           </p>
         </div>
         {action}
       </div>
       <div
         role="progressbar"
-        aria-label="Productos listos"
+        aria-label={progressLabel ? "Avance" : "Productos listos"}
         aria-valuemin={0}
         aria-valuemax={items.length}
         aria-valuenow={done}

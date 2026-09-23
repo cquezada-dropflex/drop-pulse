@@ -9,7 +9,8 @@ El onboarding de `design-system/onboarding.md` funciona contra **Shopify y Meta 
 | Autorizar Shopify | App pública no embebida con **instalación administrada** (`shopify.app.toml`) y authorization code grant con tokens offline que vencen |
 | Importar productos | Admin API (GraphQL), por tramos con lease, hacia `catalog_items` (`lib/integrations/shopify/import.ts`) |
 | Recomendados | Ventas de 30 días (pedidos sin datos de clientes) × potencial de mejora |
-| Generación de la IA | **Simulada**: 1.º producto a los 8 s, luego cada 18 s |
+| Mercado | País y zona horaria desde Shopify (`SHOP_MARKET_QUERY`, al conectar); el comerciante confirma país, moneda e idioma en “Tienda conectada” (`merchant_settings`) |
+| Generación de la IA | El avance del onboarding sigue **simulado** (1.º producto a los 8 s, luego cada 18 s). La IA real corre por producto: ver `docs/pipeline-ia.md` |
 | Autorizar Meta | Facebook Login for Business (`config_id`), token largo y `debug_token` |
 | Cuentas, páginas y píxeles | Marketing API con `appsecret_proof`, validados en el servidor al guardar |
 | Tokens | Supabase Vault (`set/get/delete_integration_token`, solo `service_role`) |
@@ -42,6 +43,7 @@ Todas responden JSON, salvo los callbacks y la instalación, que redirigen. Los 
 | `GET /api/onboarding/shopify/resume` | — | Retoma la instalación después del login |
 | `GET /api/onboarding/shopify/callback` | `?code&hmac&shop&state&timestamp` | 307 → `/onboarding/shopify` |
 | `DELETE /api/onboarding/shopify` | — | `{ snapshot }`: desconecta (borra el token) |
+| `POST /api/onboarding/market` | `{ countryCode, currency, language }` | `{ snapshot }`: confirma el mercado (“Tienda conectada” o Ajustes). 400 con `field`, 409 sin Shopify |
 | `GET /api/onboarding/shopify/products` | — | `{ recommended, all, total, defaultSelection }` |
 | `POST /api/onboarding/products` | `{ ids }` | `{ snapshot }`. 400 `ids` |
 | `GET /api/onboarding/numbers` | — | `{ suggested, currency, source }` |

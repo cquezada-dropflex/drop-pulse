@@ -4,6 +4,7 @@ import { adminClient } from "@/lib/integrations/admin";
 import { requireUser, sessionUser, type SessionUser } from "@/lib/integrations/session";
 import { getShopifyConnection, type ShopifyConnection } from "@/lib/integrations/shopify/connection";
 import { getMetaConnection, type MetaConnection } from "@/lib/integrations/meta/connection";
+import { getMarket, type MarketState } from "@/lib/settings/market";
 import { connectionErrorText } from "./errors";
 import type { ImportStatus, OnboardingState } from "./types";
 
@@ -27,9 +28,11 @@ export interface Loaded {
   meta: MetaConnection | null;
 }
 
-function shopStatus(c: ShopifyConnection | null): ImportStatus | undefined {
+function shopStatus(c: ShopifyConnection | null, m: MarketState | null): ImportStatus | undefined {
   if (!c) return undefined;
-  const base = { domain: c.shop_domain, imported: c.imported_count, total: c.total_count ?? c.imported_count, currency: c.currency ?? "" };
+  const market = m ? { ...m.market, confirmed: m.confirmed } : undefined;
+  const currency = m?.confirmed ? m.market.currency : (c.currency ?? "");
+  const base = { domain: c.shop_domain, imported: c.imported_count, total: c.total_count ?? c.imported_count, currency, market };
   if (c.status === "error" || c.status === "revoked") return { ...base, status: "error", error: connectionErrorText("shopify", c.error_code) };
   if (c.status !== "connected") return { ...base, status: "connecting" };
   const importing = c.import_status === "importing" || c.import_status === "pending";
@@ -58,6 +61,7 @@ export async function loadOnboarding(user: SessionUser): Promise<Loaded> {
   ]);
   if (row.error) throw new Error(`Leer el onboarding: ${row.error.message}`);
   const r = row.data as OnboardingRow | null;
+  const market = shop?.status === "connected" ? await getMarket(user.id, shop) : null;
   const finishedAt = r?.finished_at ? Date.parse(r.finished_at) : undefined;
   return {
     shop,
@@ -66,7 +70,7 @@ export async function loadOnboarding(user: SessionUser): Promise<Loaded> {
       version: 1,
       userId: user.id,
       account: user.email ? { email: user.email } : undefined,
-      shop: shopStatus(shop),
+      shop: shopStatus(shop, market),
       selected: r?.selected ?? [],
       numbers: r?.numbers ?? undefined,
       generation: r?.generation ?? undefined,
