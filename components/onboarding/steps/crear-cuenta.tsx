@@ -4,11 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, Field, Icon, notify, type IconName } from "@/components/df";
-import { ApiError, onboardingApi } from "@/lib/onboarding/client";
 import { cn } from "@/lib/utils";
 
-// Sin Supabase configurado, la cuenta la crea la maqueta del backend de onboarding.
-const MOCK = !process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 export const PREFILL_KEY = "df:correo";
 
 const PROMISE: [IconName, string, string][] = [
@@ -22,33 +19,21 @@ export function CrearCuenta() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string>();
-  const [loading, setLoading] = useState<"google" | "email" | null>(null);
-
-  const start = async (kind: "google" | "email") => {
-    if (kind === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+  
+  const start = (kind: "google" | "email") => {
+    if (kind === "google") {
+      notify("Por ahora crea tu cuenta con tu correo: el acceso con Google aún no está configurado.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setError("Escribe tu correo, como tu@correo.com.");
       return;
     }
     setError(undefined);
-    if (!MOCK) {
-      if (kind === "google") {
-        notify("Por ahora crea tu cuenta con tu correo: el acceso con Google aún no está configurado.");
-        return;
-      }
-      try {
-        sessionStorage.setItem(PREFILL_KEY, email.trim());
-      } catch {}
-      router.push("/auth/sign-up");
-      return;
-    }
-    setLoading(kind);
     try {
-      await onboardingApi.createAccount(kind === "google" ? "cuenta-google@maqueta.dropflex" : email);
-      router.push("/onboarding/shopify");
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : "No pudimos crear tu cuenta. Intenta de nuevo.");
-      setLoading(null);
-    }
+      sessionStorage.setItem(PREFILL_KEY, email.trim());
+    } catch {}
+    router.push("/auth/sign-up");
   };
 
   return (
@@ -92,7 +77,7 @@ export function CrearCuenta() {
           start("email");
         }}
       >
-        <Button variant="secondary" size="lg" block loading={loading === "google"} onClick={() => start("google")}>
+        <Button variant="secondary" size="lg" block onClick={() => start("google")}>
           Continuar con Google
         </Button>
         <p className="flex items-center gap-3 text-caption text-muted-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
@@ -110,12 +95,12 @@ export function CrearCuenta() {
           }}
           error={error}
         />
-        <Button type="submit" variant="primary" size="lg" block loading={loading === "email"}>
+        <Button type="submit" variant="primary" size="lg" block>
           Crear cuenta gratis
         </Button>
         <p className="mt-1 text-center text-label font-normal text-muted-foreground">
           ¿Ya tienes cuenta?{" "}
-          <Link href="/auth/login" className="font-medium text-primary underline underline-offset-3">
+          <Link href="/auth/login?next=/onboarding" className="font-medium text-primary underline underline-offset-3">
             Inicia sesión
           </Link>
         </p>

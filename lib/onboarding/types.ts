@@ -1,42 +1,37 @@
-// Contratos del backend de onboarding (design-system/onboarding.md). Hoy los implementa una maqueta
-// (lib/onboarding/service.ts); en producción, la API real con Shopify OAuth y Facebook Login for Business.
+// Contratos del backend de onboarding (design-system/onboarding.md, docs/onboarding-backend.md).
+// El estado se arma desde Supabase (tablas onboarding, shopify_connections, catalog_items y
+// meta_connections); las conexiones reales viven en lib/integrations/.
 
 export type StepKey = "shopify" | "productos" | "numeros" | "meta" | "meta-cuentas" | "listo";
 
-/** Estado persistido (cookie httpOnly en la maqueta; tabla `onboarding` en producción). */
+/** Estado del comerciante, ya resuelto desde la base. Lo consumen las funciones puras de service.ts. */
 export interface OnboardingState {
   version: 1;
-  account?: { email: string; createdAt: number };
-  shop?: {
-    domain: string;
-    status: "connecting" | "connected" | "error";
-    error?: string;
-    connectedAt?: number;
-    /** Nonce del flujo OAuth (parámetro `state`). */
-    nonce?: string;
-  };
-  /** Ids de productos elegidos, en orden. */
-  selected?: string[];
+  userId: string;
+  account?: { email: string };
+  shop?: ImportStatus;
+  /** Ids de catalog_items elegidos, en orden. */
+  selected: string[];
   numbers?: Numbers & { suggested: boolean };
-  generation?: { startedAt: number; productIds: string[] };
+  /** La generación con IA sigue simulada (fuera del alcance de la migración de conexiones). */
+  generation?: { startedAt: number; items: { id: string; name: string; image: string }[] };
   meta?: {
     status: "authorizing" | "action" | "connected" | "later" | "error";
     error?: string;
-    nonce?: string;
     account?: string;
     page?: string;
     pixel?: string;
   };
   finishedAt?: number;
-  checklistHidden?: boolean;
+  checklistHidden: boolean;
 }
 
 export interface Numbers {
   /** De cada 10 pedidos, cuántos se entregan. */
   deliveredOf10: number;
-  /** Envío por pedido, CLP. */
+  /** Envío por pedido, en la moneda de la tienda. */
   shipping: number;
-  /** Máximo por venta en anuncios (CPA límite), CLP. */
+  /** Máximo por venta en anuncios (CPA límite), en la moneda de la tienda. */
   maxCpa: number;
 }
 
@@ -57,6 +52,7 @@ export interface ImportStatus {
   domain?: string;
   imported: number;
   total: number;
+  /** ISO 4217 de la tienda (vacío hasta conectar). */
   currency: string;
   error?: string;
 }
@@ -91,10 +87,22 @@ export interface OnboardingSnapshot {
   planLimit: number;
 }
 
+export interface MetaOption {
+  value: string;
+  title: string;
+  meta?: string;
+  tone?: "warning" | "danger";
+  disabled?: boolean;
+  tag?: string;
+}
+
 export interface MetaAssets {
-  adAccounts: { value: string; title: string; meta?: string; tone?: "warning" | "danger"; disabled?: boolean; tag?: string }[];
-  pages: MetaAssets["adAccounts"];
-  pixels: MetaAssets["adAccounts"];
+  adAccounts: MetaOption[];
+  pages: MetaOption[];
+  /** Píxeles de la cuenta sugerida (compatibilidad). */
+  pixels: MetaOption[];
+  /** Los píxeles dependen de la cuenta publicitaria elegida. */
+  pixelsByAccount: Record<string, MetaOption[]>;
   suggested: { account: string; page: string; pixel: string };
 }
 

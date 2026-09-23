@@ -18,8 +18,8 @@ interface Lists {
   defaultSelection: string[];
 }
 
-const meta = (p: CatalogProduct, first: boolean) =>
-  `${money(p.price)} · ${p.sales30 ? `${count(p.sales30)} ventas${first ? " en 30 días" : ""}` : "Sin ventas en 30 días"}`;
+const meta = (p: CatalogProduct, first: boolean, currency: string) =>
+  `${money(p.price, currency)} · ${p.sales30 ? `${count(p.sales30)} ventas${first ? " en 30 días" : ""}` : "Sin ventas en 30 días"}`;
 
 /** Paso 2: elegir con qué empezar. Los 3 recomendados vienen marcados: el camino rápido es un toque. */
 export function ProductosStep({ initial }: { initial: Lists }) {
@@ -124,7 +124,7 @@ export function ProductosStep({ initial }: { initial: Lists }) {
                   key={p.id}
                   name={p.name}
                   image={p.image}
-                  meta={meta(p, i === 0)}
+                  meta={meta(p, i === 0, snapshot.shop?.currency || "CLP")}
                   issues={p.issues.slice(0, 2)}
                   score={p.score}
                   checked={checked}

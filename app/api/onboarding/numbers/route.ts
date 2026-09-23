@@ -1,15 +1,28 @@
 import { NextResponse } from "next/server";
-import { body, mutate } from "@/lib/onboarding/http";
+import { body, errorResponse, mutate } from "@/lib/onboarding/http";
+import { readOnboardingForApi } from "@/lib/onboarding/store";
 import { saveNumbers, suggestedNumbers } from "@/lib/onboarding/service";
+import { catalogByIds, catalogPrices } from "@/lib/onboarding/catalog";
 import type { Numbers } from "@/lib/onboarding/types";
 
-/** Valores sugeridos (la entrega se calcula con los pedidos de Shopify). */
+/** Valores sugeridos. La entrega aún no se calcula con los pedidos (spec D7): sin destello. */
 export async function GET() {
-  return NextResponse.json({ suggested: suggestedNumbers(), source: { deliveredOf10: "shopify-orders" } });
+  try {
+    const { state } = await readOnboardingForApi();
+    const currency = state.shop?.currency || "CLP";
+    return NextResponse.json({ suggested: suggestedNumbers(currency, await catalogPrices(state.userId)), currency, source: {} });
+  } catch (e) {
+    return errorResponse(e);
+  }
 }
 
 /** Paso 3 · Guarda los números (o `{ "sugeridos": true }`) y empieza a generar. */
 export async function POST(req: Request) {
   const b = await body<Numbers & { sugeridos: boolean }>(req);
-  return mutate((s, now) => saveNumbers(s, b.sugeridos ? null : b, now));
+  return mutate(async (s, now) => {
+    const currency = s.shop?.currency || "CLP";
+    const [prices, picked] = await Promise.all([catalogPrices(s.userId), catalogByIds(s.userId, s.selected)]);
+    const products = new Map([...picked].map(([id, p]) => [id, { name: p.name, image: p.image }]));
+    return saveNumbers(s, b.sugeridos ? null : b, now, { currency, suggested: suggestedNumbers(currency, prices), products });
+  });
 }

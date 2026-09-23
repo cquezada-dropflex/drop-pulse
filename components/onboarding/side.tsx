@@ -14,12 +14,12 @@ export function OnboardingSide() {
   const pathname = usePathname();
   const routeStep = ORDER.find((k) => pathname.startsWith(STEP_PATH[k])) ?? (pathname.startsWith("/onboarding/done") ? "listo" : null);
   const pendingIndex = s.step === "meta-cuentas" ? 3 : s.step === "listo" ? 4 : ORDER.indexOf(s.step as (typeof ORDER)[number]);
-  const n = s.numbers ?? { deliveredOf10: 8, maxCpa: 6000 };
+  const currency = s.shop?.currency || "CLP";
 
   const desc = [
     s.shop?.domain ?? "Trae tus productos",
     s.selected.length ? `${s.selected.length} elegidos` : "Recomendados por ventas",
-    `Entrega ${n.deliveredOf10} de 10 · CPA ${money(n.maxCpa)}`,
+    s.numbers ? `Entrega ${s.numbers.deliveredOf10} de 10 · CPA ${money(s.numbers.maxCpa, currency)}` : "Entrega 8 de 10 · CPA sugerido",
     s.meta?.status === "connected" ? (s.meta.account ?? "Conectada") : "Puedes hacerlo después",
   ];
   const titles = ["Conectar Shopify", "Elegir productos", "Tus números", "Conectar Meta Ads"];

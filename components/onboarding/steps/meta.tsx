@@ -132,9 +132,19 @@ export function MetaCuentasStep({ assets }: { assets: MetaAssets }) {
       }
     >
       <div className="flex flex-col gap-5">
-        <OptionList label="Cuenta publicitaria" name="cuenta" value={account} onChange={setAccount} options={assets.adAccounts} />
+        <OptionList
+          label="Cuenta publicitaria"
+          name="cuenta"
+          value={account}
+          onChange={(next) => {
+            setAccount(next);
+            // Los píxeles son de cada cuenta: se sugiere el primero de la nueva.
+            setPixel(assets.pixelsByAccount[next]?.[0]?.value ?? "");
+          }}
+          options={assets.adAccounts}
+        />
         <OptionList label="Página de Facebook" name="pagina" value={page} onChange={setPage} options={assets.pages} />
-        <OptionList label="Píxel" name="pixel" value={pixel} onChange={setPixel} options={assets.pixels} />
+        <OptionList label="Píxel" name="pixel" value={pixel} onChange={setPixel} options={assets.pixelsByAccount[account] ?? []} />
       </div>
       <PermissionList title="Qué hará DropFlex con Meta" items={PERMS_META} className="max-lg:hidden" />
     </OnboardingScreen>

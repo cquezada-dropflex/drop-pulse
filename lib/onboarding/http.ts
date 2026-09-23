@@ -1,6 +1,6 @@
 import "server-only";
 import { NextResponse } from "next/server";
-import { readOnboarding, writeOnboarding } from "./store";
+import { readOnboardingForApi, writeOnboarding, type Loaded } from "./store";
 import { snapshot } from "./service";
 import { OnboardingError, type OnboardingState } from "./types";
 
@@ -12,10 +12,11 @@ export function errorResponse(e: unknown) {
 }
 
 /** Lee el estado, aplica el cambio, lo guarda y responde con el snapshot actualizado. */
-export async function mutate(change: (state: OnboardingState, now: number) => OnboardingState | Promise<OnboardingState>, extra?: Record<string, unknown>) {
+export async function mutate(change: (state: OnboardingState, now: number, loaded: Loaded) => OnboardingState | Promise<OnboardingState>, extra?: Record<string, unknown>) {
   try {
     const now = Date.now();
-    const next = await change(await readOnboarding(), now);
+    const loaded = await readOnboardingForApi();
+    const next = await change(loaded.state, now, loaded);
     await writeOnboarding(next);
     return NextResponse.json({ ...extra, snapshot: snapshot(next, now) });
   } catch (e) {
@@ -29,8 +30,4 @@ export async function body<T>(req: Request): Promise<Partial<T>> {
   } catch {
     return {};
   }
-}
-
-export function nonce() {
-  return crypto.randomUUID();
 }

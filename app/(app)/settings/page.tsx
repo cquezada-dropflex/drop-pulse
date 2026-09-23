@@ -38,7 +38,7 @@ export default async function AjustesPage() {
           <Suspense fallback={<Skeleton className="h-40" />}>
             <div className="flex flex-col gap-3">
               <SetupSlot where="ajustes" />
-              <Connections fallbackStore={assumptions.store} fallbackMeta={assumptions.metaAccount} />
+              <Connections />
             </div>
           </Suspense>
         </Section>

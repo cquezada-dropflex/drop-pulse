@@ -47,15 +47,22 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  if (
-    request.nextUrl.pathname !== "/" &&
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
+  const path = request.nextUrl.pathname;
+  // Rutas que se autentican solas (docs/spec-migracion-conexiones.md, D1): webhooks por HMAC o
+  // signed_request, el cron por bearer y el lanzamiento de la app de Shopify por HMAC.
+  const selfAuthenticated =
+    path.startsWith("/api/webhooks/") || path.startsWith("/api/cron/") || path === "/api/onboarding/shopify/install";
+
+  if (path !== "/" && !user && !selfAuthenticated && !path.startsWith("/login") && !path.startsWith("/auth")) {
+    // La API responde 401 en JSON (el cliente muestra el mensaje); un 307 al login no le sirve a fetch.
+    if (path.startsWith("/api/")) {
+      return NextResponse.json({ error: "Tu sesión terminó. Inicia sesión para seguir." }, { status: 401 });
+    }
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
+    // Para volver a donde iba después de iniciar sesión (solo rutas internas; ver LoginForm).
+    url.search = new URLSearchParams({ next: `${path}${request.nextUrl.search}` }).toString();
     return NextResponse.redirect(url);
   }
 

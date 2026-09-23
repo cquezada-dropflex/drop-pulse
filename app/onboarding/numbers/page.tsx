@@ -3,16 +3,24 @@ import { Suspense } from "react";
 import { StepSkeleton } from "@/components/onboarding/skeleton";
 import { guardStep } from "@/lib/onboarding/guard";
 import { NumerosStep } from "@/components/onboarding/steps/numeros";
-import { CATALOG, findProduct } from "@/lib/onboarding/catalog";
 import { suggestedNumbers } from "@/lib/onboarding/service";
-
-const pick = (p: { name: string; price: number; cost: number }) => ({ name: p.name, price: p.price, cost: p.cost });
+import { catalogByIds, catalogPrices } from "@/lib/onboarding/catalog";
 
 export const metadata: Metadata = { title: "Tus números" };
 
 async function Step() {
   const { state } = await guardStep("numeros");
-  return <NumerosStep suggested={suggestedNumbers()} example={pick(findProduct(state.selected?.[0] ?? "") ?? CATALOG[0])} />;
+  const currency = state.shop?.currency || "CLP";
+  const first = state.selected[0];
+  const [prices, picked] = await Promise.all([catalogPrices(state.userId), catalogByIds(state.userId, first ? [first] : [])]);
+  const p = first ? picked.get(first) : undefined;
+  return (
+    <NumerosStep
+      suggested={suggestedNumbers(currency, prices)}
+      currency={currency}
+      example={{ name: p?.name ?? "producto", price: p?.price ?? 0, cost: p?.cost ?? 0 }}
+    />
+  );
 }
 
 export default function Page() {

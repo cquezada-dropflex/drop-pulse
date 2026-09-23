@@ -52,7 +52,7 @@ Las medidas de `bundle.css` que no están en `tokens.json` se declaran en el blo
 ## Rutas
 
 - **Las rutas van siempre en inglés** (segmentos de URL, carpetas de `app/`, rutas de API y parámetros de búsqueda): `/today`, `/products/[id]/images`, `/api/onboarding/products`, `?filter=stuck`. Los textos visibles siguen en español.
-- Pantallas: `/today`, `/products?filter=moving|stuck|published`, `/products/[id]` (`/copy`, `/images`, `/price`), `/campaigns?period=today|7|30`, `/campaigns/[id]`, `/settings`. Onboarding: `/auth/create-account`, `/onboarding/shopify|products|numbers|meta|meta/accounts|done`, `/simulation/shopify|meta`.
+- Pantallas: `/today`, `/products?filter=moving|stuck|published`, `/products/[id]` (`/copy`, `/images`, `/price`), `/campaigns?period=today|7|30`, `/campaigns/[id]`, `/settings`. Onboarding: `/auth/create-account`, `/onboarding/shopify|products|numbers|meta|meta/accounts|done`. Integraciones: `/api/onboarding/*`, `/api/webhooks/*`, `/api/cron/*`.
 - Las claves internas siguen el vocabulario del design system (`StageKey` `textos|imagenes|precio`, `ProductFilter` `detenidos…`); su traducción a URL vive en `lib/routes.ts` (`productHref`, `FILTER_PARAM`). No armes a mano una URL de etapa.
 - Las rutas antiguas en español redirigen de forma permanente (`redirects` en `next.config.ts`). `design-system/arquitectura.md` es la copia del artifact y conserva los nombres originales.
 
@@ -62,7 +62,7 @@ Español neutro con tuteo, nunca voseo ni “usted”: “Revisa”, “Elige”
 
 ## No tocar sin pedirlo
 
-`proxy.ts`, `lib/supabase/*` y la lógica de auth (las llamadas a `supabase.auth.*`).
+`proxy.ts`, `lib/supabase/*` y la lógica de auth (las llamadas a `supabase.auth.*`). Excepción ya autorizada (spec D1): las rutas públicas que se autentican solas, el 401 JSON de `/api/*` y el `?next=` del login en `lib/supabase/proxy.ts`.
 
 ## Datos
 
@@ -72,7 +72,9 @@ Español neutro con tuteo, nunca voseo ni “usted”: “Revisa”, “Elige”
 ## Onboarding
 
 - Rutas: `/auth/create-account` (O1), `/onboarding/*` (pasos 1–4 y Listo), `SetupChecklist` en Hoy y Conexiones en Ajustes. Pasos en `components/onboarding/steps/`.
-- Backend **simulado** en `lib/onboarding/` (estado en cookie, OAuth con páginas `/simulation/*`, importación y generación por tiempo) detrás de `app/api/onboarding/*`. Contrato y cómo pasar a producción: `docs/onboarding-backend.md`.
+- Backend **real**: estado en Supabase (`lib/onboarding/store.ts`), Shopify y Meta en `lib/integrations/` (`server-only`), tokens en Vault, migración en `supabase/migrations/`. Solo la generación con IA sigue simulada. Contrato, rutas y puesta en marcha: `docs/onboarding-backend.md`; decisiones: `docs/spec-migracion-conexiones.md`.
+- Shopify: app no embebida con instalación administrada (`shopify.app.toml` / `shopify.app.dev.toml`); los alcances viven ahí y en `SHOPIFY_SCOPES` de `lib/integrations/shopify/oauth.ts`, siempre iguales.
+- Dinero del catálogo en la moneda de la tienda: `money(value, currency)`; CLP es el valor por defecto.
 - Los estados de conexión usan `ConnectionCard` / `StateChip`, nunca `StatusBadge` (que es solo para el ciclo de vida del contenido).
 - `ProviderMark` es genérico: no dibujes logos de Shopify, Meta ni Google.
 
@@ -82,6 +84,7 @@ Español neutro con tuteo, nunca voseo ni “usted”: “Revisa”, “Elige”
 npm run build
 npm run lint
 npm run typecheck
+npm test                     # vitest: lib/**/*.test.ts
 npm run check:valores        # sin hex, rgb() ni px sueltos en app/ y components/
 ```
 
@@ -92,7 +95,7 @@ npm run check:a11y           # axe en cada ruta, 390 y 1280px, claro y oscuro
 npm run check:teclado        # orden de foco, foco visible y atajos A / D / E
 npm run capturas             # docs/capturas/pantallas + montajes contra design-system/screenshots
 npm run capturas:componentes # /dev/components contra las capturas de referencia
-npm run check:onboarding     # recorre el onboarding completo, con capturas y axe
+TEST_EMAIL=… TEST_PASSWORD=… npm run check:onboarding   # usuario con tienda de desarrollo conectada; capturas y axe
 ```
 
 - `/dev/tokens` y `/dev/components` (solo en desarrollo) para revisar tokens y componentes en claro y oscuro.

@@ -1,0 +1,34 @@
+# Configuración de la app de DESARROLLO (docs/spec-migracion-conexiones.md §10 F0).
+# Se instala solo en tiendas de desarrollo desde su enlace de instalación, sin revisión del App Store.
+# Uso: `shopify app config link` (elige o crea la app dev) → `shopify app deploy --config dev`.
+# DEV_TUNNEL_URL: túnel HTTPS con dominio fijo o preview estable de Vercel (la cookie del nonce depende del dominio).
+
+client_id = "REEMPLAZAR_CON_CLIENT_ID_DE_LA_APP_DEV"
+name = "DropFlex (dev)"
+# Lanzamiento de la app: valida hmac y timestamp y arranca el OAuth (spec §5.2).
+application_url = "https://DEV_TUNNEL_URL/api/onboarding/shopify/install"
+embedded = false
+
+[access_scopes]
+# Una sola lista: debe coincidir con SHOPIFY_SCOPES en lib/integrations/shopify/oauth.ts.
+# read_orders requiere la aprobación de "Protected customer data" (sin campos de cliente).
+scopes = "read_products,write_products,read_inventory,read_orders"
+use_legacy_install_flow = false
+
+[auth]
+redirect_urls = ["https://DEV_TUNNEL_URL/api/onboarding/shopify/callback"]
+
+[webhooks]
+api_version = "2026-07"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/uninstalled"]
+  uri = "https://DEV_TUNNEL_URL/api/webhooks/shopify"
+
+  # Webhooks GDPR obligatorios para apps públicas (spec §5.5).
+  [[webhooks.subscriptions]]
+  compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
+  uri = "https://DEV_TUNNEL_URL/api/webhooks/shopify"
+
+[build]
+automatically_update_urls_on_dev = false

@@ -13,17 +13,18 @@ import { OnboardingScreen } from "../screen";
 const HEADER = { step: 1, total: 4, optionalSteps: [4] };
 
 /** Paso 1 (obligatorio): conectar Shopify. De aquí salen los productos. */
-export function ShopifyStep() {
+export function ShopifyStep({ pendingShop }: { pendingShop?: string }) {
   const { snapshot } = useOnboarding();
   const shop = snapshot.shop;
   const connected = shop && (shop.status === "importing" || shop.status === "connected");
-  return connected ? <ShopConnected /> : <ShopForm />;
+  return connected ? <ShopConnected /> : <ShopForm pendingShop={pendingShop} />;
 }
 
-function ShopForm() {
+/** `pendingShop`: la tienda que llegó desde Shopify antes de iniciar sesión. */
+function ShopForm({ pendingShop }: { pendingShop?: string }) {
   const { snapshot } = useOnboarding();
   const shop = snapshot.shop;
-  const [value, setValue] = useState(shop?.domain?.replace(/\.myshopify\.com$/, "") ?? "");
+  const [value, setValue] = useState((pendingShop ?? shop?.domain)?.replace(/\.myshopify\.com$/, "") ?? "");
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
   const input = useRef<HTMLDivElement>(null);

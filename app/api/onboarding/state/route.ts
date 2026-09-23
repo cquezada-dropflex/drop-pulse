@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
-import { clearOnboarding, readOnboarding } from "@/lib/onboarding/store";
+import { errorResponse } from "@/lib/onboarding/http";
+import { readOnboardingForApi } from "@/lib/onboarding/store";
 import { snapshot } from "@/lib/onboarding/service";
+import { kickImport } from "@/lib/integrations/shopify/import";
 
-/** Estado del onboarding con lo derivado (importación, generación, paso pendiente). */
+/** Estado del onboarding con lo derivado. El sondeo de la UI también empuja la importación. */
 export async function GET() {
-  return NextResponse.json(snapshot(await readOnboarding(), Date.now()));
-}
-
-/** Reinicia el onboarding (útil para probar la maqueta). */
-export async function DELETE() {
-  await clearOnboarding();
-  return new NextResponse(null, { status: 204 });
+  try {
+    const { state, shop } = await readOnboardingForApi();
+    kickImport(shop);
+    return NextResponse.json(snapshot(state, Date.now()));
+  } catch (e) {
+    return errorResponse(e);
+  }
 }

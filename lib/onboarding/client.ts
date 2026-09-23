@@ -28,8 +28,6 @@ const post = <T>(path: string, data?: unknown) => call<T>(path, { method: "POST"
 
 export const onboardingApi = {
   state: () => call<OnboardingSnapshot>("/state"),
-  reset: () => call<void>("/state", { method: "DELETE" }),
-  createAccount: (email: string) => post<{ snapshot: OnboardingSnapshot }>("/account", { email }),
   connectShopify: (shop: string) => post<{ authorizeUrl: string }>("/shopify/connect", { shop }),
   saveProducts: (ids: string[]) => post<{ snapshot: OnboardingSnapshot }>("/products", { ids }),
   saveNumbers: (n: Numbers | { sugeridos: true }) => post<{ snapshot: OnboardingSnapshot }>("/numbers", n),
@@ -37,5 +35,7 @@ export const onboardingApi = {
   metaAssets: () => call<MetaAssets>("/meta/assets"),
   saveMetaAssets: (sel: { account: string; page: string; pixel: string }) => post<{ snapshot: OnboardingSnapshot }>("/meta/assets", sel),
   skipMeta: () => post<{ snapshot: OnboardingSnapshot }>("/meta/skip"),
+  disconnectShopify: () => call<{ snapshot: OnboardingSnapshot }>("/shopify", { method: "DELETE" }),
+  disconnectMeta: () => call<{ snapshot: OnboardingSnapshot }>("/meta", { method: "DELETE" }),
   setChecklistHidden: (hidden: boolean) => post<{ snapshot: OnboardingSnapshot }>("/checklist", { hidden }),
 };

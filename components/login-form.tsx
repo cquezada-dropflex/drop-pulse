@@ -8,6 +8,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+/** Destino después de iniciar sesión: `?next=` si es una ruta interna; si no, Hoy. */
+function nextPath(): string {
+  const next = new URLSearchParams(window.location.search).get("next");
+  return next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/\\") ? next : "/today";
+}
+
 export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +33,7 @@ export function LoginForm() {
         password,
       });
       if (error) throw error;
-      router.push("/today");
+      router.push(nextPath());
     } catch (error: unknown) {
       setError(authErrorMessage(error, "No pudimos iniciar sesión. Intenta de nuevo en un momento."));
     } finally {

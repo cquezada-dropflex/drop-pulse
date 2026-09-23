@@ -9,7 +9,7 @@ import { snapshot } from "@/lib/onboarding/service";
 export const metadata: Metadata = { title: { default: "Configura tu cuenta", template: "%s · DropFlex" } };
 
 async function Shell({ children }: { children: React.ReactNode }) {
-  const initial = snapshot(await readOnboarding(), Date.now());
+  const initial = snapshot((await readOnboarding()).state, Date.now());
   return (
     <OnboardingProvider initial={initial}>
       <div className="lg:flex">
